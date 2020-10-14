@@ -14,8 +14,6 @@
 	- [Cellular component prediction using cellphonedb:](#cellular-component-prediction-using-cellphonedb)
 	- [Finding the optimal number of clusters using SCCAF:](#finding-the-optimal-number-of-clusters-using-sccaf)
 - [Setting up the right environment](#setting-up-the-right-environment)
-- [Computing environment](#computing-environment)
-	- [Hardware and OS environment for running Seurat and Monocle](#hardware-and-os-environment-for-running-seurat-and-monocle)
 - [Citation](#citation)
 - [Contributors](#contributors)
 - [Acknowledgements](#acknowledgements)
@@ -87,16 +85,6 @@ pip install sccaf
 pip install cellphonedb
 ```
 6. If you run into problems, please open a new issue, you can do this by going to *'issues'* and clicking on the *'new issue'* icon. We will help you replicate our analysis! Do not fear single cell analysis!
-
-
-## Computing environment
-### Hardware and OS environment for running Seurat and Monocle
-#### Environment 1
-1. Processor: Intel Sandy Bridge E5-2670 (16cores x 16 threads)
-2. RAM: 25GB
-3. OS: CentOS 6.5
-#### Environment 2
-1. Hardware integrated into the [Pegasus Supercomputing array](http://ccs.miami.edu/ac/service/pegasus/) at the [University of Miami](https://welcome.miami.edu/)
 
 
 # Citation
