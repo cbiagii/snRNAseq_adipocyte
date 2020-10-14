@@ -7,12 +7,12 @@
 - [How can I use this data, and where can I find it?](#how-can-i-use-this-data-and-where-can-i-find-it)
 	- [Downloading Data files](#downloading-data-files)
 - [Analysis and visualization programs](#analysis-and-visualization-programs)
-	- [R and R's integrated developmental environment RStudio:](#r-and-rs-integrated-developmental-environment-rstudio)
-	- [scRNAseq analysis pipeline SEURAT developed by the Satija lab:](#scrnaseq-analysis-pipeline-seurat-developed-by-the-satija-lab)
-	- [Pseudotemporal gene expression analysis using Monocle developed by the Trapnell Lab:](#pseudotemporal-gene-expression-analysis-using-monocle-developed-by-the-trapnell-lab)
-	- [Cell type classification using Metacell:](#cell-type-classification-using-metacell)
-	- [Cellular component prediction using cellphonedb:](#cellular-component-prediction-using-cellphonedb)
-	- [Finding the optimal number of clusters using SCCAF:](#finding-the-optimal-number-of-clusters-using-sccaf)
+	- [R and R's integrated developmental environment RStudio](#r-and-rs-integrated-developmental-environment-rstudio)
+	- [scRNAseq analysis pipeline SEURAT developed by the Satija lab](#scrnaseq-analysis-pipeline-seurat-developed-by-the-satija-lab)
+	- [Pseudotemporal gene expression analysis using Monocle developed by the Trapnell Lab](#pseudotemporal-gene-expression-analysis-using-monocle-developed-by-the-trapnell-lab)
+	- [Cell type classification using Metacell](#cell-type-classification-using-metacell)
+	- [Cellular component prediction using cellphonedb](#cellular-component-prediction-using-cellphonedb)
+	- [Finding the optimal number of clusters using SCCAF](#finding-the-optimal-number-of-clusters-using-sccaf)
 - [Setting up the right environment](#setting-up-the-right-environment)
 - [Citation](#citation)
 - [Contributors](#contributors)
@@ -94,7 +94,7 @@ Qadir, M.M.F., Alvarez-Cubela, S., Klein, D., Van Dijk, J., Anquela, R.M., Lanzo
 # Contributors
 1. Carlos Alberto Oliveira de Biagi Junior - [Github](https://github.com/cbiagii) - [University of Sao Paulo](https://www.fmrp.usp.br/en/) - to contact please [Email](mailto:biagi@usp.br)
 2. Sarah Santiloni Cury - [Sao Paulo State University](https://www.international.unesp.br/) - to contact please [Email](mailto:santiloni.cury@unesp.br)
-3. Miguel Luiz Batista Junior [Boston University School of Medicine](https://www.bumc.bu.edu/busm/) - to contact please [Email](mailto:migueljr4@me.com)
+3. Miguel Luiz Batista Junior - [Boston University School of Medicine](https://www.bumc.bu.edu/busm/) - to contact please [Email](mailto:migueljr4@me.com)
 
 
 # Acknowledgements

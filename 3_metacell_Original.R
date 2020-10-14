@@ -1,27 +1,31 @@
-##### Convert an Seurat object to 10x format
-#library(Seurat)
-#library(DropletUtils)
-#data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/10x_Processed.rds")
-#write10xCounts(x = data@assays$RNA@counts, path = "/projects/cangen/coliveir/Miguel/output/10x/metacell/data")
+# DESCRIPTION ####
+# The following code ASSUMES all dependencies in R have been installed See file(s): 
+# 1_environment_setup.R
+# The purpose of this code is to generate de Seurat object reproducing the analysis performed by Rajbhandari et al., 2020
 
-
-
+# LOAD LIBRARIES ####
+# Run the following code once you have Seurat installed
 library(Seurat)
-library(loomR)
 library(future)
 library(metacell)
+library(ggpubr)
 
-#tgconfig::set_param("scm_balance_graph_k_expand", 100, "metacell")
+## Convert an Seurat object to 10x format
+library(Seurat)
+library(DropletUtils)
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds")
+write10xCounts(x = data@assays$RNA@counts, path = "/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/data")
 
-if(!dir.exists("/projects/cangen/coliveir/Miguel/output/10x/metacell/db")) dir.create("/projects/cangen/coliveir/Miguel/output/10x/metacell/db")
-scdb_init("/projects/cangen/coliveir/Miguel/output/10x/metacell/db", force_reinit=T)
 
-mcell_import_scmat_10x("test1", base_dir="/projects/cangen/coliveir/Miguel/output/10x/metacell/data")
+if(!dir.exists("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db")) dir.create("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db")
+scdb_init("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db", force_reinit=T)
+
+mcell_import_scmat_10x("test1", base_dir="/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/data")
 
 mat = scdb_mat("test1")
 
-if(!dir.exists("/projects/cangen/coliveir/Miguel/output/10x/metacell/figs")) dir.create("/projects/cangen/coliveir/Miguel/output/10x/metacell/figs")
-scfigs_init("/projects/cangen/coliveir/Miguel/output/10x/metacell/figs")
+if(!dir.exists("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/figs")) dir.create("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/figs")
+scfigs_init("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/figs")
 
 mcell_plot_umis_per_cell("test1")
 mat = scdb_mat("test1")
@@ -71,35 +75,33 @@ mcell_mc_split_filt(new_mc_id="test_mc_f",
 
 mcell_gset_from_mc_markers(gset_id="test_markers", mc_id="test_mc_f")
 
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda")
 lfp = log2(object@mc_fp)
 
 
 ########### 1st Round ###########
-#marks_colors <- NULL
-#marks_colors <- rbind(marks_colors, c("Adipocyte", "Adrb3", "blue", 1, 2))
-#marks_colors <- rbind(marks_colors, c("Endothelial", "Pecam1", "green", 1, 1))
-#marks_colors <- rbind(marks_colors, c("Immune_1", "Ptprc", "#ff748c", 1, 0.5))
-#marks_colors <- rbind(marks_colors, c("Immune_2", "Cd19", "#ff8fa3", 1, 0.5))
-#marks_colors <- rbind(marks_colors, c("Progenitor_1", "Cd34", "#ffa500", 1, 2))
-#marks_colors <- rbind(marks_colors, c("Progenitor_2", "Pdgfra", "#ffb732", 1, 2))
-#marks_colors <- as.data.frame(marks_colors)
-#colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
-#marks_colors$priority <- as.integer(marks_colors$priority)
-#marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
-
+marks_colors <- NULL
+marks_colors <- rbind(marks_colors, c("Adipocyte", "Adrb3", "blue", 1, 2))
+marks_colors <- rbind(marks_colors, c("Endothelial", "Pecam1", "green", 1, 1))
+marks_colors <- rbind(marks_colors, c("Immune_1", "Ptprc", "#ff748c", 1, 0.5))
+marks_colors <- rbind(marks_colors, c("Immune_2", "Cd19", "#ff8fa3", 1, 0.5))
+marks_colors <- rbind(marks_colors, c("Progenitor_1", "Cd34", "#ffa500", 1, 2))
+marks_colors <- rbind(marks_colors, c("Progenitor_2", "Pdgfra", "#ffb732", 1, 2))
+marks_colors <- as.data.frame(marks_colors)
+colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
+marks_colors$priority <- as.integer(marks_colors$priority)
+marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
 mc = scdb_mc("test_mc_f")
 gene_folds = mc@mc_fp
 
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell/db/gset.test_markers.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/gset.test_markers.Rda")
 gset <- object
 good_marks = intersect(names(gset@gene_set), rownames(mc@mc_fp))
 mc_ord = 1:ncol(mc@mc_fp)
 
 mat = log2(gene_folds[good_marks, mc_ord])
 mat = pmax(pmin(mat, 3), -3)
-
 
 mat_A <- mat[, which(mc@colors == "blue")]
 mat_A <- mat_A[rowSums(mat_A) > quantile(rowSums(mat_A), 0.9), ]
@@ -125,10 +127,7 @@ for (i in 1:length(items)){
   plot_list[[i]] = x[[4]]     ##to save each plot into a list. note the [[4]]
 }
 
-library(gridExtra)
-png("/projects/cangen/coliveir/Miguel/Figures/Metacell_Markers.png", width=10, height=8, res = 500, units = "in")
-grid.arrange(arrangeGrob(grobs= plot_list,ncol=2))
-dev.off()
+gggpubr(plotlist = plot_list, ncol = 2)
 
 ########### 2st Round ###########
 marks_colors <- NULL

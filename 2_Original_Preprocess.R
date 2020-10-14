@@ -1,19 +1,29 @@
+# DESCRIPTION ####
+# The following code ASSUMES all dependencies in R have been installed See file(s): 
+# 1_environment_setup.R
+# The purpose of this code is to generate de Seurat object reproducing the analysis performed by Rajbhandari et al., 2020
+
+# LOAD LIBRARIES ####
+# Run the following code once you have Seurat installed
 library(Seurat)
-library(SeuratWrappers)
 
+## Loading data Cellranger output format
+data <- Read10X("/Users/biagi/PhD/AdipoSNAP/data/10x/")
 
-data <- Read10X("/projects/cangen/coliveir/Miguel/data/10x/")
-anno <- read.table("/projects/cangen/coliveir/Miguel/data/GSE133486_10XAdiposeNuclei.metaData.tsv")
+## Reading metadata annotation
+anno <- read.table("/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv")
 
-
+## Creating Seurat object
 data <- CreateSeuratObject(counts = data,
                            project = "Adipocyte", 
                            meta.data = anno, 
                            min.cells = 3,
                            min.features = 200)
 
+## Subset remaining only N condition
 data <- subset(data, cells = rownames(data@meta.data)[which(data@meta.data$condition == "N")])
 
+## Cell cycle genes
 m.s.genes <- c("Gmnn", "Rad51", "Prim1", "Dscc1", "Cdca7", "Slbp", "Mcm7", "Cenpu", "Pold3", 
                "Ccne2", "Mcm4", "Polr1b", "Fen1", "Rad51ap1", "Tyms", "Usp1", "Rrm2", "Wdr76", 
                "Dtl", "Rrm1", "Gins2", "Tipin", "Hells", "Ubr7", "Chaf1b", "Clspn", "E2f8", "Mcm5", 
@@ -26,18 +36,25 @@ m.g2m.genes <- c("Cdk1", "Tmpo", "Smc4", "Tacc3", "Mki67", "Ckap2l", "Cks2", "Cd
                  "Cenpe", "Nuf2", "Anln", "Ttk", "Kif2c", "Kif20b", "Aurka", "Hmmr", "Pimreg", "Cks1brt", 
                  "Tubb4b", "Kif23", "Ccnb2", "Ctcf")
 
+## MT based cell thresholding
 data <- subset(data, subset = nFeature_RNA > 200 & nFeature_RNA < 2500)
 
+## Normalizing data
 data <- NormalizeData(data)
 
+## Finding variable features
 data <- FindVariableFeatures(data)
 
+## Scoring cell cycle phases
 data <- CellCycleScoring(data, s.features = m.s.genes, g2m.features = m.g2m.genes, set.ident = TRUE)
 
+## Scalling and centering the data regressing out nCount_RNA, S.Score and G2M.Score
 data <- ScaleData(data, vars.to.regress = c("nCount_RNA", "S.Score", "G2M.Score"))
 
+# Running PCA
 data <- RunPCA(data)
 
+## Defining the best number of PC that has a explained variance greater than 80%
 dp <- data@reductions$pca@stdev
 dp <- dp^2
 for (z in 1:length(dp)) {
@@ -48,10 +65,15 @@ for (z in 1:length(dp)) {
   }
 }
 
+## Clustering
 data <- FindNeighbors(data, dims = 1:best_pc)
 data <- FindClusters(data)
 
+## RunUMAP
 data <- RunUMAP(data, dims = 1:best_pc)
+
+## RunUMAP
 data <- RunTSNE(data, dims = 1:best_pc, max_iter = 5000, perplexity = 50, verbose = T)
 
-saveRDS(data, "/projects/cangen/coliveir/Miguel/output/10x/10x_Processed.rds")
+## Save RDS file
+saveRDS(data, "/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds")

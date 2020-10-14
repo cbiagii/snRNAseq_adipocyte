@@ -10,7 +10,7 @@ new.packages <- CRAN_packages[!(CRAN_packages %in% installed.packages()[,"Packag
 if(length(new.packages)) install.packages(new.packages)
 
 # Install additional Bioconductor packages
-Bioconductor_packages <- c('slingshot', 'SingleCellExperiment', 'fgsea', 'ComplexHeatmap', 'monocle', 'tradeSeq', 'SummarizedExperiment')
+Bioconductor_packages <- c('slingshot', 'SingleCellExperiment', 'fgsea', 'ComplexHeatmap', 'monocle', 'tradeSeq', 'SummarizedExperiment', 'DropletUtils')
 new.packages <- Bioconductor_packages[!(Bioconductor_packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) BiocManager::install(new.packages)
 
