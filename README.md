@@ -27,6 +27,10 @@ This repository contains coding scripts utilized for the analysis performed in t
 
 
 ## Workflow
+AdipoSNAP contains three main steps:
+- 1) Teste
+- 2) Teste
+- 3) Teste
 <img src="Workflow.png" align="center">
 
 
