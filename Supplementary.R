@@ -24,6 +24,21 @@ library(tidyverse)
 ##################################
 ########### Figure S1A ###########
 ##################################
+data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/10x_Processed.rds")
+Idents(data) <- factor(data$CellTypeRefined)
+
+postscript("/projects/cangen/coliveir/Miguel/paper/Figure_S1B.eps", width = 7, height = 6)
+TSNEPlot(data, label = FALSE, pt.size = 0.3) +
+  xlab("t-SNE 1") + ylab("t-SNE 2") +
+  theme_classic() + labs(color = "Cluster") +
+  theme(legend.position="bottom")
+dev.off()
+
+
+
+##################################
+########### Figure S1B ###########
+##################################
 load("/projects/cangen/coliveir/Miguel/output/10x/metacell/db/mc.test_mc_f.Rda")
 lfp = log2(object@mc_fp)
 
@@ -122,21 +137,6 @@ pt <- ggplot(df, aes(x = "", y = value, fill = class)) +
 
 postscript("/projects/cangen/coliveir/Miguel/paper/Figure_S1A_2.eps", width = 7, height = 7)
 print(pt)
-dev.off()
-
-
-
-##################################
-########### Figure S1B ###########
-##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/10x_Processed.rds")
-Idents(data) <- factor(data$CellTypeRefined)
-
-postscript("/projects/cangen/coliveir/Miguel/paper/Figure_S1B.eps", width = 7, height = 6)
-TSNEPlot(data, label = FALSE, pt.size = 0.3) +
-  xlab("t-SNE 1") + ylab("t-SNE 2") +
-  theme_classic() + labs(color = "Cluster") +
-  theme(legend.position="bottom")
 dev.off()
 
 

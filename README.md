@@ -86,7 +86,7 @@ conda activate /Users/biagi/Library/r-miniconda/envs/r-reticulate
 pip install sccaf
 pip install cellphonedb
 ```
-6. If you run into problems, please open a new issue, you can do this by going to 'issues' and clicking on the 'new issue' icon. We will help you replicate our analysis! Do not fear single cell analysis!
+6. If you run into problems, please open a new issue, you can do this by going to *'issues'* and clicking on the *'new issue'* icon. We will help you replicate our analysis! Do not fear single cell analysis!
 
 
 ## Computing environment
