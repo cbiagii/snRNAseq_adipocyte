@@ -28,9 +28,12 @@ This repository contains coding scripts utilized for the analysis performed in t
 
 ## Workflow
 AdipoSNAP contains three main steps:
-- 1) Teste
-- 2) Teste
-- 3) Teste
+1. Dataset: 
+2. Clustering: 
+  2.1 Teste
+3. Main analysis: 
+  3.1 Teste
+  3.2 Teste
 <img src="Workflow.png" align="center">
 
 
