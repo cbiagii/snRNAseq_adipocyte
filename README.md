@@ -30,21 +30,21 @@ This repository contains coding scripts utilized for the analysis performed in t
 AdipoSNAP contains three main steps:
 1. **Dataset:**
 2. **Clustering:**
-    1. SubItem1
-    2. SubItem2
-    3. SubItem3
-    4. SubItem4
+    1. Overclustering
+    2. Optimal number of clusters
+    3. Cell type identification
+    4. Markers expression
 3. **Main analysis:**
-    1. SubItem1
-    2. SubItem2
-    3. SubItem3
-    4. SubItem4
+    1. Differential Expression
+    2. Functional Enrichment
+    3. Transdifferentiation
+    4. Cellular component prediction
 <img src="Workflow.png" align="center">
 
 
 ## How can I use this data, and where can I find it?
 ### Downloading Data files
-Data files utilized in this analysis have been deposited in the [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo/), gene expression data repository at the NIH. Data are part of the GSE131886 high-thoroughput sequencing repository and can be found [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE131886). Data files have been renamed allowing for sample-origin information to be incorporated. Supplementary files contain Cellranger output files, which have been renamed to ensure clarity. Change file names (of filtered information) to 'matrix.mtx.gz', 'barcodes.tsv.gz' and 'features.tsv.gz' after seperating files into donor specific folders. This is necessary, to allow Seurat to read these files. Seruat cannot read files named in their current form. Please note, (unless you are a reviewer or journal editor) since this manuscript is currently under review, GSE raw data files will not be present for public download. If you would like to download the data, please email the project leader for requests.
+Public data files utilized in this analysis have been downloaded from [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo/), gene expression data repository at the NIH. Data are part of the GSE133486 high-thoroughput sequencing repository and can be found [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE133486). The Cellranger output files were renamed to 'matrix.mtx.gz', 'barcodes.tsv.gz' and 'features.tsv.gz' to allow Seurat to read these files.
 
 
 ## Analysis and visualization programs
