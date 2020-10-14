@@ -1,7 +1,7 @@
 # AdipoSNAP: Adipose Single-Nuclei Analysis Pipeline <img src="Logo.png" align="right" width="300" />
 
 
-## Table of Contents
+# Table of Contents
 - [What is this?](#what-is-this)
 - [Workflow](#workflow)
 - [How can I use this data, and where can I find it?](#how-can-i-use-this-data-and-where-can-i-find-it)
@@ -23,7 +23,7 @@
 
 
 ## What is this?
-This repository contains coding scripts utilized for the analysis performed in the "Single-nuclei reconstruction of the adipose tissue using AdipoSNAP (Adipose Single-Nuclei Analysis Pipeline) reveals the mature adipocyte landscape underlying thermogenic response" publication [(XXX)](XXX). The purpose of providing the code here is to allow for transparency and robust data-analysis reproducibility. Most of the steps used for data analysis and visualization have been optimised for an average computing environment (for the year 2019). Some analyses however, require a high-performace computing environment (see computing environment). The methodology has already been described extensively in the manuscript. However, this analysis relies heavily on powerful scRNAseq analysis algorithms developed by the [Satija lab](https://satijalab.org/), namely [Seurat](https://satijalab.org/seurat/) [(Butler et al., 2018: Nature Biotechnology;](https://www.nature.com/articles/nbt.4096) [Stuart et al., 2018: Cell)](https://www.sciencedirect.com/science/article/pii/S0092867419305598?via%3Dihub) (for a complete list of dependencies and code utilized see analysis & visualization programs).
+This repository contains coding scripts utilized for the analysis performed in the "Single-nuclei reconstruction of the adipose tissue using AdipoSNAP (Adipose Single-Nuclei Analysis Pipeline) reveals the mature adipocyte landscape underlying thermogenic response" publication [(XXX)](XXX). The purpose of providing the code here is to allow for transparency and robust data-analysis reproducibility. The methodology has already been described extensively in the manuscript. However, this analysis relies heavily on powerful scRNAseq analysis algorithms like [Seurat](https://satijalab.org/seurat/) [(Butler et al., 2018: Nature Biotechnology;](https://www.nature.com/articles/nbt.4096) [Stuart et al., 2018: Cell)](https://www.sciencedirect.com/science/article/pii/S0092867419305598?via%3Dihub), [SCCAF](https://github.com/SCCAF/sccaf) and [cellphonedb](https://www.cellphonedb.org) [(Efremova et al., 2020: Nature;](https://www.nature.com/articles/s41596-020-0292-x) [Vento-Tormo et al., 2018: Nature)](https://www.nature.com/articles/s41586-018-0698-6) (for a complete list of dependencies and code utilized see analysis & visualization programs).
 
 
 ## Workflow
