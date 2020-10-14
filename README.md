@@ -73,11 +73,11 @@ Public data files utilized in this analysis have been downloaded from [Gene Expr
 ## Setting up the right environment
 1. Install R and Rstudio
 2. Once you have installed R and RStudio, run the [**1_environmetn_setup.R**](https://github.com/cbiagii/AdipoSNAP/blob/master/1_environment_setup.R) script.
-3. Together with *Seurat*, a conda environment called ***r-reticulate*** will be installed. We will install the *SCCAF* and *cellphonedb* modules within this environment so that we can run the Python code inside R using the ***reticulate*** package previously installed. So, to check the installed environment just type the following commands in a new terminal:
+3. Together with *Seurat*, a conda environment called ***r-reticulate*** will be installed. We will install the *SCCAF* and *cellphonedb* modules within this environment so that we can run the Python code inside R using the ***reticulate*** package previously installed. So, to check the installed environment full name just type the following commands in a new terminal:
 ```
 conda env list
 ```
-4. After checking the full name of the environment mentioned above, we will load it:
+4. After checking the full name of the environment mentioned above, we will load it (replace the path below with the similar one shown on your terminal):
 ```
 conda activate /Users/biagi/Library/r-miniconda/envs/r-reticulate
 ```
