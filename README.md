@@ -71,12 +71,25 @@ Public data files utilized in this analysis have been downloaded from [Gene Expr
 
 
 ## Setting up the right environment
-1. Install R
-2. Install Rstudio
-3. You are ready to rumble in the jungle. 
-4. Once you have installed R and RStudio, run the [**1_environmetn_setup.R**](https://github.com/cbiagii/AdipoSNAP/blob/master/1_environment_setup.R) script.
-5. If you need help understanding how commands are run in R  use the [ctrl + enter] command or please visit [here](https://support.rstudio.com/hc/en-us/articles/200484448-Editing-and-Executing-Code).
-6. If you run into problems, please open a new issue, you can do this by going to 'issues' and clicking on the 'new issue' icon. We will help you replicate our analysis! Do not fear single cell analysis!
+1. Install R and Rstudio
+2. You are ready to rumble in the jungle. 
+3. Once you have installed R and RStudio, run the [**1_environmetn_setup.R**](https://github.com/cbiagii/AdipoSNAP/blob/master/1_environment_setup.R) script.
+4. Next step is to install SCCAF and cellphonedb. Both are in Python, so it is necessary to have *Python* installed (> v3.5), *pip* and/or *conda*.
+5. Once installed the software in item 4, to install SCCAF just type:
+```
+pip install sccaf
+
+or
+
+conda install sccaf
+```
+6. And to install cellphonedb just type:
+```
+python -m venv cpdb-venv
+source cpdb-venv/bin/activate
+pip install cellphonedb
+```
+7. If you run into problems, please open a new issue, you can do this by going to 'issues' and clicking on the 'new issue' icon. We will help you replicate our analysis! Do not fear single cell analysis!
 
 
 ## Computing environment
