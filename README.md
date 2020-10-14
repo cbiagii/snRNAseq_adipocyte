@@ -48,24 +48,24 @@ Public data files utilized in this analysis have been downloaded from [Gene Expr
 
 
 ## Analysis and visualization programs
-### R and R's integrated developmental environment RStudio:
+#### R and R's integrated developmental environment RStudio:
 1. [R v4.0.2 (x64 bit)](https://cran.r-project.org/bin/macosx/base/)
 2. [RStudio v1.3.1073 (x64 bit)](https://www.rstudio.com/products/rstudio/download/)
 4. [Tutorial for R](https://cran.r-project.org/doc/manuals/r-release/R-intro.html)
 5. [Tutorial for RStudio](https://resources.rstudio.com/)
-### scRNAseq analysis pipeline SEURAT developed by the Satija lab:
+#### scRNAseq analysis pipeline SEURAT developed by the Satija lab:
 1. [Source code for Seurat v3.2.2](https://cran.r-project.org/web/packages/Seurat/index.html)
 2. [Tutorials for Seurat](https://satijalab.org/seurat/)
-### Pseudotemporal gene expression analysis using Monocle developed by the Trapnell Lab:
+#### Pseudotemporal gene expression analysis using Monocle developed by the Trapnell Lab:
 1. [Source code for Monocle v2.16.0](https://bioconductor.org/packages/release/bioc/html/monocle.html)
 2. [Tutorial for Monocle](http://cole-trapnell-lab.github.io/monocle-release/docs/#constructing-single-cell-trajectories)
-### Cell type classification using Metacell:
+#### Cell type classification using Metacell:
 1. [Source code for metacell v0.3.41](https://github.com/tanaylab/metacell/releases/tag/v0.3.41)
 2. [Tutorial for metacell](https://tanaylab.github.io/metacell/)
-### Cellular component prediction using cellphonedb:
+#### Cellular component prediction using cellphonedb:
 1. [Source code for cellphonedb v2.1.4](https://github.com/Teichlab/cellphonedb/releases/tag/v2.1.4)
 2. [Tutorial for cellphonedb](https://github.com/Teichlab/cellphonedb)
-### Finding the optimal number of clusters using SCCAF:
+#### Finding the optimal number of clusters using SCCAF:
 1. [Source code for SCCAF v0.09](https://github.com/SCCAF/sccaf/releases/tag/0.09)
 2. [Tutorial for SCCAF](https://github.com/SCCAF/sccaf)
 
