@@ -1,7 +1,7 @@
 # AdipoSNAP: Adipose Single-Nuclei Analysis Pipeline <img src="Logo.png" align="right" width="300" />
 
 
-# Table of Contents
+## Table of Contents
 - [What is this?](#what-is-this)
 - [Workflow](#workflow)
 - [How can I use this data, and where can I find it?](#how-can-i-use-this-data-and-where-can-i-find-it)
