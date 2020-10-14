@@ -74,7 +74,7 @@ Public data files utilized in this analysis have been downloaded from [Gene Expr
 1. Install R
 2. Install Rstudio
 3. You are ready to rumble in the jungle. 
-4. Once you have installed R and RStudio, run the **1_environmetn_setup.R** script.
+4. Once you have installed R and RStudio, run the [**1_environmetn_setup.R**](https://github.com/cbiagii/AdipoSNAP/blob/master/1_environment_setup.R) script.
 5. If you need help understanding how commands are run in R  use the [ctrl + enter] command or please visit [here](https://support.rstudio.com/hc/en-us/articles/200484448-Editing-and-Executing-Code).
 6. If you run into problems, please open a new issue, you can do this by going to 'issues' and clicking on the 'new issue' icon. We will help you replicate our analysis! Do not fear single cell analysis!
 
