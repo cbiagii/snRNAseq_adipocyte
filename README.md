@@ -30,10 +30,15 @@ This repository contains coding scripts utilized for the analysis performed in t
 AdipoSNAP contains three main steps:
 1. Dataset: 
 2. Clustering: 
-  1. Teste
+  2.1. SubItemA
+  2.2. SubItemB
+  2.3. SubItemC
+  2.4. SubItemD
 3. Main analysis: 
-  1. Teste
-  2. Teste
+  3.1. SubItemE
+  3.2. SubItemF
+  3.3. SubItemG
+  3.4. SubItemH
 <img src="Workflow.png" align="center">
 
 
