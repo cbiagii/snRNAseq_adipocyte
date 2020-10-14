@@ -14,6 +14,9 @@ Bioconductor_packages <- c('slingshot', 'SingleCellExperiment', 'fgsea', 'Comple
 new.packages <- Bioconductor_packages[!(Bioconductor_packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) BiocManager::install(new.packages)
 
+# Install reticulate package
+install.packages('reticulate')
+
 # Install Seurat and SeuratWrappers packages
 install.packages('Seurat')
 install.packages('SeuratWrappers')
