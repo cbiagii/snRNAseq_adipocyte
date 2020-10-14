@@ -433,7 +433,7 @@ dev.off()
 volcano.plot = function(res, upGenes = NULL, downGenes = NULL){
   mut <- as.data.frame(res)
   mut <- na.omit(mut)
-  mutateddf <- dplyr::mutate(mut, sig=ifelse(mut$gene %in% upGenes,"Up_regulated", ifelse(mut$gene %in% downGenes , "Down_regulated", "Not_different")))
+  mutateddf <- mutate(mut, sig=ifelse(mut$gene %in% upGenes,"Up_regulated", ifelse(mut$gene %in% downGenes , "Down_regulated", "Not_different")))
   rownames(mutateddf) <- rownames(mut)
   input <- cbind(gene=rownames(mutateddf), mutateddf)
   colnames(input)[which(colnames(input)=="sig")] <- "Significance"
@@ -607,7 +607,7 @@ top2 <- markers_CLxRT %>% top_n(n = 50, wt = avg_logFC)
 top10 <- rbind(top1, top2)
 
 cls <- c("blue", "red", "green")
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 
 ht1 <- DoHeatmap(data2, features = top10$gene, group.colors = cls, angle = 0, size = 5, label = F) +
   scale_fill_gradientn(colours = rev(mapal)) +
@@ -687,11 +687,11 @@ paths <- paths[which(paths$Term %in% c("PPAR signaling pathway", "Propanoate met
 
 paths <- paths %>%
   mutate(
-    class_with_color = ifelse(class == "KEGG_2019_Mouse", glue::glue("<strong><span style='color:#0000FF'>{Term}</span></strong>"),
-                              ifelse(class == "WikiPathways_2019_Mouse", glue::glue("<strong><span style='color:#f28804'>{Term}</span></strong>"),
-                                     ifelse(class == "Jensen_TISSUES", glue::glue("<strong><span style='color:#CC0000'>{Term}</span></strong>"),
-                                            ifelse(class == "GO_Biological_Process_2018", glue::glue("<strong><span style='color:#9900CC'>{Term}</span></strong>"),
-                                                   glue::glue("<strong><span style='color:#18a997'>{Term}</span></strong>")))))
+    class_with_color = ifelse(class == "KEGG_2019_Mouse", glue("<strong><span style='color:#0000FF'>{Term}</span></strong>"),
+                              ifelse(class == "WikiPathways_2019_Mouse", glue("<strong><span style='color:#f28804'>{Term}</span></strong>"),
+                                     ifelse(class == "Jensen_TISSUES", glue("<strong><span style='color:#CC0000'>{Term}</span></strong>"),
+                                            ifelse(class == "GO_Biological_Process_2018", glue("<strong><span style='color:#9900CC'>{Term}</span></strong>"),
+                                                   glue("<strong><span style='color:#18a997'>{Term}</span></strong>")))))
   )
 
 
@@ -734,16 +734,16 @@ data <- ScaleData(data, features = rownames(data))
 ##Fatty Acid Oxidation
 genes1 <- c('Abcb11', 'Abcd1', 'Abcd2', 'Abcd3', 'Abcd4', 'Acaa1a', 'Acaa1b', 'Acaa2', 'Acacb', 'Acad11', 'Acadl', 'Acadm', 'Acads', 'Acadvl', 'Acat1', 'Acat2', 'Acat3', 'Acox1', 'Acox2', 'Acox3', 'Acoxl', 'Acsbg2', 'Acsl5', 'Adh4', 'Adh5', 'Adh7', 'Adipoq', 'Adipor1', 'Adipor2', 'Akt1', 'Akt2', 'Alox12', 'Appl2', 'Auh', 'Bdh2', 'C1qtnf2', 'C1qtnf9', 'Cd36', 'Cnr1', 'Cpt1a', 'Cpt2', 'Crat', 'Crot', 'Cygb', 'Cyp4v3', 'Cyp24a1', 'Dbi', 'Decr1', 'Dgat1', 'Dgat2', 'Echdc1', 'Echdc2', 'Echs1', 'Eci1', 'Eci2', 'Eci3', 'Ehhadh', 'Etfa', 'Etfb', 'Etfbkmt', 'Etfdh', 'Fabp1', 'Fabp3', 'Gcdh', 'Gm45753', 'Gm49387', 'Hacl1', 'Hadh', 'Hadha', 'Hadhb', 'Hao1', 'Hao2', 'Hsd17b4', 'Hsd17b10', 'Ilvbl', 'Irs1', 'Irs2', 'Ivd', 'Lep', 'Lonp2', 'Mapk14', 'Mfsd2a', 'Mir199a-2', 'Mir214', 'Mir696', 'Mlycd', 'Mtor', 'Nr4a3', 'Nucb2', 'Pdk4', 'Pex2', 'Pex5', 'Pex7', 'Pex13', 'Phyh', 'Plin5', 'Por', 'Ppara', 'Ppard', 'Pparg', 'Ppargc1a', 'Prkaa1', 'Scp2', 'Sesn2', 'Sirt4', 'Slc25a17', 'Slc27a2', 'Sox9', 'Twist1', 'Tysnd1')
 genes1 <- genes1[genes1 %in% rownames(data)]
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 ht1 <- DoHeatmap(data, features = genes1, angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
   labs(color='UCP1 Expression')
 y <- ht1$data %>% drop_na()
-x <- y %>% group_by(Identity) %>% dplyr::select(Feature, Cell, Identity, Expression) %>%
-  tidyr::spread(key = Feature, value = Expression)
-w <- y %>% dplyr::select(Feature, Cell, Expression) %>%
-  tidyr::spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
+x <- y %>% group_by(Identity) %>% select(Feature, Cell, Identity, Expression) %>%
+  spread(key = Feature, value = Expression)
+w <- y %>% select(Feature, Cell, Expression) %>%
+  spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
 pt <- Heatmap(w, cluster_columns = F)
 ht1 <- DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
@@ -768,16 +768,16 @@ dev.off()
 ##Tricarboxylic Acid Cycle
 genes2 <- c('4933405O20Rik', 'Aco1', 'Aco2', 'Cs', 'Csl', 'Dhtkd1', 'Dlat', 'Dlst', 'Fh1', 'Idh1', 'Idh2', 'Idh3a', 'Idh3b', 'Idh3g', 'Ireb2', 'Mdh1', 'Mdh1b', 'Mdh2', 'Ndufs4', 'Ogdh', 'Ogdhl', 'Pdha1', 'Pdha2', 'Pdhb', 'Sdha', 'Sdhaf2', 'Sdhb', 'Sdhc', 'Sdhd', 'Sucla2', 'Suclg1', 'Suclg2')
 genes2 <- genes2[genes2 %in% rownames(data)]
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 ht1 <- DoHeatmap(data, features = genes2, angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
   labs(color='UCP1 Expression')
 y <- ht1$data %>% drop_na()
-x <- y %>% group_by(Identity) %>% dplyr::select(Feature, Cell, Identity, Expression) %>%
-  tidyr::spread(key = Feature, value = Expression)
-w <- y %>% dplyr::select(Feature, Cell, Expression) %>%
-  tidyr::spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
+x <- y %>% group_by(Identity) %>% select(Feature, Cell, Identity, Expression) %>%
+  spread(key = Feature, value = Expression)
+w <- y %>% select(Feature, Cell, Expression) %>%
+  spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
 pt <- Heatmap(w, cluster_columns = F)
 ht1 <- DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
@@ -802,16 +802,16 @@ dev.off()
 ##Fat Acid Transport
 genes3 <- c('Abcc1', 'Abcc2', 'Abcc4', 'Abcd1', 'Abcd2', 'Abcd3', 'Abcd4', 'Ace', 'Acsl1', 'Acsl3', 'Acsl4', 'Acsl5', 'Acsl6', 'Agtr2', 'Akt1', 'Akt2', 'Anxa1', 'Apoe', 'Atp5j', 'Avpr1b', 'Bdkrb2', 'Cd36', 'Cpt1b', 'Crot', 'Cyp4f18', 'Drd2', 'Drd3', 'Drd4', 'Edn1', 'Eprs', 'Erfe', 'Fabp1', 'Fabp2', 'Fabp3', 'Fabp4', 'Fabp5', 'Hnf1a', 'Hrh2', 'Il1a', 'Il1b', 'Irs2', 'Kiss1r', 'Lep', 'Lhcgr', 'Map2k6', 'Mapk9', 'Mfsd2a', 'Mif', 'Nmb', 'Nmur2', 'Nos2', 'Ntsr1', 'Oc90', 'Oxt', 'P2rx7', 'P2ry2', 'Pla2g1b', 'Pla2g2c', 'Pla2g2d', 'Pla2g2e', 'Pla2g2f', 'Pla2g3', 'Pla2g4a', 'Pla2g4f', 'Pla2g5', 'Pla2g6', 'Pla2g10', 'Pla2g12a', 'Pla2g12b', 'Pla2r1', 'Plin2', 'Pnpla8', 'Pparg', 'Ptges', 'Repin1', 'Rps6kb1', 'Slc2a1', 'Slc5a8', 'Slc22a22', 'Slc25a17', 'Slc27a1', 'Slc27a2', 'Slc27a3', 'Slc27a4', 'Slc27a5', 'Slc27a6', 'Slco2a1', 'Slco3a1', 'Spx', 'Sstr4', 'Syk', 'Thbs1', 'Tnfrsf11a', 'Tnfsf11')
 genes3 <- genes3[genes3 %in% rownames(data)]
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 ht1 <- DoHeatmap(data, features = genes3, angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
   labs(color='UCP1 Expression')
 y <- ht1$data %>% drop_na()
-x <- y %>% group_by(Identity) %>% dplyr::select(Feature, Cell, Identity, Expression) %>%
-  tidyr::spread(key = Feature, value = Expression)
-w <- y %>% dplyr::select(Feature, Cell, Expression) %>%
-  tidyr::spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
+x <- y %>% group_by(Identity) %>% select(Feature, Cell, Identity, Expression) %>%
+  spread(key = Feature, value = Expression)
+w <- y %>% select(Feature, Cell, Expression) %>%
+  spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
 pt <- Heatmap(w, cluster_columns = F)
 ht1 <- DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
@@ -836,16 +836,16 @@ dev.off()
 ##Triglyceride/Fatty Acid Cycle
 genes4 <- c('Aadac', 'Abhd5', 'Daglb', 'Pnpla2', 'Pck1', 'Pcx' , 'Gpd1', 'Slc2a4', 'Lipe', 'Adrb3')
 genes4 <- genes4[genes4 %in% rownames(data)]
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 ht1 <- DoHeatmap(data, features = genes4, angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
   labs(color='UCP1 Expression')
 y <- ht1$data %>% drop_na()
-x <- y %>% group_by(Identity) %>% dplyr::select(Feature, Cell, Identity, Expression) %>%
-  tidyr::spread(key = Feature, value = Expression)
-w <- y %>% dplyr::select(Feature, Cell, Expression) %>%
-  tidyr::spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
+x <- y %>% group_by(Identity) %>% select(Feature, Cell, Identity, Expression) %>%
+  spread(key = Feature, value = Expression)
+w <- y %>% select(Feature, Cell, Expression) %>%
+  spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
 pt <- Heatmap(w, cluster_columns = F)
 ht1 <- DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
@@ -1066,7 +1066,7 @@ markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
 markers <- subset(markers, p_val_adj < 0.05 & cluster == 'High')
 markers <- markers[order(markers$avg_logFC, decreasing = T), ]
 
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 
 ht1 <- DoHeatmap(data, features = markers$gene, angle = 0, size = 5, label = F) +
   scale_fill_gradientn(colours = rev(mapal)) +
@@ -1132,16 +1132,16 @@ data <- ScaleData(data, features = rownames(data))
 
 genes8 <- c('Atp2a1', 'Atp2a2', 'Tmtc4', 'Adra1a', 'Arpc2')
 genes8 <- genes8[genes8 %in% rownames(data)]
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 ht1 <- DoHeatmap(data, features = genes8, angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
   labs(color='UCP1 Expression')
 y <- ht1$data %>% drop_na()
-x <- y %>% group_by(Identity) %>% dplyr::select(Feature, Cell, Identity, Expression) %>%
-  tidyr::spread(key = Feature, value = Expression)
-w <- y %>% dplyr::select(Feature, Cell, Expression) %>%
-  tidyr::spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
+x <- y %>% group_by(Identity) %>% select(Feature, Cell, Identity, Expression) %>%
+  spread(key = Feature, value = Expression)
+w <- y %>% select(Feature, Cell, Expression) %>%
+  spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
 pt <- Heatmap(w, cluster_columns = F)
 ht1 <- DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
@@ -1165,16 +1165,16 @@ dev.off()
 
 genes6 <- c('Slc6a8', 'Gatm', 'Gamt', 'Ckmt1', 'Ckmt2')
 genes6 <- genes6[genes6 %in% rownames(data)]
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 ht1 <- DoHeatmap(data, features = genes6, angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
   labs(color='UCP1 Expression')
 y <- ht1$data %>% drop_na()
-x <- y %>% group_by(Identity) %>% dplyr::select(Feature, Cell, Identity, Expression) %>%
-  tidyr::spread(key = Feature, value = Expression)
-w <- y %>% dplyr::select(Feature, Cell, Expression) %>%
-  tidyr::spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
+x <- y %>% group_by(Identity) %>% select(Feature, Cell, Identity, Expression) %>%
+  spread(key = Feature, value = Expression)
+w <- y %>% select(Feature, Cell, Expression) %>%
+  spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
 pt <- Heatmap(w, cluster_columns = F)
 ht1 <- DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
@@ -1198,16 +1198,16 @@ dev.off()
 
 genes <- c('Actn3', 'Adpgk', 'Aldoa', 'Aldoart1', 'Aldoart2', 'Aldob', 'Aldoc', 'App', 'Bpgm', 'Cbfa2t3', 'Ddit4', 'Dhtkd1', 'Eif6', 'Eno1', 'Eno1b', 'Eno2', 'Eno3', 'Eno4', 'Entpd5', 'Ep300', 'Esrrb', 'Fbp1', 'Foxk1', 'Foxk2', 'Gale', 'Galk1', 'Galt', 'Gapdh', 'Gapdhs', 'Gck', 'Gm3839', 'Gm10358', 'Gm11214', 'Gm12117', 'Gm15294', 'Gpd1', 'Gpi1', 'Hdac4', 'Hif1a', 'Hk1', 'Hk2', 'Hk3', 'Hkdc1', 'Htr2a', 'Ier3', 'Ifng', 'Igf1', 'Il3', 'Ins2', 'Insr', 'Jmjd8', 'Khk', 'Mif', 'Mlxipl', 'Mpi', 'Mtch2', 'Myc', 'Myog', 'Ncor1', 'Nupr1', 'Ogdh', 'Ogt', 'P2rx7', 'Pfkfb2', 'Pfkl', 'Pfkm', 'Pfkp', 'Pgam1', 'Pgam2', 'Pgk1', 'Pgk2', 'Pklr', 'Pkm', 'Ppara', 'Ppargc1a', 'Prkaa1', 'Prkaa2', 'Prkag2', 'Prkag3', 'Prxl2c', 'Psen1', 'Sirt6', 'Slc2a6', 'Slc4a1', 'Slc4a4', 'Stat3', 'Tigar', 'Tkfc', 'Tpi1', 'Trex1', 'Zbtb7a', 'Zbtb20')
 genes <- genes[genes %in% rownames(data)]
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 ht1 <- DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
   labs(color='UCP1 Expression')
 y <- ht1$data %>% drop_na()
-x <- y %>% group_by(Identity) %>% dplyr::select(Feature, Cell, Identity, Expression) %>%
-  tidyr::spread(key = Feature, value = Expression)
-w <- y %>% dplyr::select(Feature, Cell, Expression) %>%
-  tidyr::spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
+x <- y %>% group_by(Identity) %>% select(Feature, Cell, Identity, Expression) %>%
+  spread(key = Feature, value = Expression)
+w <- y %>% select(Feature, Cell, Expression) %>%
+  spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
 pt <- Heatmap(w, cluster_columns = F)
 ht1 <- DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +

@@ -22,6 +22,8 @@ library(pbapply)
 library(gam)
 library(tradeSeq)
 library(SummarizedExperiment)
+library(UpSetR)
+library(glue)
 
 
 #################################
@@ -215,7 +217,7 @@ rm(data)
 data2 <- ScaleData(data2)
 
 cls <- c("#FFA500", "#329932", "#ff9999", "#6666ff")
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 
 ht1 <- DoHeatmap(data2, features = top10$gene, group.colors = cls, angle = 0, size = 5, label = F) +
   scale_fill_gradientn(colours = rev(mapal)) +
@@ -407,10 +409,10 @@ paths <- paths[which(paths$Term %in% c("PPAR signaling pathway", "AMPK signaling
 
 paths <- paths %>%
   mutate(
-    class_with_color = ifelse(class == "KEGG_2019_Mouse", glue::glue("<strong><span style='color:#0000FF'>{Term}</span></strong>"),
-                              ifelse(class == "GO_Biological_Process_2018", glue::glue("<strong><span style='color:#9900CC'>{Term}</span></strong>"),
-                                     ifelse(class == "Jensen_TISSUES", glue::glue("<strong><span style='color:#CC0000'>{Term}</span></strong>"),
-                                            glue::glue("<strong><span style='color:'>{Term}</span></strong>"))))
+    class_with_color = ifelse(class == "KEGG_2019_Mouse", glue("<strong><span style='color:#0000FF'>{Term}</span></strong>"),
+                              ifelse(class == "GO_Biological_Process_2018", glue("<strong><span style='color:#9900CC'>{Term}</span></strong>"),
+                                     ifelse(class == "Jensen_TISSUES", glue("<strong><span style='color:#CC0000'>{Term}</span></strong>"),
+                                            glue("<strong><span style='color:'>{Term}</span></strong>"))))
   )
 paths <- paths %>% group_by(type) %>% arrange(desc(Combined.Score), .by_group = TRUE)
 paths$class_with_color <- factor(paths$class_with_color, levels = rev(unique(paths$class_with_color)))
@@ -481,7 +483,7 @@ data <- RunALRA(data)
 data <- ScaleData(data)
 
 cls <- c("#11c78b", "#800080", "#e57400", "#0000FF", "#dfdf0d")
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 
 ht1 <- DoHeatmap(data, features = top10$gene, group.colors = cls, angle = 0, size = 5, label = F) +
   scale_fill_gradientn(colours = rev(mapal)) +
@@ -593,11 +595,11 @@ paths <- paths[which(paths$Term %in% c("PPAR signaling pathway", "Fatty acid deg
 
 paths <- paths %>%
   mutate(
-    class_with_color = ifelse(class == "KEGG_2019_Mouse", glue::glue("<strong><span style='color:#0000FF'>{Term}</span></strong>"),
-                              ifelse(class == "WikiPathways_2019_Mouse", glue::glue("<strong><span style='color:#f28804'>{Term}</span></strong>"),
-                                     ifelse(class == "Jensen_TISSUES", glue::glue("<strong><span style='color:#CC0000'>{Term}</span></strong>"),
-                                            ifelse(class == "GO_Biological_Process_2018", glue::glue("<strong><span style='color:#9900CC'>{Term}</span></strong>"),
-                                                   glue::glue("<strong><span style='color:#18a997'>{Term}</span></strong>")))))
+    class_with_color = ifelse(class == "KEGG_2019_Mouse", glue("<strong><span style='color:#0000FF'>{Term}</span></strong>"),
+                              ifelse(class == "WikiPathways_2019_Mouse", glue("<strong><span style='color:#f28804'>{Term}</span></strong>"),
+                                     ifelse(class == "Jensen_TISSUES", glue("<strong><span style='color:#CC0000'>{Term}</span></strong>"),
+                                            ifelse(class == "GO_Biological_Process_2018", glue("<strong><span style='color:#9900CC'>{Term}</span></strong>"),
+                                                   glue("<strong><span style='color:#18a997'>{Term}</span></strong>")))))
   )
 
 paths <- paths %>% group_by(type) %>% arrange(desc(Combined.Score), .by_group = TRUE)
@@ -800,7 +802,7 @@ dev.off()
 #volcano.plot = function(res, upGenes = NULL, downGenes = NULL){
 #  mut <- as.data.frame(res)
 #  mut <- na.omit(mut)
-#  mutateddf <- dplyr::mutate(mut, sig=ifelse(mut$gene %in% upGenes,"Up_regulated", ifelse(mut$gene %in% downGenes , "Down_regulated", "Not_different")))
+#  mutateddf <- mutate(mut, sig=ifelse(mut$gene %in% upGenes,"Up_regulated", ifelse(mut$gene %in% downGenes , "Down_regulated", "Not_different")))
 #  rownames(mutateddf) <- rownames(mut)
 #  input <- cbind(gene=rownames(mutateddf), mutateddf)
 #  colnames(input)[which(colnames(input)=="sig")] <- "Significance"
@@ -1055,7 +1057,7 @@ genes <- c('Acaa2', 'Ehhadh', 'Slc27a2', 'Acadm', 'Scp2', 'Acadvl', 'Hadha', 'Ha
 
 genes <- genes[genes %in% rownames(data)]
 
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 ht1 <- DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
@@ -1394,7 +1396,7 @@ markers <- markers[order(markers$avg_logFC, decreasing = T), ]
 
 genes1 <- c(head(markers$gene, 10), tail(markers$gene, 10))
 
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 ht1 <- DoHeatmap(data, features = genes1, angle = 0, size = 5, label = F) +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
@@ -1537,7 +1539,7 @@ genes <- c('Acaa2', 'Ehhadh', 'Slc27a2', 'Acadm', 'Scp2', 'Acadvl', 'Hadha', 'Ha
            "Daglb", "Slc2a4", "Gpd1", "Pcx", "Abhd5", "Adrb3", "Lipe", "Pck1", "Pnpla2")
 genes <- genes[genes %in% rownames(data)]
 
-mapal <- colorRampPalette(RColorBrewer::brewer.pal(11,"RdBu"))(256)
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 ht1 <- DoHeatmap(data, features = genes, angle = 0, size = 5, label = F) +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
@@ -1563,8 +1565,6 @@ dev.off()
 #################################
 ########### Figure 4F ###########
 #################################
-library(UpSetR)
-
 expressionInput <- c(Set1 = 962, Set2 = 244, Set3 = 73, Set4 = 35, `Set1&Set2` = 315, `Set1&Set3` = 16, `Set2&Set3` = 1, `Set1&Set2&Set3` = 46)
 
 postscript("/Users/biagi/cangen/coliveir/Miguel/paper/Figure_4F.eps", width = 8, height = 6)
