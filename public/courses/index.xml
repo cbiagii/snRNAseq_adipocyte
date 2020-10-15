@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Courses | AdipoSNAP</title>
+    <link>https://cbiagii.github.io/AdipoSNAP/courses/</link>
+      <atom:link href="https://cbiagii.github.io/AdipoSNAP/courses/index.xml" rel="self" type="application/rss+xml" />
+    <description>Courses</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 05 May 2019 00:00:00 +0100</lastBuildDate>
+    <image>
+      <url>https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png</url>
+      <title>Courses</title>
+      <link>https://cbiagii.github.io/AdipoSNAP/courses/</link>
+    </image>
+    
+  </channel>
+</rss>
