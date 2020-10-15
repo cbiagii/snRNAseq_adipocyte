@@ -1,111 +1,46 @@
-# AdipoSNAP: Adipose Single-Nuclei Analysis Pipeline <img src="Logo.png" align="right" width="300" />
+<p align="center"><a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener"><img src="https://sourcethemes.com/academic/img/logo_200px.png" alt="Academic logo"></a></p>
 
+# Academic Kickstart: The Template for [Academic Website Builder](https://sourcethemes.com/academic/)
 
-# Table of Contents
-- [What is this?](#what-is-this)
-- [Workflow](#workflow)
-- [How can I use this data, and where can I find it?](#how-can-i-use-this-data-and-where-can-i-find-it)
-	- [Downloading Data files](#downloading-data-files)
-- [Analysis and visualization programs](#analysis-and-visualization-programs)
-	- [R and R's integrated developmental environment RStudio](#r-and-rs-integrated-developmental-environment-rstudio)
-	- [scRNAseq analysis pipeline SEURAT developed by the Satija lab](#scrnaseq-analysis-pipeline-seurat-developed-by-the-satija-lab)
-	- [Pseudotemporal gene expression analysis using Monocle developed by the Trapnell Lab](#pseudotemporal-gene-expression-analysis-using-monocle-developed-by-the-trapnell-lab)
-	- [Cell type classification using Metacell](#cell-type-classification-using-metacell)
-	- [Cellular component prediction using cellphonedb](#cellular-component-prediction-using-cellphonedb)
-	- [Finding the optimal number of clusters using SCCAF](#finding-the-optimal-number-of-clusters-using-sccaf)
-- [Setting up the right environment](#setting-up-the-right-environment)
-- [Citation](#citation)
-- [Contributors](#contributors)
-- [Acknowledgements](#acknowledgements)
+[**Academic**](https://github.com/gcushen/hugo-academic) makes it easy to create a beautiful website for free using Markdown, Jupyter, or RStudio. Customize anything on your site with widgets, themes, and language packs. [Check out the latest demo](https://academic-demo.netlify.app/) of what you'll get in less than 10 minutes, or [view the showcase](https://sourcethemes.com/academic/#expo).
 
+**Academic Kickstart** provides a minimal template to kickstart your new website.
 
+- 👉 [**Get Started**](#install)
+- 📚 [View the **documentation**](https://sourcethemes.com/academic/docs/)
+- 💬 [Chat with the **Academic community**](https://spectrum.chat/academic) or [**Hugo community**](https://discourse.gohugo.io)
+- 🐦 Twitter: [@source_themes](https://twitter.com/source_themes) [@GeorgeCushen](https://twitter.com/GeorgeCushen) [#MadeWithAcademic](https://twitter.com/search?q=%23MadeWithAcademic&src=typd)
+- 💡 [Request a **feature** or report a **bug**](https://github.com/gcushen/hugo-academic/issues)
+- ⬆️ **Updating?** View the [Update Guide](https://sourcethemes.com/academic/docs/update/) and [Release Notes](https://sourcethemes.com/academic/updates/)
+- :heart: **Support development** of Academic:
+  - ☕️ [**Donate a coffee**](https://paypal.me/cushen)
+  - 💵 [Become a backer on **Patreon** and **unlock rewards**](https://www.patreon.com/cushen)
+  - 🖼️ [Decorate your laptop or journal with an Academic **sticker**](https://www.redbubble.com/people/neutreno/works/34387919-academic)
+  - 👕 [Wear the **T-shirt**](https://academic.threadless.com/)
+  - :woman_technologist: [**Contribute**](https://sourcethemes.com/academic/docs/contribute/)
 
-## What is this?
-This repository contains coding scripts utilized for the analysis performed in the "Single-nuclei reconstruction of the adipose tissue using AdipoSNAP (Adipose Single-Nuclei Analysis Pipeline) reveals the mature adipocyte landscape underlying thermogenic response" publication [(XXX)](XXX). The purpose of providing the code here is to allow for transparency and robust data-analysis reproducibility. The methodology has already been described extensively in the manuscript. However, this analysis relies heavily on powerful scRNAseq analysis algorithms like [Seurat](https://satijalab.org/seurat/) [(Butler et al., 2018: Nature Biotechnology;](https://www.nature.com/articles/nbt.4096) [Stuart et al., 2018: Cell)](https://www.sciencedirect.com/science/article/pii/S0092867419305598?via%3Dihub), [SCCAF](https://github.com/SCCAF/sccaf), [Metacell](https://tanaylab.github.io/metacell/) [(Baran et al., 2019: Genome Biology)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1812-2) and [cellphonedb](https://www.cellphonedb.org) [(Efremova et al., 2020: Nature;](https://www.nature.com/articles/s41596-020-0292-x) [Vento-Tormo et al., 2018: Nature)](https://www.nature.com/articles/s41586-018-0698-6) (for a complete list of dependencies and code utilized see analysis & visualization programs).
+[![Screenshot](https://raw.githubusercontent.com/gcushen/hugo-academic/master/academic.png)](https://github.com/gcushen/hugo-academic/)
 
+## Install
 
-## Workflow
-AdipoSNAP contains three main steps:
-1. **Dataset:**
-2. **Clustering:**
-    1. Overclustering
-    2. Optimal number of clusters
-    3. Cell type identification
-    4. Markers expression
-3. **Main analysis:**
-    1. Differential Expression
-    2. Functional Enrichment
-    3. Transdifferentiation
-    4. Cellular component prediction
-<img src="Workflow.png" align="center">
+You can choose from one of the following four methods to install:
 
+* [**one-click install using your web browser (recommended)**](https://sourcethemes.com/academic/docs/install/#install-with-web-browser)
+* [install on your computer using **Git** with the Command Prompt/Terminal app](https://sourcethemes.com/academic/docs/install/#install-with-git)
+* [install on your computer by downloading the **ZIP files**](https://sourcethemes.com/academic/docs/install/#install-with-zip)
+* [install on your computer with **RStudio**](https://sourcethemes.com/academic/docs/install/#install-with-rstudio)
 
-## How can I use this data, and where can I find it?
-### Downloading Data files
-Public data files utilized in this analysis have been downloaded from [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo/), gene expression data repository at the NIH. Data are part of the GSE133486 high-thoroughput sequencing repository and can be found [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE133486). The Cellranger output files were renamed to 'matrix.mtx.gz', 'barcodes.tsv.gz' and 'features.tsv.gz' to allow Seurat to read these files.
+Then [personalize your new site](https://sourcethemes.com/academic/docs/get-started/).
 
+## Ecosystem
 
-## Analysis and visualization programs
-#### R and R's integrated developmental environment RStudio:
-1. [R v4.0.2 (x64 bit)](https://cran.r-project.org/bin/macosx/base/)
-2. [RStudio v1.3.1073 (x64 bit)](https://www.rstudio.com/products/rstudio/download/)
-4. [Tutorial for R](https://cran.r-project.org/doc/manuals/r-release/R-intro.html)
-5. [Tutorial for RStudio](https://resources.rstudio.com/)
-#### scRNAseq analysis pipeline SEURAT developed by the Satija lab:
-1. [Source code for Seurat v3.2.2](https://cran.r-project.org/web/packages/Seurat/index.html)
-2. [Tutorials for Seurat](https://satijalab.org/seurat/)
-#### Pseudotemporal gene expression analysis using Monocle developed by the Trapnell Lab:
-1. [Source code for Monocle v2.16.0](https://bioconductor.org/packages/release/bioc/html/monocle.html)
-2. [Tutorial for Monocle](http://cole-trapnell-lab.github.io/monocle-release/docs/#constructing-single-cell-trajectories)
-#### Cell type classification using Metacell:
-1. [Source code for metacell v0.3.41](https://github.com/tanaylab/metacell/releases/tag/v0.3.41)
-2. [Tutorial for metacell](https://tanaylab.github.io/metacell/)
-#### Cellular component prediction using cellphonedb:
-1. [Source code for cellphonedb v2.1.4](https://github.com/Teichlab/cellphonedb/releases/tag/v2.1.4)
-2. [Tutorial for cellphonedb](https://github.com/Teichlab/cellphonedb)
-#### Finding the optimal number of clusters using SCCAF:
-1. [Source code for SCCAF v0.09](https://github.com/SCCAF/sccaf/releases/tag/0.09)
-2. [Tutorial for SCCAF](https://github.com/SCCAF/sccaf)
+* **[Academic Admin](https://github.com/sourcethemes/academic-admin):** An admin tool to import publications from BibTeX or import assets for an offline site
+* **[Academic Scripts](https://github.com/sourcethemes/academic-scripts):** Scripts to help migrate content to new versions of Academic
 
+## License
 
-## Setting up the right environment
-1. Install R and Rstudio
-2. Once you have installed R and RStudio, run the [**1_environmetn_setup.R**](https://github.com/cbiagii/AdipoSNAP/blob/master/1_environment_setup.R) script.
-3. Together with *Seurat*, a conda environment called ***r-reticulate*** will be installed. We will install the *SCCAF* and *cellphonedb* modules within this environment so that we can run the Python code inside R using the ***reticulate*** package previously installed. So, to check the installed environment full name just type the following commands in a new terminal:
-```
-conda env list
-```
-4. After checking the full name of the environment mentioned above, we will load it (replace the path below with the similar one shown on your terminal):
-```
-conda activate /Users/biagi/Library/r-miniconda/envs/r-reticulate
-```
-5. Finally, we will install the modules with the following commands:
-```
-pip install sccaf
-pip install cellphonedb
-```
-6. If you run into problems, please open a new issue, you can do this by going to *'issues'* and clicking on the *'new issue'* icon. We will help you replicate our analysis! Do not fear single cell analysis!
+Copyright 2017-present [George Cushen](https://georgecushen.com).
 
+Released under the [MIT](https://github.com/sourcethemes/academic-kickstart/blob/master/LICENSE.md) license.
 
-# Citation
-Qadir, M.M.F., Alvarez-Cubela, S., Klein, D., Van Dijk, J., Anquela, R.M., Lanzoni, G., Sadiq, S., Moreno-Hernandez, Y.B., Navarro-Rubio, B., Garcia, M.T., Diaz, A., Johnson, K., Sant, D., Ricordi, C., Griswold, T., Pastori, R.L., Dominguez-bendala, J. (2020) Proceedings of the National Academy of Sciences. Single cell resolution analysis of the human pancreatic ductal progenitor cell niche. Apr 2020, 201918314; DOI: 10.1073/pnas.1918314117
-
-
-# Contributors
-1. Carlos Alberto Oliveira de Biagi Junior - [Github](https://github.com/cbiagii) - [University of Sao Paulo](https://www.fmrp.usp.br/en/) - to contact please [Email](mailto:biagi@usp.br)
-2. Sarah Santiloni Cury - [Sao Paulo State University](https://www.international.unesp.br/) - to contact please [Email](mailto:santiloni.cury@unesp.br)
-3. Miguel Luiz Batista Junior - [Boston University School of Medicine](https://www.bumc.bu.edu/busm/) - to contact please [Email](mailto:migueljr4@me.com)
-
-
-# Acknowledgements
-1. Diabetes Research Institute Foundation (DRIF)
-2. The Inserra family
-3. The Fred and Mabel R. Parks Foundation
-4. The Tonkinson Foundation
-5. ADA Grant #1-19-ICTS-078
-6. NIH Grant #1R43DK105655-01
-7. NIH Grant #2R44DK105655-02
-8. NIH/NIDDK HIRN Grant #U01DK120393 (These studies are part of this grant)
-9. IIE Fulbright
-
-## If this was useful to you please dont forget to cite, star and fork this repository.
+[![Analytics](https://ga-beacon.appspot.com/UA-78646709-2/academic-kickstart/readme?pixel)](https://github.com/igrigorik/ga-beacon)
