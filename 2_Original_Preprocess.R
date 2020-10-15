@@ -7,6 +7,7 @@
 # Run the following code once you have Seurat installed
 library(Seurat)
 
+
 ## Loading data Cellranger output format
 data <- Read10X("/Users/biagi/PhD/AdipoSNAP/data/10x/")
 
