@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tutorials | AdipoSNAP</title>
+    <link>https://cbiagii.github.io/AdipoSNAP/post/</link>
+      <atom:link href="https://cbiagii.github.io/AdipoSNAP/post/index.xml" rel="self" type="application/rss+xml" />
+    <description>Tutorials</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 24 May 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png</url>
+      <title>Tutorials</title>
+      <link>https://cbiagii.github.io/AdipoSNAP/post/</link>
+    </image>
+    
+    <item>
+      <title>1 - Environment Setup</title>
+      <link>https://cbiagii.github.io/AdipoSNAP/post/1_environment_setup/</link>
+      <pubDate>Sun, 24 May 2020 00:00:00 +0000</pubDate>
+      <guid>https://cbiagii.github.io/AdipoSNAP/post/1_environment_setup/</guid>
+      <description>&lt;h6 id=&#34;install-additional-cran-packages&#34;&gt;Install additional CRAN packages&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;CRAN_packages &amp;lt;- c(&#39;BiocManager&#39;, &#39;future&#39;, &#39;ggpubr&#39;, &#39;dplyr&#39;, &#39;ggplot2&#39;, 
+                   &#39;enrichR&#39;, &#39;forcats&#39;, &#39;ggtext&#39;, &#39;ggrepel&#39;, &#39;RColorBrewer&#39;, &#39;ggbeeswarm&#39;, &#39;circlize&#39;, 
+                   &#39;pheatmap&#39;, &#39;pbapply&#39;, &#39;gam&#39;, &#39;UpSetR&#39;, &#39;tidyr&#39;, &#39;tibble&#39;, &#39;tidyverse&#39;)
+new.packages &amp;lt;- CRAN_packages[!(CRAN_packages %in% installed.packages()[,&amp;quot;Package&amp;quot;])]
+if(length(new.packages)) install.packages(new.packages)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;install-additional-bioconductor-packages&#34;&gt;Install additional Bioconductor packages&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;Bioconductor_packages &amp;lt;- c(&#39;slingshot&#39;, &#39;SingleCellExperiment&#39;, &#39;fgsea&#39;, &#39;ComplexHeatmap&#39;, &#39;monocle&#39;, &#39;tradeSeq&#39;, &#39;SummarizedExperiment&#39;, &#39;DropletUtils&#39;)
+new.packages &amp;lt;- Bioconductor_packages[!(Bioconductor_packages %in% installed.packages()[,&amp;quot;Package&amp;quot;])]
+if(length(new.packages)) BiocManager::install(new.packages)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;install-reticulate-package&#34;&gt;Install reticulate package&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;install.packages(&#39;reticulate&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;install-seurat-and-seuratwrappers-packages&#34;&gt;Install Seurat and SeuratWrappers packages&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;install.packages(&#39;Seurat&#39;)
+install.packages(&#39;SeuratWrappers&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;install-metacell-package&#34;&gt;Install metacell package&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&amp;quot;Package&amp;quot;])])) BiocManager::install(&amp;quot;tanaylab/metacell&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;load-libraries&#34;&gt;LOAD LIBRARIES&lt;/h6&gt;
+&lt;h6 id=&#34;restart-rstudio-or-r&#34;&gt;Restart Rstudio or R&lt;/h6&gt;
+&lt;pre&gt;&lt;code class=&#34;language-library(BiocManager)&#34;&gt;library(circlize)
+library(ComplexHeatmap)
+library(dplyr)
+library(enrichR)
+library(fgsea)
+library(forcats)
+library(future)
+library(gam)
+library(ggbeeswarm)
+library(ggplot2)
+library(ggpubr)
+library(ggrepel)
+library(ggtext)
+library(metacell)
+library(monocle)
+library(pbapply)
+library(pheatmap)
+library(RColorBrewer)
+library(Seurat)
+library(SeuratWrappers)
+library(SingleCellExperiment)
+library(slingshot)
+library(SummarizedExperiment)
+library(tibble)
+library(tidyr)
+library(tidyverse)
+library(tradeSeq)
+library(UpSetR)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;confirm-package-version-of-seurat-and-monocle&#34;&gt;Confirm package version of Seurat and Monocle&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;packageVersion(&amp;quot;Seurat&amp;quot;)
+packageVersion(&amp;quot;monocle&amp;quot;)
+packageVersion(&amp;quot;metacell&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>2 - Original Preprocessing</title>
+      <link>https://cbiagii.github.io/AdipoSNAP/post/2_original_preprocess/</link>
+      <pubDate>Sun, 24 May 2020 00:00:00 +0000</pubDate>
+      <guid>https://cbiagii.github.io/AdipoSNAP/post/2_original_preprocess/</guid>
+      <description>&lt;h6 id=&#34;loading-libraries&#34;&gt;Loading libraries&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;library(Seurat)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;loading-data-cellranger-output-format&#34;&gt;Loading data Cellranger output format&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- Read10X(&amp;quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;reading-metadata-annotation&#34;&gt;Reading metadata annotation&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;anno &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;creating-seurat-object&#34;&gt;Creating Seurat object&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- CreateSeuratObject(counts = data,
+                           project = &amp;quot;Adipocyte&amp;quot;, 
+                           meta.data = anno, 
+                           min.cells = 3,
+                           min.features = 200)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;subset-remaining-only-n-condition&#34;&gt;Subset remaining only N condition&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- subset(data, cells = rownames(data@meta.data)[which(data@meta.data$condition == &amp;quot;N&amp;quot;)])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;cell-cycle-genes&#34;&gt;Cell cycle genes&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;m.s.genes &amp;lt;- c(&amp;quot;Gmnn&amp;quot;, &amp;quot;Rad51&amp;quot;, &amp;quot;Prim1&amp;quot;, &amp;quot;Dscc1&amp;quot;, &amp;quot;Cdca7&amp;quot;, &amp;quot;Slbp&amp;quot;, &amp;quot;Mcm7&amp;quot;, &amp;quot;Cenpu&amp;quot;, &amp;quot;Pold3&amp;quot;, 
+               &amp;quot;Ccne2&amp;quot;, &amp;quot;Mcm4&amp;quot;, &amp;quot;Polr1b&amp;quot;, &amp;quot;Fen1&amp;quot;, &amp;quot;Rad51ap1&amp;quot;, &amp;quot;Tyms&amp;quot;, &amp;quot;Usp1&amp;quot;, &amp;quot;Rrm2&amp;quot;, &amp;quot;Wdr76&amp;quot;, 
+               &amp;quot;Dtl&amp;quot;, &amp;quot;Rrm1&amp;quot;, &amp;quot;Gins2&amp;quot;, &amp;quot;Tipin&amp;quot;, &amp;quot;Hells&amp;quot;, &amp;quot;Ubr7&amp;quot;, &amp;quot;Chaf1b&amp;quot;, &amp;quot;Clspn&amp;quot;, &amp;quot;E2f8&amp;quot;, &amp;quot;Mcm5&amp;quot;, 
+               &amp;quot;Nasp&amp;quot;, &amp;quot;Pcna&amp;quot;, &amp;quot;Mrpl36&amp;quot;, &amp;quot;Rfc2&amp;quot;, &amp;quot;Cdc45&amp;quot;, &amp;quot;Casp8ap2&amp;quot;, &amp;quot;Mcm6&amp;quot;, &amp;quot;Exo1&amp;quot;, &amp;quot;Pola1&amp;quot;, &amp;quot;Cdc6&amp;quot;, 
+               &amp;quot;Ung&amp;quot;, &amp;quot;Uhrf1&amp;quot;, &amp;quot;Blm&amp;quot;, &amp;quot;Msh2&amp;quot;)
+m.g2m.genes &amp;lt;- c(&amp;quot;Cdk1&amp;quot;, &amp;quot;Tmpo&amp;quot;, &amp;quot;Smc4&amp;quot;, &amp;quot;Tacc3&amp;quot;, &amp;quot;Mki67&amp;quot;, &amp;quot;Ckap2l&amp;quot;, &amp;quot;Cks2&amp;quot;, &amp;quot;Cdc25c&amp;quot;, &amp;quot;Nusap1&amp;quot;, &amp;quot;Kif11&amp;quot;, 
+                 &amp;quot;Top2a&amp;quot;, &amp;quot;Cdca3&amp;quot;, &amp;quot;Cks1b&amp;quot;, &amp;quot;Ect2&amp;quot;, &amp;quot;Ckap5&amp;quot;, &amp;quot;Ckap2&amp;quot;, &amp;quot;Cenpa&amp;quot;, &amp;quot;Cdca2&amp;quot;, &amp;quot;Ncapd2&amp;quot;, &amp;quot;Aurkb&amp;quot;, 
+                 &amp;quot;Cenpf&amp;quot;, &amp;quot;Gtse1&amp;quot;, &amp;quot;Birc5&amp;quot;, &amp;quot;Bub1&amp;quot;, &amp;quot;Cdca8&amp;quot;, &amp;quot;Anp32e&amp;quot;, &amp;quot;Rangap1&amp;quot;, &amp;quot;Tpx2&amp;quot;, &amp;quot;Hjurp&amp;quot;, &amp;quot;Lbr&amp;quot;, 
+                 &amp;quot;Dlgap5&amp;quot;, &amp;quot;Psrc1&amp;quot;, &amp;quot;Ndc80&amp;quot;, &amp;quot;Nek2&amp;quot;, &amp;quot;Cbx5&amp;quot;, &amp;quot;Ube2c&amp;quot;, &amp;quot;Gas2l3&amp;quot;, &amp;quot;G2e3&amp;quot;, &amp;quot;Cdc20&amp;quot;, &amp;quot;Hmgb2&amp;quot;, 
+                 &amp;quot;Cenpe&amp;quot;, &amp;quot;Nuf2&amp;quot;, &amp;quot;Anln&amp;quot;, &amp;quot;Ttk&amp;quot;, &amp;quot;Kif2c&amp;quot;, &amp;quot;Kif20b&amp;quot;, &amp;quot;Aurka&amp;quot;, &amp;quot;Hmmr&amp;quot;, &amp;quot;Pimreg&amp;quot;, &amp;quot;Cks1brt&amp;quot;, 
+                 &amp;quot;Tubb4b&amp;quot;, &amp;quot;Kif23&amp;quot;, &amp;quot;Ccnb2&amp;quot;, &amp;quot;Ctcf&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;mt-based-cell-thresholding&#34;&gt;MT based cell thresholding&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- subset(data, subset = nFeature_RNA &amp;gt; 200 &amp;amp; nFeature_RNA &amp;lt; 2500)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;normalizing-data&#34;&gt;Normalizing data&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- NormalizeData(data)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;finding-variable-features&#34;&gt;Finding variable features&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- FindVariableFeatures(data)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;scoring-cell-cycle-phases&#34;&gt;Scoring cell cycle phases&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- CellCycleScoring(data, s.features = m.s.genes, g2m.features = m.g2m.genes, set.ident = TRUE)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;scalling-and-centering-the-data-regressing-out-ncount_rna-sscore-and-g2mscore&#34;&gt;Scalling and centering the data regressing out nCount_RNA, S.Score and G2M.Score&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- ScaleData(data, vars.to.regress = c(&amp;quot;nCount_RNA&amp;quot;, &amp;quot;S.Score&amp;quot;, &amp;quot;G2M.Score&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;running-pca&#34;&gt;Running PCA&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- RunPCA(data)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;defining-the-best-number-of-pc-that-has-a-explained-variance-greater-than-80&#34;&gt;Defining the best number of PC that has a explained variance greater than 80%&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;dp &amp;lt;- data@reductions$pca@stdev
+dp &amp;lt;- dp^2
+for (z in 1:length(dp)) {
+  soma &amp;lt;- sum(dp[1:z])/sum(dp)
+  if (soma &amp;gt;= 0.8) {
+    best_pc &amp;lt;- z
+    break()
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;clustering&#34;&gt;Clustering&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- FindNeighbors(data, dims = 1:best_pc)
+data &amp;lt;- FindClusters(data)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;runumap&#34;&gt;RunUMAP&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- RunUMAP(data, dims = 1:best_pc)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;runumap-1&#34;&gt;RunUMAP&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;data &amp;lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 5000, perplexity = 50, verbose = T)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6 id=&#34;save-rds-file&#34;&gt;Save RDS file&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
