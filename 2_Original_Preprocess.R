@@ -76,5 +76,5 @@ data <- RunUMAP(data, dims = 1:best_pc)
 ## RunUMAP
 data <- RunTSNE(data, dims = 1:best_pc, max_iter = 5000, perplexity = 50, verbose = T)
 
-## Save RDS file
+## Saving RDS file
 saveRDS(data, "/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds")

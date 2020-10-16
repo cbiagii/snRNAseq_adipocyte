@@ -1,18 +1,13 @@
-convertHumanGeneList <- function(x){
-  require("biomaRt")
-  human = useMart("ensembl", dataset = "hsapiens_gene_ensembl")
-  mouse = useMart("ensembl", dataset = "mmusculus_gene_ensembl")
-  
-  genesV2 = getLDS(attributes = c("hgnc_symbol"), filters = "hgnc_symbol", values = x , mart = human, attributesL = c("mgi_symbol"), martL = mouse, uniqueRows=T)
-  
-  humanx <- unique(genesV2[, 2])
-  
-  return(humanx)
-}
+# DESCRIPTION ####
+# The following code ASSUMES all dependencies in R have been installed See file(s): 
+# 1_environment_setup.R
+# The purpose of this code is to generate de Seurat object reproducing the analysis performed by Rajbhandari et al., 2020
 
-
+# LOAD LIBRARIES ####
+# Run the following code once you have Seurat installed
 library(Seurat)
 
+## Loading metacell results
 marks_colors <- NULL
 marks_colors <- rbind(marks_colors, c("Adipocyte_1", "Acsl1", "#0000b3", 1, 2.5))
 marks_colors <- rbind(marks_colors, c("Adipocyte_2", "Plin4", "#0000cc", 1, 2.5))
@@ -39,11 +34,11 @@ colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
 marks_colors$priority <- as.integer(marks_colors$priority)
 marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
-load("/Users/biagi/cangen/coliveir/Miguel/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
 dims <- data.frame(x = object@sc_x, 
                    y = object@sc_y)
 
-load("/Users/biagi/cangen/coliveir/Miguel/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
 tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 <- data.frame(cols = object@colors)
 teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
@@ -55,8 +50,9 @@ teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", mar
 teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
 tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
 
-data <- readRDS("/Users/biagi/cangen/coliveir/Miguel/output/10x/10x_SCT_Processed.rds")
-infos <- read.table("/Users/biagi/cangen/coliveir/scRNA_output/SCCAF/Adipocytes/results/obs.csv")
+## Assign sccaf clusters to metacell results
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -74,11 +70,14 @@ names(new.cluster.ids) <- levels(data)
 data <- RenameIdents(data, new.cluster.ids)
 Idents(data) <- factor(Idents(data), levels = c('A1', 'A2', 'A3', 'A4', 'E1', 'E2', 'I1', 'I2', 'I3', 'P1', 'P2', 'P3', 'P4', 'P5'))
 
+## Selecting only the 4 adipocytes clusters
 cells <- names(Idents(data))[which(Idents(data) == "A1" | Idents(data) == "A2" | Idents(data) == "A3" | Idents(data) == "A4")]
 
-data <- readRDS("/Users/biagi/cangen/coliveir/Miguel/output/10x/10x_Processed.rds")
+## Subsetting adipocyte clusters from all
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds")
 data <- subset(data, cells = cells)
 
+## Cell cycle genes
 m.s.genes <- c("Gmnn", "Rad51", "Prim1", "Dscc1", "Cdca7", "Slbp", "Mcm7", "Cenpu", "Pold3", 
                "Ccne2", "Mcm4", "Polr1b", "Fen1", "Rad51ap1", "Tyms", "Usp1", "Rrm2", "Wdr76", 
                "Dtl", "Rrm1", "Gins2", "Tipin", "Hells", "Ubr7", "Chaf1b", "Clspn", "E2f8", "Mcm5", 
@@ -91,21 +90,19 @@ m.g2m.genes <- c("Cdk1", "Tmpo", "Smc4", "Tacc3", "Mki67", "Ckap2l", "Cks2", "Cd
                  "Cenpe", "Nuf2", "Anln", "Ttk", "Kif2c", "Kif20b", "Aurka", "Hmmr", "Pimreg", "Cks1brt", 
                  "Tubb4b", "Kif23", "Ccnb2", "Ctcf")
 
-
-#FeatureScatter(data, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+## nFeature_RNA based cell thresholding
 data <- subset(data, subset = nFeature_RNA < 2000)
 
-#data <- NormalizeData(data)
-
-#data <- FindVariableFeatures(data)
-
+## Scoring cell cycle phases
 data <- CellCycleScoring(data, s.features = m.s.genes, g2m.features = m.g2m.genes, set.ident = TRUE)
 
+## Using regularized negative binomial regression to normalize UMI count data regressing out nCount_RNA, S.Score and G2M.Score variables
 data <- SCTransform(data, vars.to.regress = c("nCount_RNA", "S.Score", "G2M.Score"), verbose = TRUE)
-#data <- ScaleData(data, vars.to.regress = c("nCount_RNA", "S.Score", "G2M.Score"), features = rownames(data))
 
+## Running PCA
 data <- RunPCA(data)
 
+## Defining the best number of PC that has a explained variance greater than 80%
 dp <- data@reductions$pca@stdev
 dp <- dp^2
 for (z in 1:length(dp)) {
@@ -116,10 +113,11 @@ for (z in 1:length(dp)) {
   }
 }
 
-#data <- FindNeighbors(data, dims = 1:best_pc)
-#data <- FindClusters(data)
-
+## RunUMAP
 data <- RunUMAP(data, dims = 1:best_pc)
+
+## RunTSNE
 data <- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = T)
 
-saveRDS(data, "/Users/biagi/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+## Saving RDS file
+saveRDS(data, "/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")

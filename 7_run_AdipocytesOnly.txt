@@ -1,7 +1,7 @@
 library(Seurat)
 source("/projects/cangen/coliveir/SeuratToH5ad.R")
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-SeuratToH5ad(data, "/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/data.h5ad", "RNA", 1)
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+SeuratToH5ad(data, "/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad", "RNA", 1)
 
 
 # python to define the optimal accuracy number
@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings("ignore")
 from SCCAF import *
 
-ad = sc.read("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/data.h5ad")
+ad = sc.read("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad")
 
 y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_Round0'],n=100)
 aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
@@ -19,21 +19,22 @@ plt.show()
 
 
 ##### Optimisation and general purpose usage
-cd /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/
-sccaf -i /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.669 -c 10 --produce-rounds-summary -o /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results.h5ad --optimisation-plots-output /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results.pdf
+cd /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/
+sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.669 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.pdf
 
 
 ##### Parallel run of assessments
-sccaf-assess -i /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results.h5ad -o /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
-sccaf-assess -i /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results.h5ad -o /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
-sccaf-assess -i /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results.h5ad -o /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
 
 
-sccaf-assess-merger -i /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly -r /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/rounds.txt -o /projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/rounds-acc-comparison-plot.png
+##### Merging parallel runs to produce plot
+sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly -r /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds-acc-comparison-plot.png
 
 
 
 # python
 import scanpy as sc
-adata = sc.read("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results.h5ad")
-adata.write_csvs("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results", sep='\t', skip_data=True)
+adata = sc.read("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad")
+adata.write_csvs("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results", sep='\t', skip_data=True)
