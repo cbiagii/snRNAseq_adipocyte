@@ -10,6 +10,7 @@ library(future)
 library(metacell)
 library(ggpubr)
 library(DropletUtils)
+library(pheatmap)
 
 
 ## Convert an Seurat object to 10x format to input in metacell
@@ -139,7 +140,7 @@ items <- list(Adipocytes = mat_A, Endothelials = mat_E, Immunes = mat_I, Progeni
 plot_list=list()
 for (i in 1:length(items)){
   x <- pheatmap(items[[i]], fontsize = 6, main = names(items)[i], legend = FALSE, treeheight_row = 0, treeheight_col = 0)
-  plot_list[[i]] = x[[4]]     ##to save each plot into a list. note the [[4]]
+  plot_list[[i]] = x[[4]]
 }
 gggpubr(plotlist = plot_list, ncol = 2)
 
