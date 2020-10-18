@@ -13,9 +13,8 @@ library(ggpubr)
 #################################
 ########### Figure 2A ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -34,9 +33,8 @@ TSNEPlot(data, pt.size = 1, cols = c("#11c78b", "#800080", "#e57400", "#0000FF",
 #################################
 ########### Figure 2B ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -64,8 +62,8 @@ DoHeatmap(data, features = top10$gene, group.colors = cls, angle = 0, size = 5, 
 #################################
 ########### Figure 2C ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -86,11 +84,11 @@ DotPlot(data, features = c('Adipoq', 'Adrb3', 'Cidec', 'Dgat1', 'Fasn', 'Lipe', 
 #################################
 dbs <- c("KEGG_2019_Mouse", "WikiPathways_2019_Mouse", "Jensen_TISSUES", "GO_Biological_Process_2018", "Mouse_Gene_Atlas")
 
-genes_1 <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig2C_Markers_1.txt")
-genes_2 <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig2C_Markers_2.txt")
-genes_3 <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig2C_Markers_3.txt")
-genes_4 <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig2C_Markers_4.txt")
-genes_5 <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig2C_Markers_5.txt")
+genes_1 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_1.txt")
+genes_2 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_2.txt")
+genes_3 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_3.txt")
+genes_4 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_4.txt")
+genes_5 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_5.txt")
 
 genes <- list(Ad1 = genes_1,
               Ad2 = genes_2,
@@ -160,8 +158,8 @@ ggplot(paths, aes(x = type, y = class_with_color)) +
 #################################
 ########### Figure 2E ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)

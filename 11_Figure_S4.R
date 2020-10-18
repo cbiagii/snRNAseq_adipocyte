@@ -15,8 +15,8 @@ library(circlize)
 ##################################
 ########### Figure S4A ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -64,8 +64,8 @@ ggarrange(plotlist = plotList)
 ##################################
 ########### Figure S4B ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -98,8 +98,8 @@ DoHeatmap(data, features = markers$gene, angle = 0, size = 5, label = F) +
 ##################################
 ########### Figure S4C ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -110,8 +110,8 @@ data$cluster <- Idents(data)
 data <- subset(data, idents = list('Ad1'))
 tmp1 <- factor(ifelse(data@assays$SCT@data["Ucp1", ] > 0, "Ad1_High", "Ad1_Low"))
 
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -198,10 +198,10 @@ DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, labe
 ##################################
 ########### Figure S4H ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
-ort <- read.table("/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = T)
+ort <- read.table("/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt", sep = ",", header = T)
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)

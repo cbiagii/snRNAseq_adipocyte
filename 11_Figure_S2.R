@@ -6,13 +6,13 @@ library(ggrepel)
 library(enrichR)
 library(dplyr)
 
-source('0_Function_volcanoPlot.R') #####ARRUMAR CAMINHO**********
+source('/Users/biagi/PhD/AdipoSNAP/2_Functions.R')
 
 
 ##################################
 ########### Figure S2A ###########
 ##################################
-filelist = list.files(path = "/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly",
+filelist = list.files(path = "/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly",
                       pattern = "sccaf_assess", recursive = T, full.names = T)
 fnames <- gsub("sccaf_assess_", "", basename(filelist))
 fnames <- gsub(".txt", "", fnames)
@@ -51,19 +51,19 @@ import warnings
 warnings.filterwarnings("ignore")
 from SCCAF import *
   
-ad = sc.read("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results.h5ad")
+ad = sc.read("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad")
 
 y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_result'],n_jobs=8)
 aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
-plt.savefig('/projects/cangen/coliveir/Miguel/paper/Figure_2A_3.eps')
+plt.savefig('/Users/biagi/PhD/AdipoSNAP/paper/Figure_2A_3.eps')
 
 
 
 ##################################
 ########### Figure S2C ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -87,8 +87,8 @@ annotate_figure(figure, left = text_grob("Expression Level", rot = 90))
 ##################################
 ########### Figure S2D ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -143,11 +143,11 @@ ggarrange(pt_1, pt_2, pt_3, pt_4, pt_5, nrow = 2, ncol = 3, common.legend = T)
 ##################################
 dbs <- c("Jensen_TISSUES", "Mouse_Gene_Atlas")
 
-genes_1 <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig2C_Markers_1.txt")
-genes_2 <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig2C_Markers_2.txt")
-genes_3 <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig2C_Markers_3.txt")
-genes_4 <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig2C_Markers_4.txt")
-genes_5 <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig2C_Markers_5.txt")
+genes_1 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_1.txt")
+genes_2 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_2.txt")
+genes_3 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_3.txt")
+genes_4 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_4.txt")
+genes_5 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_5.txt")
 
 genes <- list(Ad1 = genes_1,
               Ad2 = genes_2,
@@ -197,8 +197,8 @@ ggarrange(plotlist = plotlist)
 ##################################
 ########### Figure S2H ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -210,7 +210,7 @@ Idents(data) <- new_cluster
 count_raw <- data@assays$SCT@counts[, rownames(data@meta.data)]
 count_norm <- apply(count_raw, 2, function(x) (x/sum(x))*10000)
 
-ort <- read.table("/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = T)
+ort <- read.table("/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt", sep = ",", header = T)
 mat <- merge(ort, count_norm, by.x = "Mouse.gene.name", by.y = "row.names")
 mat$Mouse.gene.name <- mat$Gene.stable.ID <- mat$Mouse.gene.stable.ID <- NULL
 colnames(mat)[1] <- "Gene"
@@ -218,12 +218,10 @@ colnames(mat)[1] <- "Gene"
 anno <- data.frame(Cell = names(Idents(data)), 
                    cluster = Idents(data), row.names = NULL)
 
-write.table(mat, "/projects/cangen/coliveir/cellphonedb/counts.txt", row.names = F, col.names = T, sep = "\t", quote = F)
-write.table(anno, "/projects/cangen/coliveir/cellphonedb/meta.txt", row.names = F, col.names = T, sep = "\t", quote = F)
+write.table(mat, "/Users/biagi/PhD/AdipoSNAP/cellphonedb/counts.txt", row.names = F, col.names = T, sep = "\t", quote = F)
+write.table(anno, "/Users/biagi/PhD/AdipoSNAP/cellphonedb/meta.txt", row.names = F, col.names = T, sep = "\t", quote = F)
 
 
 #Python
-source /home/coliveir/cpdb-venv/bin/activate
-cd /projects/cangen/coliveir/cellphonedb
-
+cd /Users/biagi/PhD/AdipoSNAP/cellphonedb
 cellphonedb method statistical_analysis meta.txt counts.txt --threads=16 --counts-data=gene_name --pvalue=0.05 --iterations=1000

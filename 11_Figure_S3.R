@@ -15,13 +15,13 @@ library(scales)
 library(ggpubr)
 library(viridis)
 
-source('/Users/biagi/cangen/coliveir/plotMonocle.R')
+source('/Users/biagi/PhD/AdipoSNAP/2_Functions.R')
 
 
 ##################################
 ########### Figure S3A ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
 data$timpoint <- gsub('4day', 'Cold', data$timpoint)
 
 Idents(data) <- as.factor(data$timpoint)
@@ -56,8 +56,8 @@ DoHeatmap(data2, features = topGenes$gene, group.colors = cls, angle = 0, size =
 ##################################
 dbs <- c("KEGG_2019_Mouse", "WikiPathways_2019_Mouse", "Jensen_TISSUES", "GO_Biological_Process_2018")
 
-genes_ColdxRT <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Diff_Adipocytes_ColdxRT.txt")
-genes_CLxRT <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Diff_Adipocytes_CLxRT.txt")
+genes_ColdxRT <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_ColdxRT.txt")
+genes_CLxRT <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_CLxRT.txt")
 
 genes <- list(ColdxRT = genes_ColdxRT,
               CLxRT = genes_CLxRT)
@@ -124,8 +124,8 @@ ggplot(paths, aes(x = type, y = class_with_color)) +
 ##################################
 ########### Figure S3C ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -223,8 +223,8 @@ DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, labe
 ##################################
 ########### Figure S3H ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -236,7 +236,7 @@ Idents(data) <- new_cluster
 count_raw <- data@assays$SCT@counts[, rownames(data@meta.data)]
 count_norm <- apply(count_raw, 2, function(x) (x/sum(x))*10000)
 
-ort <- read.table("/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = T)
+ort <- read.table("/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt", sep = ",", header = T)
 mat <- merge(ort, count_norm, by.x = "Mouse.gene.name", by.y = "row.names")
 mat$Mouse.gene.name <- mat$Gene.stable.ID <- mat$Mouse.gene.stable.ID <- NULL
 colnames(mat)[1] <- "Gene"
@@ -244,14 +244,12 @@ colnames(mat)[1] <- "Gene"
 anno <- data.frame(Cell = names(Idents(data)), 
                    cluster = Idents(data), row.names = NULL)
 
-write.table(mat, "/projects/cangen/coliveir/cellphonedb/counts.txt", row.names = F, col.names = T, sep = "\t", quote = F)
-write.table(anno, "/projects/cangen/coliveir/cellphonedb/meta.txt", row.names = F, col.names = T, sep = "\t", quote = F)
+write.table(mat, "/Users/biagi/PhD/AdipoSNAP/cellphonedb/counts.txt", row.names = F, col.names = T, sep = "\t", quote = F)
+write.table(anno, "/Users/biagi/PhD/AdipoSNAP/cellphonedb/meta.txt", row.names = F, col.names = T, sep = "\t", quote = F)
 
 
 #Python
-source /home/coliveir/cpdb-venv/bin/activate
-cd /projects/cangen/coliveir/cellphonedb
-
+cd /Users/biagi/PhD/AdipoSNAP/cellphonedb
 cellphonedb method statistical_analysis meta.txt counts.txt --threads=16 --counts-data=gene_name --pvalue=0.05 --iterations=1000
 
 
@@ -259,10 +257,10 @@ cellphonedb method statistical_analysis meta.txt counts.txt --threads=16 --count
 ##################################
 ########### Figure S3I ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
 data$timpoint <- gsub('4day', 'Cold', data$timpoint)
 
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -314,10 +312,10 @@ plotMonocle(cds, c('Ucp1', 'Ppara', 'Dio2', 'Chst1', 'Plppr3', 'Nnat', 'Pim1', '
 ##################################
 ########### Figure S3J ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
 data$timpoint <- gsub('4day', 'Cold', data$timpoint)
 
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1

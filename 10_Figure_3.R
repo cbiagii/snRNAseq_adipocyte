@@ -11,13 +11,13 @@ library(monocle)
 library(scales)
 library(viridis)
 
-source('/Users/biagi/cangen/coliveir/plotMonocle.R')
+source('/Users/biagi/PhD/AdipoSNAP/2_Functions.R')
 
 
 #################################
 ########### Figure 3A ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
 Idents(data) <- as.factor(data$timpoint)
 data <- subset(data, cells = names(which(data$timpoint == '4day' | data$timpoint == 'RT' | data$timpoint == 'CL')))
 data$timpoint <- gsub('4day', 'Cold', data$timpoint)
@@ -32,7 +32,7 @@ TSNEPlot(data, pt.size = 1, group.by = 'timpoint') +
 #################################
 ########### Figure 3B ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
 Idents(data) <- as.factor(data$timpoint)
 data <- subset(data, cells = names(which(data$timpoint == '4day' | data$timpoint == 'RT' | data$timpoint == 'CL')))
 
@@ -57,10 +57,10 @@ ggarrange(plotlist = pt, ncol = 5, nrow = 3, common.legend = T)
 ########### Figure 3C ###########
 #################################
 ort <- read.table("/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = T)
-pathways <- gmtPathways('/projects/cangen/coliveir/Miguel/msigdb.v7.1.symbols.gmt')
+pathways <- gmtPathways('/Users/biagi/PhD/AdipoSNAP/msigdb.v7.1.symbols.gmt')
 
 #ColdxRT
-comp1 <- read.table("/projects/cangen/coliveir/Miguel/Figures/update/Diff_Adipocytes_ColdxRT_ALL.txt")
+comp1 <- read.table("/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_ColdxRT_ALL.txt")
 comp1 <- subset(comp1, p_val_adj < 0.05)
 comp1 <- comp1[order(comp1$avg_logFC, decreasing = T), ]
 comp1 <- rbind(head(comp1, 50), tail(comp1, 50))
@@ -77,7 +77,7 @@ for (i in 1:length(genes1)) {
   fgseaRes1$genes[i] <- paste(genes1[[i]], collapse = ';')
 }
 fgseaRes1$leadingEdge <- NULL
-enrich_ColdxRT <- read.table('/projects/cangen/coliveir/Miguel/Figures/update/fgsea_ColdxRT.txt', header = T)
+enrich_ColdxRT <- read.table('/Users/biagi/PhD/AdipoSNAP/Figures/update/fgsea_ColdxRT.txt', header = T)
 pathways_ColdxRT <- c('GO_ORGANOPHOSPHATE_BIOSYNTHETIC_PROCESS', 'GO_FATTY_ACID_TRANSPORT', 'GO_LONG_CHAIN_FATTY_ACID_TRANSPORT', 'GO_MONOCARBOXYLIC_ACID_TRANSPORT', 'GO_RESPONSE_TO_FATTY_ACID', 'REACTOME_NGF_STIMULATED_TRANSCRIPTION', 'REACTOME_NUCLEAR_EVENTS_KINASE_AND_TRANSCRIPTION_FACTOR_ACTIVATION', 'OSWALD_HEMATOPOIETIC_STEM_CELL_IN_COLLAGEN_GEL_UP', 'NAGASHIMA_EGF_SIGNALING_UP', 'NAGASHIMA_NRG1_SIGNALING_UP')
 enrich_ColdxRT <- enrich_ColdxRT[which(enrich_ColdxRT$pathway %in% pathways_ColdxRT), ]
 enrich_ColdxRT$class <- ifelse(enrich_ColdxRT$NES > 0, 'Up-regulated', 'Down-regulated')
@@ -95,7 +95,7 @@ ggplot(enrich_ColdxRT, aes(order, NES, fill = class)) +
   ggtitle('GSEA for Cold x RT')
 
 #CLxRT
-comp2 <- read.table("/projects/cangen/coliveir/Miguel/Figures/update/Diff_Adipocytes_CLxRT_ALL.txt")
+comp2 <- read.table("/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_CLxRT_ALL.txt")
 comp2 <- subset(comp2, p_val_adj < 0.05)
 comp2 <- comp2[order(comp2$avg_logFC, decreasing = T), ]
 comp2 <- rbind(head(comp2, 50), tail(comp2, 50))
@@ -112,7 +112,7 @@ for (i in 1:length(genes2)) {
   fgseaRes2$genes[i] <- paste(genes2[[i]], collapse = ';')
 }
 fgseaRes2$leadingEdge <- NULL
-enrich_CLxRT <- read.table('/projects/cangen/coliveir/Miguel/Figures/update/fgsea_CLxRT.txt', header = T)
+enrich_CLxRT <- read.table('/Users/biagi/PhD/AdipoSNAP/Figures/update/fgsea_CLxRT.txt', header = T)
 pathways_CLxRT <- c('GO_ORGANOPHOSPHATE_METABOLIC_PROCESS', 'GO_MITOCHONDRIAL_ENVELOPE', 'GO_ATP_METABOLIC_PROCESS', 'GO_OXIDOREDUCTASE_ACTIVITY', 'GO_OXIDATIVE_PHOSPHORYLATION', 'GO_NEGATIVE_REGULATION_OF_PROTEIN_METABOLIC_PROCESS', 'GO_RESPONSE_TO_MECHANICAL_STIMULUS', 'GO_NEGATIVE_REGULATION_OF_BIOSYNTHETIC_PROCESS', 'NAGASHIMA_EGF_SIGNALING_UP', 'NAGASHIMA_NRG1_SIGNALING_UP')
 enrich_CLxRT <- enrich_CLxRT[which(enrich_CLxRT$pathway %in% pathways_CLxRT), ]
 enrich_CLxRT$class <- ifelse(enrich_CLxRT$NES > 0, 'Up-regulated', 'Down-regulated')
@@ -134,10 +134,10 @@ ggplot(enrich_CLxRT, aes(order, NES, fill = class)) +
 #################################
 ########### Figure 3D ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
 data$timpoint <- gsub('4day', 'Cold', data$timpoint)
 
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -290,8 +290,8 @@ ggplot(df2, aes(x = "", y = value, fill = class)) +
 #################################
 ########### Figure 3E ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -322,8 +322,8 @@ DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = 'cl
 #################################
 ########### Figure 3G ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -371,10 +371,10 @@ ggboxplot(df, x = "cluster", y = "value",
 ######## Figure 3H and 3I ########
 ##################################
 ## CL
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
 data$timpoint <- gsub('4day', 'Cold', data$timpoint)
 
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -423,10 +423,10 @@ plot_cell_trajectory(cds, color_by = "cluster") +
 plotMonocle(cds, c('Pparg', 'Creb1', 'Atf2', 'Egr2', 'Dbp', 'Xbp1', 'Clock', 'Zbtb43', 'Zbtb7a'))
 
 ## Cold
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
 data$timpoint <- gsub('4day', 'Cold', data$timpoint)
 
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1

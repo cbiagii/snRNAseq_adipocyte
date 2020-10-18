@@ -39,11 +39,11 @@ colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
 marks_colors$priority <- as.integer(marks_colors$priority)
 marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
 dims <- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
 tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 <- data.frame(cols = object@colors)
 teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
@@ -55,8 +55,8 @@ teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", mar
 teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
 tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
 
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/10x_SCT_Processed.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/Adipocytes/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -142,11 +142,11 @@ colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
 marks_colors$priority <- as.integer(marks_colors$priority)
 marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
 dims <- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
 tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 <- data.frame(cols = object@colors)
 teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
@@ -158,8 +158,8 @@ teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", mar
 teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
 tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
 
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/10x_SCT_Processed.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/Adipocytes/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -181,7 +181,7 @@ markers <- FindAllMarkers(data, only.pos = T)
 
 top20 <- markers %>% group_by(cluster) %>% top_n(n = 20, wt = avg_logFC)
 
-data2 <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/10x_SCT_Processed_ALRA.rds")
+data2 <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
 
 Idents(data2) <- Idents(data)
 rm(data)
@@ -225,11 +225,11 @@ colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
 marks_colors$priority <- as.integer(marks_colors$priority)
 marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell/db/mc2d.test_2dproj.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc2d.test_2dproj.Rda")
 dims <- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda")
 tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 <- data.frame(cols = object@colors)
 teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
@@ -241,8 +241,8 @@ teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", mar
 teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
 tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
 
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/10x_SCT_Processed_ALRA.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/Adipocytes/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -272,7 +272,7 @@ DotPlot(data, features = c("Acsl1", "Plin4", "Mlxipl", "Pck1", "Adrb3",
   xlab("") + ylab("") + theme(axis.text.x = element_text(angle = 45, hjust=1))
 
 
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/10x_SCT_Processed_ALRA.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
 
 pt <- FeaturePlot(data, c("Mlxipl", "Egfl7", "Runx1", "Celf2"),
                   cols = c("grey", 'red'), reduction = 'tsne', pt.size = 0.1, combine = F)
@@ -291,10 +291,10 @@ ggarrange(plotlist = pt)
 #################################
 dbs <- c("KEGG_2019_Mouse", "WikiPathways_2019_Mouse", "Jensen_TISSUES", "GO_Biological_Process_2018")
 
-genes_A <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig1D_2_Markers_A.txt")
-genes_E <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig1D_2_Markers_E.txt")
-genes_I <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig1D_2_Markers_I.txt")
-genes_P <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig1D_2_Markers_P.txt")
+genes_A <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_A.txt")
+genes_E <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_E.txt")
+genes_I <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_I.txt")
+genes_P <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_P.txt")
 
 genes <- list(Adipocyte = genes_A,
               Endothelial = genes_E,

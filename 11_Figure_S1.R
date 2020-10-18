@@ -11,7 +11,7 @@ library(enrichR)
 ##################################
 ########### Figure S1A ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/10x_Processed.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds")
 Idents(data) <- factor(data$CellTypeRefined)
 
 TSNEPlot(data, label = FALSE, pt.size = 0.3) +
@@ -24,7 +24,7 @@ TSNEPlot(data, label = FALSE, pt.size = 0.3) +
 ##################################
 ########### Figure S1B ###########
 ##################################
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda")
 lfp = log2(object@mc_fp)
 
 marks_colors <- NULL
@@ -53,11 +53,11 @@ colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
 marks_colors$priority <- as.integer(marks_colors$priority)
 marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell/db/mc2d.test_2dproj.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc2d.test_2dproj.Rda")
 dims <- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda")
 tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 <- data.frame(cols = object@colors)
 teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
@@ -69,7 +69,7 @@ teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", mar
 teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
 tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
 
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/10x_Processed.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds")
 Idents(data) <- factor(data$CellTypeRefined)
 infos <- data@meta.data
 infos <- infos[tab$Row.names, ]
@@ -123,7 +123,7 @@ ggplot(df, aes(x = "", y = value, fill = class)) +
 ##################################
 ########### Figure S1C ###########
 ##################################
-filelist = list.files(path = "/projects/cangen/coliveir/scRNA_output/SCCAF/Adipocytes",
+filelist = list.files(path = "/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes",
                       pattern = "sccaf_assess", recursive = T, full.names = T)
 fnames <- gsub("sccaf_assess_", "", basename(filelist))
 fnames <- gsub(".txt", "", fnames)
@@ -162,18 +162,18 @@ import warnings
 warnings.filterwarnings("ignore")
 from SCCAF import *
   
-ad = sc.read("/projects/cangen/coliveir/scRNA_output/SCCAF/Adipocytes/results.h5ad")
+ad = sc.read("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad")
 
 y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_result'],n_jobs=8)
 aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
-plt.savefig('/projects/cangen/coliveir/Miguel/paper/Figure_SD.eps')
+plt.savefig('/Users/biagi/PhD/AdipoSNAP/paper/Figure_SD.eps')
 
 
 
 ##################################
 ########### Figure S1E ###########
 ##################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/10x_SCT_Processed_ALRA.rds")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
 
 pt <- FeaturePlot(data, c("Adrb3", "Pecam1", "Ptprc", "Cd34", "Pdgfra", "Itgb1"),
                   cols = c("grey", 'red'), reduction = 'tsne', pt.size = 0.1, combine = F)
@@ -189,10 +189,10 @@ ggarrange(plotlist = pt, common.legend = T)
 ##################################
 ########### Figure S1F ###########
 ##################################
-scdb_init("/projects/cangen/coliveir/Miguel/output/10x/metacell_SCT2/db", force_reinit=T)
-scfigs_init("/projects/cangen/coliveir/Miguel/output/10x/metacell_SCT2/figs")
+scdb_init("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT2/db", force_reinit=T)
+scfigs_init("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT2/figs")
 
-load("/projects/cangen/coliveir/Miguel/output/10x/metacell_SCT2/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT2/db/mc.test_mc_f.Rda")
 lfp = log2(object@mc_fp)
 
 mc = scdb_mc("test_mc_f")
@@ -233,10 +233,10 @@ pheatmap(mat_P, fontsize = 8, main = 'Progenitors', legend = TRUE, treeheight_ro
 ##################################
 dbs <- c("KEGG_2019_Mouse", "WikiPathways_2019_Mouse", "Jensen_TISSUES", "GO_Biological_Process_2018")
 
-genes_A <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig1D_2_Markers_A.txt")
-genes_E <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig1D_2_Markers_E.txt")
-genes_I <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig1D_2_Markers_I.txt")
-genes_P <- readLines("/projects/cangen/coliveir/Miguel/Figures/update/Fig1D_2_Markers_P.txt")
+genes_A <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_A.txt")
+genes_E <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_E.txt")
+genes_I <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_I.txt")
+genes_P <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_P.txt")
 
 genes <- list(Adipocyte = genes_A,
               Endothelial = genes_E,

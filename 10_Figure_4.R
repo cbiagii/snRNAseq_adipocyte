@@ -14,8 +14,8 @@ library(circlize)
 #################################
 ########### Figure 4A ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -73,8 +73,8 @@ ggplot() +
            colour = 'red', size = 1.5)
 
 #pieplot UCP1 High
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -116,8 +116,8 @@ ggplot(df, aes(x = "", y = value, fill = class)) +
 #################################
 ########### Figure 4B ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -152,8 +152,8 @@ DoHeatmap(data, features = genes1, angle = 0, size = 5, label = F) +
 #################################
 ########### Figure 4C ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -174,8 +174,8 @@ markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
 markers <- subset(markers, p_val_adj < 0.05 & cluster == 'High')
 markers <- markers[order(markers$avg_logFC, decreasing = T), ]
 
-ort <- read.table("/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = T)
-pathways <- gmtPathways('/projects/cangen/coliveir/Miguel/msigdb.v7.1.symbols.gmt')
+ort <- read.table("/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt", sep = ",", header = T)
+pathways <- gmtPathways('/Users/biagi/PhD/AdipoSNAP/msigdb.v7.1.symbols.gmt')
 
 comp1 <- rbind(head(markers, 50), tail(markers, 35))
 
@@ -214,8 +214,8 @@ ggplot(fgseaRes1, aes(order, NES, fill = class)) +
 #################################
 ########### Figure 4D ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -227,8 +227,8 @@ data <- subset(data, idents = list('Ad1'))
 tmp1 <- factor(ifelse(data@assays$SCT@data["Ucp1", ] > 0, "Ad1_High", "Ad1_Low"))
 
 
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -278,10 +278,10 @@ upset(fromExpression(expressionInput), set_size.show = T, shade.alpha	= 1)
 #################################
 ########### Figure 4G ###########
 #################################
-data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
 
-ort <- read.table("/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = T)
+ort <- read.table("/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt", sep = ",", header = T)
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
