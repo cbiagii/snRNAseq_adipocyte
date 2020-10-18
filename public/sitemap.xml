@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/post/2_functions/</loc>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/1_setup/</loc>
     <lastmod>2020-10-18T00:00:00+00:00</lastmod>
   </url>
   
@@ -18,13 +18,18 @@
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/</loc>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/2_functions/</loc>
     <lastmod>2020-10-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/post/4_metacell_original/</loc>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/</loc>
     <lastmod>2020-10-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/4_metacell_original/</loc>
+    <lastmod>2020-10-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>

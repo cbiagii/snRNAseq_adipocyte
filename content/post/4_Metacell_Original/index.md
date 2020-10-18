@@ -1,5 +1,5 @@
 ---
-date: "2020-10-16"
+date: "2020-10-15"
 diagram: true
 math: true
 title: 4 - Metacell Original

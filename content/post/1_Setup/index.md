@@ -1,8 +1,8 @@
 ---
-date: "2020-10-19"
-diagram: true
-math: true
-title: 1 - Environment Setup
+title: "1 - Setup"
+diagram: yes
+date: '2020-10-18'
+math: yes
 ---
 
 ```
