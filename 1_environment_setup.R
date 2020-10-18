@@ -1,7 +1,5 @@
 # Install additional CRAN packages
-CRAN_packages <- c('BiocManager', 'circlize', 'dplyr', 'enrichR', 'future', 'ggplot2', 
-                   'ggpubr', 'ggrepel', 'ggtext', 'glue', 'pheatmap', 'RColorBrewer', 
-                   'scales', 'tibble', 'tidyr', 'UpSetR', 'viridis')
+CRAN_packages <- c('BiocManager', 'circlize', 'dplyr', 'enrichR', 'future', 'ggplot2', 'ggpubr', 'ggrepel', 'ggtext', 'glue', 'pheatmap', 'RColorBrewer', 'scales', 'tibble', 'tidyr', 'UpSetR', 'viridis')
 new.packages <- CRAN_packages[!(CRAN_packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 

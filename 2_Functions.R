@@ -30,7 +30,6 @@ plotMonocle <- function(cds, gene) {
       theme(legend.key=element_blank())
   }
   
-  
   tmp <- cds@assayData$exprs[gene, ]
   if (length(gene) == 1) {
     tmp <- rescale(tmp, to = c(-2,2))
