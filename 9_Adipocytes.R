@@ -1,10 +1,4 @@
-# DESCRIPTION ####
-# The following code ASSUMES all dependencies in R have been installed See file(s): 
-# 1_environment_setup.R
-# The purpose of this code is to generate de Seurat object reproducing the analysis performed by Rajbhandari et al., 2020
-
-# LOAD LIBRARIES ####
-# Run the following code once you have Seurat installed
+## Loading R packages
 library(Seurat)
 
 ## Loading metacell results

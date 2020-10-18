@@ -1,36 +1,21 @@
-### Loading librarys
+## Loading R packages
 library(Seurat)
+library(SeuratWrappers)
 library(ggplot2)
 library(dplyr)
-library(ggpubr)
-library(enrichR)
-library(forcats)
-library(ggtext)
 library(ggrepel)
-library(SeuratWrappers)
 library(RColorBrewer)
-library(slingshot)
-library(SingleCellExperiment)
-library(ggbeeswarm)
 library(fgsea)
+library(UpSetR)
 library(ComplexHeatmap)
 library(circlize)
-library(pheatmap)
-library(ggrepel)
-library(monocle)
-library(pbapply)
-library(gam)
-library(tradeSeq)
-library(SummarizedExperiment)
-library(UpSetR)
-library(glue)
 
 
 #################################
 ########### Figure 4A ###########
 #################################
-data <- readRDS("/Users/biagi/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -56,7 +41,7 @@ dims <- data.frame(sample_id = rownames(Embeddings(data, 'tsne')),
                    x = Embeddings(data, 'tsne')[,1], 
                    y = Embeddings(data, 'tsne')[,2])
 
-pt <- ggplot() +
+ggplot() +
   geom_point(data = dims,
              aes(x = x,
                  y = y,
@@ -87,14 +72,9 @@ pt <- ggplot() +
            dims[names(data$UCP1[which(data$UCP1 == 'High')]), 4], 
            colour = 'red', size = 1.5)
 
-postscript("/Users/biagi/cangen/coliveir/Miguel/paper/Figure_4A_1.eps", width = 8, height = 6)
-print(pt)
-dev.off()
-
-
 #pieplot UCP1 High
-data <- readRDS("/Users/biagi/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -123,7 +103,7 @@ df <- df %>%
   mutate(text_y = cumsum(value) - value/2)
 df$pos = (cumsum(c(0, df$value)) + c(df$value / 2, .01))[1:nrow(df)]
 
-piePlot <- ggplot(df, aes(x = "", y = value, fill = class)) +
+ggplot(df, aes(x = "", y = value, fill = class)) +
   geom_bar(width = 1, stat = "identity", color = "white") +
   coord_polar("y", start = 0)+
   scale_fill_manual(values = c("#11c78b", "#800080", "#dfdf0d")) +
@@ -131,18 +111,13 @@ piePlot <- ggplot(df, aes(x = "", y = value, fill = class)) +
   geom_text_repel(aes(x = 1.5, y = pos, label = paste0(value, "%")), nudge_x = .1, segment.size = .7, show.legend = FALSE) +
   ggtitle('Ucp1')
 
-postscript("/Users/biagi/cangen/coliveir/Miguel/paper/Figure_4A_2.eps", width = 7, height = 7)
-print(piePlot)
-dev.off()
-
 
 
 #################################
 ########### Figure 4B ###########
 #################################
-data <- readRDS("/Users/biagi/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-
-infos <- read.table("/Users/biagi/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -163,39 +138,22 @@ markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
 markers <- subset(markers, p_val_adj < 0.05 & cluster == 'High')
 markers <- markers[order(markers$avg_logFC, decreasing = T), ]
 
-#write.table(markers, '/projects/cangen/coliveir/Miguel/paper/Markers_Ucp1.txt', sep = '\t', quote = F, row.names = F)
-
 genes1 <- c(head(markers$gene, 10), tail(markers$gene, 10))
 
 mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
-ht1 <- DoHeatmap(data, features = genes1, angle = 0, size = 5, label = F) +
+
+DoHeatmap(data, features = genes1, angle = 0, size = 5, label = F) +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
   labs(color='UCP1 Expression')
-
-ht2 <- ht1 + theme(legend.position = "none",
-                   panel.grid = element_blank(),
-                   axis.title = element_blank(),
-                   axis.text = element_blank(),
-                   axis.ticks = element_blank(),
-                   panel.background = element_blank())
-
-postscript("/Users/biagi/cangen/coliveir/Miguel/paper/Figure_4B_1.eps", width = 8, height = 6)
-print(ht1)
-dev.off()
-
-tiff("/Users/biagi/cangen/coliveir/Miguel/paper/Figure_4B_2.tiff", width = 8, height = 6, units = 'in', res = 600)
-print(ht2)
-dev.off()
 
 
 
 #################################
 ########### Figure 4C ###########
 #################################
-data <- readRDS("/Users/biagi/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-
-infos <- read.table("/Users/biagi/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -216,11 +174,8 @@ markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
 markers <- subset(markers, p_val_adj < 0.05 & cluster == 'High')
 markers <- markers[order(markers$avg_logFC, decreasing = T), ]
 
-
-ort <- read.table("/Users/biagi/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = T)
-pathways <- gmtPathways('/Users/biagi//cangen/coliveir/Miguel/msigdb.v7.1.symbols.gmt')
-
-#write.table(markers, '/projects/cangen/coliveir/Miguel/paper/Fig4_B_markers.txt', row.names = F, col.names = T, sep = '\t', quote = F)
+ort <- read.table("/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = T)
+pathways <- gmtPathways('/projects/cangen/coliveir/Miguel/msigdb.v7.1.symbols.gmt')
 
 comp1 <- rbind(head(markers, 50), tail(markers, 35))
 
@@ -237,7 +192,6 @@ for (i in 1:length(genes1)) {
   fgseaRes1$genes[i] <- paste(genes1[[i]], collapse = ';')
 }
 fgseaRes1$leadingEdge <- NULL
-#write.table(fgseaRes1, '/projects/cangen/coliveir/Miguel/paper/Fig4_B_GSEA.txt', row.names = F, col.names = T, sep = '\t', quote = F)
 
 pathways <- c('GO_POSITIVE_REGULATION_OF_COLD_INDUCED_THERMOGENESIS', 'GO_CELLULAR_CARBOHYDRATE_METABOLIC_PROCESS', 'GO_RESPONSE_TO_EXTRACELLULAR_STIMULUS', 'GO_MITOCHONDRION', 'GO_LIPID_OXIDATION', 'GO_CELLULAR_KETONE_METABOLIC_PROCESS', 'GO_INTRINSIC_COMPONENT_OF_PLASMA_MEMBRANE', 'GO_PROTEIN_HOMODIMERIZATION_ACTIVITY', 'GO_RESPONSE_TO_CYTOKINE', 'GO_REGULATION_OF_KINASE_ACTIVITY', 'RUAN_RESPONSE_TO_TROGLITAZONE_UP', 'GERHOLD_ADIPOGENESIS_UP')
 fgseaRes1 <- fgseaRes1[which(fgseaRes1$pathway %in% pathways), ]
@@ -245,7 +199,7 @@ fgseaRes1$class <- ifelse(fgseaRes1$NES > 0, 'Up-regulated', 'Down-regulated')
 fgseaRes1 <- fgseaRes1[order(fgseaRes1$class, fgseaRes1$NES), ]
 fgseaRes1$order <- seq_len(nrow(fgseaRes1))
 
-pt1 <- ggplot(fgseaRes1, aes(order, NES, fill = class)) +
+ggplot(fgseaRes1, aes(order, NES, fill = class)) +
   geom_bar(stat = "identity", show.legend = TRUE) +
   xlab(NULL) + ylab("Normalized Enrichment Score (NES)") +
   theme_bw() +
@@ -255,20 +209,13 @@ pt1 <- ggplot(fgseaRes1, aes(order, NES, fill = class)) +
   scale_x_continuous(breaks = fgseaRes1$order, labels = fgseaRes1$pathway, expand = c(0, 0)) +
   ggtitle('GSEA for UCP1 High/Low for AD1 cluster')
 
-postscript("/Users/biagi/cangen/coliveir/Miguel/paper/Figure_4D.eps", width = 8, height = 6)
-pt1 + theme(legend.position = "right",
-            axis.title = element_blank(),
-            axis.text = element_blank(),
-            panel.background = element_blank())
-dev.off()
-
 
 
 #################################
 ########### Figure 4D ###########
 #################################
-data <- readRDS("/Users/biagi/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -280,8 +227,8 @@ data <- subset(data, idents = list('Ad1'))
 tmp1 <- factor(ifelse(data@assays$SCT@data["Ucp1", ] > 0, "Ad1_High", "Ad1_Low"))
 
 
-data <- readRDS("/Users/biagi/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -300,7 +247,7 @@ tmp <- as.factor(structure(tmp2, names = tmp3))
 Idents(data) <- tmp
 data$cluster <- Idents(data)
 
-data <- RunALRA(data)
+data <- SeuratWrappers::RunALRA(data)
 data <- ScaleData(data, features = rownames(data))
 
 genes <- c('Acaa2', 'Ehhadh', 'Slc27a2', 'Acadm', 'Scp2', 'Acadvl', 'Hadha', 'Hadhb', 'Acaa1b', 'Abcd3', 
@@ -311,25 +258,11 @@ genes <- c('Acaa2', 'Ehhadh', 'Slc27a2', 'Acadm', 'Scp2', 'Acadvl', 'Hadha', 'Ha
 genes <- genes[genes %in% rownames(data)]
 
 mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
-ht1 <- DoHeatmap(data, features = genes, angle = 0, size = 5, label = F) +
+
+DoHeatmap(data, features = genes, angle = 0, size = 5, label = F) +
   scale_fill_gradientn(colours = rev(mapal)) +
   theme(axis.text=element_text(size=6)) +
   labs(color='UCP1 Expression')
-
-ht2 <- ht1 + theme(legend.position = "none",
-                   panel.grid = element_blank(),
-                   axis.title = element_blank(),
-                   axis.text = element_blank(),
-                   axis.ticks = element_blank(),
-                   panel.background = element_blank())
-
-postscript("/Users/biagi/cangen/coliveir/Miguel/paper/Figure_4C_1.eps", width = 8, height = 6)
-print(ht1)
-dev.off()
-
-tiff("/Users/biagi/cangen/coliveir/Miguel/paper/Figure_4C_2.tiff", width = 8, height = 6, units = 'in', res = 600)
-print(ht2)
-dev.off()
 
 
 
@@ -338,20 +271,17 @@ dev.off()
 #################################
 expressionInput <- c(Set1 = 962, Set2 = 244, Set3 = 73, Set4 = 35, `Set1&Set2` = 315, `Set1&Set3` = 16, `Set2&Set3` = 1, `Set1&Set2&Set3` = 46)
 
-postscript("/Users/biagi/cangen/coliveir/Miguel/paper/Figure_4F.eps", width = 8, height = 6)
 upset(fromExpression(expressionInput), set_size.show = T, shade.alpha	= 1)
-dev.off()
 
 
 
 #################################
 ########### Figure 4G ###########
 #################################
-data <- readRDS("/Users/biagi/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+data <- readRDS("/projects/cangen/coliveir/Miguel/output/10x/Adipocytes.rds")
+infos <- read.table("/projects/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
 
-infos <- read.table("/Users/biagi/cangen/coliveir/scRNA_output/SCCAF/AdipocytesOnly/results/obs.csv")
-
-ort <- read.table("/Users/biagi/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = T)
+ort <- read.table("/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = T)
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -367,35 +297,34 @@ data <- ScaleData(data, features = rownames(data))
 data$UCP1 <- factor(ifelse(data@assays$SCT@data["Ucp1", ] > 0, "High", "Low"))
 Idents(data) <- data$UCP1
 
-
 genes_High <- c('PPARD', 'HNF4A', 'ESR1', 'PPARG', 'SALL4', 'CEBPD', 'EGR1', 'NANOG', 'STAT3', 'BHLHE40')
 genes_High <- ort$Mouse.gene.name[which(ort$Gene.name %in% genes_High)]
 genes_High <- genes_High[genes_High %in% rownames(data)]
 tabHigh <- as.matrix(data@assays$SCT@data[genes_High, names(data$UCP1)[which(data$UCP1 == 'High')]])
 tabLow <- as.matrix(data@assays$SCT@data[genes_High, names(data$UCP1)[which(data$UCP1 == 'Low')]])
+
 df <- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
 df <- t(df)
+
 x <- as.matrix(df)
 m = apply(x, 1, mean, na.rm = T)
 s = apply(x, 1, sd, na.rm = T)
 res <- (x - m)/s
 cn = colnames(res)
+
 ba <- HeatmapAnnotation(
   text = anno_text(cn, rot = 0, location = unit(0.9, "npc"), just = "centre", gp = gpar(fontsize = 8)),
   annotation_height = max_text_width(cn)
 )
-breaks <- seq(-2,2, by= 0.1)
-ht <- Heatmap(as.matrix(res), 
-              bottom_annotation = ba, 
-              name = "zscore", column_title = "Ad1 UCP1 High", width = 1, 
-              show_row_names = T, show_column_names = F,
-              cluster_rows = F, cluster_columns = T,
-              col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = "RdBu")))(41)), 
-              heatmap_height = unit(6, "cm"), row_names_gp = gpar(fontsize = 8))
 
-postscript("/Users/biagi/cangen/coliveir/Miguel/paper/Figure_4G_1.eps", width = 8, height = 6)
-print(ht)
-dev.off()
+breaks <- seq(-2,2, by= 0.1)
+Heatmap(as.matrix(res), 
+        bottom_annotation = ba, 
+        name = "zscore", column_title = "Ad1 UCP1 High", width = 1, 
+        show_row_names = T, show_column_names = F,
+        cluster_rows = F, cluster_columns = T,
+        col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = "RdBu")))(41)), 
+        heatmap_height = unit(6, "cm"), row_names_gp = gpar(fontsize = 8))
 
 
 genes_Low <- c('PPARG', 'SALL4', 'ESR1', 'TP63', 'AR', 'GATA2')
@@ -403,26 +332,26 @@ genes_Low <- ort$Mouse.gene.name[which(ort$Gene.name %in% genes_Low)]
 genes_Low <- genes_Low[genes_Low %in% rownames(data)]
 tabHigh <- as.matrix(data@assays$SCT@data[genes_Low, names(data$UCP1)[which(data$UCP1 == 'High')]])
 tabLow <- as.matrix(data@assays$SCT@data[genes_Low, names(data$UCP1)[which(data$UCP1 == 'Low')]])
+
 df <- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
 df <- t(df)
+
 x <- as.matrix(df)
 m = apply(x, 1, mean, na.rm = T)
 s = apply(x, 1, sd, na.rm = T)
 res <- (x - m)/s
 cn = colnames(res)
+
 ba <- HeatmapAnnotation(
   text = anno_text(cn, rot = 0, location = unit(0.9, "npc"), just = "centre", gp = gpar(fontsize = 8)),
   annotation_height = max_text_width(cn)
 )
-breaks <- seq(-2,2, by= 0.1)
-ht <- Heatmap(as.matrix(res), 
-              bottom_annotation = ba, 
-              name = "zscore", column_title = "Ad1 UCP1 Low", width = 1, 
-              show_row_names = T, show_column_names = F,
-              cluster_rows = F, cluster_columns = T,
-              col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = "RdBu")))(41)), 
-              heatmap_height = unit(6, "cm"), row_names_gp = gpar(fontsize = 8))
 
-postscript("/Users/biagi/cangen/coliveir/Miguel/paper/Figure_4G_2.eps", width = 8, height = 6)
-print(ht)
-dev.off()
+breaks <- seq(-2,2, by= 0.1)
+Heatmap(as.matrix(res), 
+        bottom_annotation = ba, 
+        name = "zscore", column_title = "Ad1 UCP1 Low", width = 1, 
+        show_row_names = T, show_column_names = F,
+        cluster_rows = F, cluster_columns = T,
+        col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = "RdBu")))(41)), 
+        heatmap_height = unit(6, "cm"), row_names_gp = gpar(fontsize = 8))

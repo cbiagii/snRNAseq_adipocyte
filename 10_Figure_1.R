@@ -1,3 +1,4 @@
+## Loading R packages
 library(metacell)
 library(Seurat)
 library(ggplot2)
@@ -12,7 +13,6 @@ library(ggtext)
 #################################
 ########### Figure 1B ###########
 #################################
-## Figuew 1B - 1
 marks_colors <- NULL
 marks_colors <- rbind(marks_colors, c("Adipocyte_1", "Acsl1", "#0000b3", 1, 2.5))
 marks_colors <- rbind(marks_colors, c("Adipocyte_2", "Plin4", "#0000cc", 1, 2.5))
@@ -86,7 +86,7 @@ TSNEPlot(data, label = FALSE, pt.size = 0.3, cols = cls) +
   theme_classic() + labs(color = "Cell Type") +
   theme(legend.position="bottom")
 
-## Figuew 1B - 2
+
 a <- round((sum(Idents(data) == "AD1" | Idents(data) == "AD2" | Idents(data) == "AD3" | Idents(data) == "AD4")/ncol(data))*100, 2); a1 <- sum(Idents(data) == "AD1" | Idents(data) == "AD2" | Idents(data) == "AD3" | Idents(data) == "AD4")
 b <- round((sum(Idents(data) == "EN1" | Idents(data) == "EN2")/ncol(data))*100, 2); b1 <- sum(Idents(data) == "EN1" | Idents(data) == "EN2")
 c <- round((sum(Idents(data) == "IM1" | Idents(data) == "IM2" | Idents(data) == "IM3" | Idents(data) == "IM4")/ncol(data))*100, 2); c1 <- sum(Idents(data) == "IM1" | Idents(data) == "IM2" | Idents(data) == "IM3" | Idents(data) == "IM4")
