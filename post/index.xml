@@ -13,9 +13,37 @@
     </image>
     
     <item>
+      <title>1 - Setup</title>
+      <link>https://cbiagii.github.io/AdipoSNAP/post/1_setup/</link>
+      <pubDate>Sun, 18 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>https://cbiagii.github.io/AdipoSNAP/post/1_setup/</guid>
+      <description>&lt;pre&gt;&lt;code&gt;# Install additional CRAN packages
+CRAN_packages &amp;lt;- c(&#39;BiocManager&#39;, &#39;circlize&#39;, &#39;dplyr&#39;, &#39;enrichR&#39;, &#39;future&#39;, &#39;ggplot2&#39;, &#39;ggpubr&#39;, &#39;ggrepel&#39;, &#39;ggtext&#39;, &#39;glue&#39;, &#39;pheatmap&#39;, &#39;RColorBrewer&#39;, &#39;scales&#39;, &#39;tibble&#39;, &#39;tidyr&#39;, &#39;UpSetR&#39;, &#39;viridis&#39;)
+new.packages &amp;lt;- CRAN_packages[!(CRAN_packages %in% installed.packages()[,&amp;quot;Package&amp;quot;])]
+if(length(new.packages)) install.packages(new.packages)
+
+# Install additional Bioconductor packages
+Bioconductor_packages &amp;lt;- c(&#39;ComplexHeatmap&#39;, &#39;DropletUtils&#39;, &#39;fgsea&#39;, &#39;monocle&#39;)
+new.packages &amp;lt;- Bioconductor_packages[!(Bioconductor_packages %in% installed.packages()[,&amp;quot;Package&amp;quot;])]
+if(length(new.packages)) BiocManager::install(new.packages)
+
+# Install reticulate package
+install.packages(&#39;reticulate&#39;)
+
+# Install Seurat and SeuratWrappers packages
+install.packages(&#39;Seurat&#39;)
+remotes::install_github(&#39;satijalab/seurat-wrappers&#39;)
+
+# Install metacell package
+if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&amp;quot;Package&amp;quot;])])) BiocManager::install(&amp;quot;tanaylab/metacell&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
       <title>2 - Functions</title>
       <link>https://cbiagii.github.io/AdipoSNAP/post/2_functions/</link>
-      <pubDate>Sun, 18 Oct 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 17 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/2_functions/</guid>
       <description>&lt;pre&gt;&lt;code&gt;## plotMonocle
 plotMonocle &amp;lt;- function(cds, gene) {
@@ -227,7 +255,7 @@ volcano.plot &amp;lt;- function(res, upGenes = NULL, downGenes = NULL){
     <item>
       <title>3 - Original Preprocessing</title>
       <link>https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/</link>
-      <pubDate>Sat, 17 Oct 2020 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/</guid>
       <description>&lt;pre&gt;&lt;code&gt;## Loading R packages
 library(Seurat)
@@ -309,7 +337,7 @@ saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds&
     <item>
       <title>4 - Metacell Original</title>
       <link>https://cbiagii.github.io/AdipoSNAP/post/4_metacell_original/</link>
-      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/4_metacell_original/</guid>
       <description>&lt;pre&gt;&lt;code&gt;## Loading R packages
 library(Seurat)
