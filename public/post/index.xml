@@ -17,63 +17,27 @@
       <link>https://cbiagii.github.io/AdipoSNAP/post/1_environment_setup/</link>
       <pubDate>Sun, 24 May 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/1_environment_setup/</guid>
-      <description>&lt;h6 id=&#34;install-additional-cran-packages&#34;&gt;Install additional CRAN packages&lt;/h6&gt;
-&lt;pre&gt;&lt;code&gt;CRAN_packages &amp;lt;- c(&#39;BiocManager&#39;, &#39;future&#39;, &#39;ggpubr&#39;, &#39;dplyr&#39;, &#39;ggplot2&#39;, 
-                   &#39;enrichR&#39;, &#39;forcats&#39;, &#39;ggtext&#39;, &#39;ggrepel&#39;, &#39;RColorBrewer&#39;, &#39;ggbeeswarm&#39;, &#39;circlize&#39;, 
-                   &#39;pheatmap&#39;, &#39;pbapply&#39;, &#39;gam&#39;, &#39;UpSetR&#39;, &#39;tidyr&#39;, &#39;tibble&#39;, &#39;tidyverse&#39;)
+      <description>&lt;pre&gt;&lt;code&gt;# Install additional CRAN packages
+CRAN_packages &amp;lt;- c(&#39;BiocManager&#39;, &#39;circlize&#39;, &#39;dplyr&#39;, &#39;enrichR&#39;, &#39;future&#39;, &#39;ggplot2&#39;, 
+                   &#39;ggpubr&#39;, &#39;ggrepel&#39;, &#39;ggtext&#39;, &#39;glue&#39;, &#39;pheatmap&#39;, &#39;RColorBrewer&#39;, 
+                   &#39;scales&#39;, &#39;tibble&#39;, &#39;tidyr&#39;, &#39;UpSetR&#39;, &#39;viridis&#39;)
 new.packages &amp;lt;- CRAN_packages[!(CRAN_packages %in% installed.packages()[,&amp;quot;Package&amp;quot;])]
 if(length(new.packages)) install.packages(new.packages)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h6 id=&#34;install-additional-bioconductor-packages&#34;&gt;Install additional Bioconductor packages&lt;/h6&gt;
-&lt;pre&gt;&lt;code&gt;Bioconductor_packages &amp;lt;- c(&#39;slingshot&#39;, &#39;SingleCellExperiment&#39;, &#39;fgsea&#39;, &#39;ComplexHeatmap&#39;, &#39;monocle&#39;, &#39;tradeSeq&#39;, &#39;SummarizedExperiment&#39;, &#39;DropletUtils&#39;)
+
+# Install additional Bioconductor packages
+Bioconductor_packages &amp;lt;- c(&#39;ComplexHeatmap&#39;, &#39;DropletUtils&#39;, &#39;fgsea&#39;, &#39;monocle&#39;)
 new.packages &amp;lt;- Bioconductor_packages[!(Bioconductor_packages %in% installed.packages()[,&amp;quot;Package&amp;quot;])]
 if(length(new.packages)) BiocManager::install(new.packages)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h6 id=&#34;install-reticulate-package&#34;&gt;Install reticulate package&lt;/h6&gt;
-&lt;pre&gt;&lt;code&gt;install.packages(&#39;reticulate&#39;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h6 id=&#34;install-seurat-and-seuratwrappers-packages&#34;&gt;Install Seurat and SeuratWrappers packages&lt;/h6&gt;
-&lt;pre&gt;&lt;code&gt;install.packages(&#39;Seurat&#39;)
-install.packages(&#39;SeuratWrappers&#39;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h6 id=&#34;install-metacell-package&#34;&gt;Install metacell package&lt;/h6&gt;
-&lt;pre&gt;&lt;code&gt;if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&amp;quot;Package&amp;quot;])])) BiocManager::install(&amp;quot;tanaylab/metacell&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h6 id=&#34;load-libraries&#34;&gt;LOAD LIBRARIES&lt;/h6&gt;
-&lt;h6 id=&#34;restart-rstudio-or-r&#34;&gt;Restart Rstudio or R&lt;/h6&gt;
-&lt;pre&gt;&lt;code class=&#34;language-library(BiocManager)&#34;&gt;library(circlize)
-library(ComplexHeatmap)
-library(dplyr)
-library(enrichR)
-library(fgsea)
-library(forcats)
-library(future)
-library(gam)
-library(ggbeeswarm)
-library(ggplot2)
-library(ggpubr)
-library(ggrepel)
-library(ggtext)
-library(metacell)
-library(monocle)
-library(pbapply)
-library(pheatmap)
-library(RColorBrewer)
-library(Seurat)
-library(SeuratWrappers)
-library(SingleCellExperiment)
-library(slingshot)
-library(SummarizedExperiment)
-library(tibble)
-library(tidyr)
-library(tidyverse)
-library(tradeSeq)
-library(UpSetR)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h6 id=&#34;confirm-package-version-of-seurat-and-monocle&#34;&gt;Confirm package version of Seurat and Monocle&lt;/h6&gt;
-&lt;pre&gt;&lt;code&gt;packageVersion(&amp;quot;Seurat&amp;quot;)
-packageVersion(&amp;quot;monocle&amp;quot;)
-packageVersion(&amp;quot;metacell&amp;quot;)
+
+# Install reticulate package
+install.packages(&#39;reticulate&#39;)
+
+# Install Seurat and SeuratWrappers packages
+install.packages(&#39;Seurat&#39;)
+remotes::install_github(&#39;satijalab/seurat-wrappers&#39;)
+
+# Install metacell package
+if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&amp;quot;Package&amp;quot;])])) BiocManager::install(&amp;quot;tanaylab/metacell&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
