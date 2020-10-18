@@ -3,603 +3,67 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/courses/example/example1/</loc>
-    <lastmod>2019-05-05T00:00:00+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/courses/example/</loc>
-    <lastmod>2018-09-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/courses/example/example2/</loc>
-    <lastmod>2019-05-05T00:00:00+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/publication-type/2/</loc>
-    <lastmod>2020-08-20T00:00:00+00:00</lastmod>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/2_functions/</loc>
+    <lastmod>2020-10-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://cbiagii.github.io/AdipoSNAP/</loc>
-    <lastmod>2020-08-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/authors/</loc>
-    <lastmod>2020-08-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/ferreira-mr-santos-ga-biagi-ca-silva-junior/</loc>
-    <lastmod>2020-08-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/publication/gsva/</loc>
-    <lastmod>2020-08-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/publication_types/</loc>
-    <lastmod>2020-08-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/publication/</loc>
-    <lastmod>2020-08-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/wa-zambuzzi-wf/</loc>
-    <lastmod>2020-08-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/project/cetf/</loc>
-    <lastmod>2020-08-09T13:08:40+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/project/docker/</loc>
-    <lastmod>2020-08-09T13:08:40+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/project/</loc>
-    <lastmod>2020-08-09T13:08:40+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/agrela-mv/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/bernardes-af/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/bispo-dos-santos-k/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/boldrini-vo/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/borin-a/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/brunetti-ns/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/carmo-hr/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/carregari-vc/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/carvalho-rf/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/codo-ac/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/coimbra-ld/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/crunfli-f/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/damasio-a/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/davanzo-gg/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/de-biagi-junior-cao/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/de-souza-gf/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/publication/covid/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/farias-as/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/jimenez-restrepo-jl/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/mansour-e/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/marques-re/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/martini-mc/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/martins-de-souza-d/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/monteiro-lb/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/moraes-vieira-pm/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/moretti-ml/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/mori-ma/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/muraro-sp/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/nakaya-hi/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/nunes-ta/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/palma-ac/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/parise-pl/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/pereira-fb/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/prodonoff-js/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/proenca-modena-jl/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/reis-de-oliveira-g/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/ribeiro-lc/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/sposito-ac/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/toledo-teixeira-da/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/ulaf-rg/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/velloso-la/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/vendramini-ph/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/vieira-as/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/vinolo-mar/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/virgilio-da-silva-jv/</loc>
-    <lastmod>2020-07-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/post/1_environment_setup/</loc>
-    <lastmod>2020-05-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/post/2_original_preprocess/</loc>
-    <lastmod>2020-05-24T00:00:00+00:00</lastmod>
+    <lastmod>2020-10-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://cbiagii.github.io/AdipoSNAP/post/</loc>
-    <lastmod>2020-05-24T00:00:00+00:00</lastmod>
+    <lastmod>2020-10-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/publication-type/3/</loc>
-    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/</loc>
+    <lastmod>2020-10-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/breno-osvaldo-funicheli/</loc>
-    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/4_metacell_original/</loc>
+    <lastmod>2020-10-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/carlos-alberto-oliveira-de-biagi-jr/</loc>
-    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/5_sccaf_sct/</loc>
+    <lastmod>2020-10-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/publication/cetf/</loc>
-    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/6_metacell_sct/</loc>
+    <lastmod>2020-10-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/joao-paulo-bianchi-ximenez/</loc>
-    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/7_sct_preprocess/</loc>
+    <lastmod>2020-10-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/patricia-de-cassia-ruy/</loc>
-    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/8_sccaf_adipocytes/</loc>
+    <lastmod>2020-10-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/ricardo-perecin-nociti/</loc>
-    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/9_adipocytes_preprocess/</loc>
+    <lastmod>2020-10-10T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/wilson-araujo-silva-jr/</loc>
-    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/10_main_figures/</loc>
+    <lastmod>2020-10-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/brandalise-sr/</loc>
-    <lastmod>2020-01-30T00:00:00+00:00</lastmod>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/11_supplementary_figures/</loc>
+    <lastmod>2020-10-08T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/calin-ga/</loc>
-    <lastmod>2020-01-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/das-chagas-pf/</loc>
-    <lastmod>2020-01-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/de-oliveira-jc/</loc>
-    <lastmod>2020-01-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/de-sousa-gr/</loc>
-    <lastmod>2020-01-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/kodama-mh/</loc>
-    <lastmod>2020-01-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/scrideli-ca/</loc>
-    <lastmod>2020-01-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/tone-lg/</loc>
-    <lastmod>2020-01-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/publication/ultraconserved/</loc>
-    <lastmod>2020-01-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/yunes-ja/</loc>
-    <lastmod>2020-01-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/araujo-lf/</loc>
-    <lastmod>2019-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/de-barros-ii/</loc>
-    <lastmod>2019-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/de-biagi-cao-jr/</loc>
-    <lastmod>2019-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/espreafico-em/</loc>
-    <lastmod>2019-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/molfetta-g/</loc>
-    <lastmod>2019-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/peronni-k/</loc>
-    <lastmod>2019-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/placa-jr/</loc>
-    <lastmod>2019-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/siena-add/</loc>
-    <lastmod>2019-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/silva-wa-jr/</loc>
-    <lastmod>2019-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/sousa-jf/</loc>
-    <lastmod>2019-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/publication/zeb1/</loc>
-    <lastmod>2019-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/courses/</loc>
-    <lastmod>2019-05-05T00:00:00+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/publication/medulloblastoma/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/baroni-milan-m/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/baumgartner-m/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/cruzeiro-gav/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/da-silva-silveira-v/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/de-almeida-magalhaes-t/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/de-oliveira-rs/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/de-paula-queiroz-rg/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/dos-santos-klinger-ph/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/lira-rcp/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/nagahashi-smk/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/oba-shinjo-sm/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/saggioro-fp/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/salomao-kb/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/seidinger-al/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/sturm-d/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/valera-et/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/projects/</loc>
-    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/barros-ii/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/biagi-cao-jr/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/brotto-db/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/leopoldino-am/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/publication/tfam/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/molfetta-ga/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/muys-br/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/peronni-kc/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/west-ap/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/author/west-lc/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <loc>https://cbiagii.github.io/AdipoSNAP/authors/</loc>
   </url>
   
   <url>
@@ -611,7 +75,7 @@
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/talk/</loc>
+    <loc>https://cbiagii.github.io/AdipoSNAP/publication_types/</loc>
   </url>
   
   <url>
