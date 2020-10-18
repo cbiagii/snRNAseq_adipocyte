@@ -1,0 +1,2156 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.8.0">
+
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Carlos Biagi Jr">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Figure 1 ## Loading R packages library(metacell) library(Seurat) library(ggplot2) library(dplyr) library(RColorBrewer) library(ggpubr) library(enrichR) library(glue) library(ggtext) ################################# ########### Figure 1B ########### ################################# marks_colors &lt;- NULL marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_1&quot;, &quot;Acsl1&quot;, &quot;#0000b3&quot;, 1, 2.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://cbiagii.github.io/AdipoSNAP/post/10_main_figures/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#1EBA9D">
+  
+
+  
+  
+  
+  <script src="/AdipoSNAP/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css" integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin="anonymous" title="hl-light" disabled>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark">
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+    
+      
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=B612+Mono:400,700%7CMerriweather:400,700%7CLato:400,700&display=swap">
+    
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="/AdipoSNAP/css/academic.css">
+
+  
+
+
+
+
+  
+
+
+  
+  
+
+  
+
+  <link rel="manifest" href="/AdipoSNAP/index.webmanifest">
+  <link rel="icon" type="image/png" href="/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="https://cbiagii.github.io/AdipoSNAP/post/10_main_figures/">
+
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="og:site_name" content="AdipoSNAP">
+  <meta property="og:url" content="https://cbiagii.github.io/AdipoSNAP/post/10_main_figures/">
+  <meta property="og:title" content="10 - Main Figures | AdipoSNAP">
+  <meta property="og:description" content="Figure 1 ## Loading R packages library(metacell) library(Seurat) library(ggplot2) library(dplyr) library(RColorBrewer) library(ggpubr) library(enrichR) library(glue) library(ggtext) ################################# ########### Figure 1B ########### ################################# marks_colors &lt;- NULL marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_1&quot;, &quot;Acsl1&quot;, &quot;#0000b3&quot;, 1, 2."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
+  <meta property="twitter:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2020-10-09T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2020-10-09T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://cbiagii.github.io/AdipoSNAP/post/10_main_figures/"
+  },
+  "headline": "10 - Main Figures",
+  
+  "datePublished": "2020-10-09T00:00:00Z",
+  "dateModified": "2020-10-09T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Carlos Biagi Jr"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "AdipoSNAP",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "Figure 1 ## Loading R packages library(metacell) library(Seurat) library(ggplot2) library(dplyr) library(RColorBrewer) library(ggpubr) library(enrichR) library(glue) library(ggtext) ################################# ########### Figure 1B ########### ################################# marks_colors \u0026lt;- NULL marks_colors \u0026lt;- rbind(marks_colors, c(\u0026quot;Adipocyte_1\u0026quot;, \u0026quot;Acsl1\u0026quot;, \u0026quot;#0000b3\u0026quot;, 1, 2."
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>10 - Main Figures | AdipoSNAP</title>
+
+</head>
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="dark">
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/AdipoSNAP/">AdipoSNAP</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/AdipoSNAP/">AdipoSNAP</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link  active" href="/AdipoSNAP/post/"><span>Tutorials</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link js-theme-selector" data-toggle="dropdown" aria-haspopup="true">
+          <i class="fas fa-palette" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>10 - Main Figures</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Oct 9, 2020
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <h2 id="figure-1">Figure 1</h2>
+<pre><code>## Loading R packages
+library(metacell)
+library(Seurat)
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(ggpubr)
+library(enrichR)
+library(glue)
+library(ggtext)
+
+
+#################################
+########### Figure 1B ###########
+#################################
+marks_colors &lt;- NULL
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_1&quot;, &quot;Acsl1&quot;, &quot;#0000b3&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_2&quot;, &quot;Plin4&quot;, &quot;#0000cc&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_3&quot;, &quot;Mlxipl&quot;, &quot;#0000e6&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_4&quot;, &quot;Pck1&quot;, &quot;#0000ff&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_5&quot;, &quot;Adrb3&quot;, &quot;#1a1aff&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_1&quot;, &quot;Btnl9&quot;, &quot;#00cd00&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_2&quot;, &quot;Ushbp1&quot;, &quot;#00b300&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_3&quot;, &quot;Egfl7&quot;, &quot;#009a00&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_4&quot;, &quot;Mcf2l&quot;, &quot;#008000&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_5&quot;, &quot;Ptprb&quot;, &quot;#006700&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_1&quot;, &quot;Zeb2&quot;, &quot;#ff7f7f&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_2&quot;, &quot;Trps1&quot;, &quot;#ff6666&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_3&quot;, &quot;Runx1&quot;, &quot;#ff4c4c&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_4&quot;, &quot;Ptprc&quot;, &quot;#ff3232&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_5&quot;, &quot;Adap2&quot;, &quot;#ff1919&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_1&quot;, &quot;Dcn&quot;, &quot;#ffff4d&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_2&quot;, &quot;Celf2&quot;, &quot;#ffff33&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_3&quot;, &quot;Meg3&quot;, &quot;#ffff1a&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_4&quot;, &quot;Col1a2&quot;, &quot;#ffff00&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_5&quot;, &quot;Col3a1&quot;, &quot;#e6e600&quot;, 1, 2.4))
+marks_colors &lt;- as.data.frame(marks_colors)
+colnames(marks_colors) &lt;- c(&quot;group&quot;, &quot;gene&quot;, &quot;color&quot;, &quot;priority&quot;, &quot;T_fold&quot;)
+marks_colors$priority &lt;- as.integer(marks_colors$priority)
+marks_colors$T_fold &lt;- as.numeric(marks_colors$T_fold)
+
+load(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda&quot;)
+dims &lt;- data.frame(x = object@sc_x,
+                   y = object@sc_y)
+
+load(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&quot;)
+tmp1 &lt;- data.frame(cells = names(object@mc), cols = object@mc)
+tmp2 &lt;- data.frame(cols = object@colors)
+teste &lt;- merge(tmp1, tmp2, by.x = &quot;cols&quot;, by.y = &quot;row.names&quot;)
+teste$cols &lt;- NULL
+
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Adipocyte&quot;, marks_colors$group)], &quot;Adipocytes&quot;, &quot;Unknown&quot;)
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Progenitor&quot;, marks_colors$group)], &quot;Progenitors&quot;, teste$cellType)
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Immune&quot;, marks_colors$group)], &quot;Immunes&quot;, teste$cellType)
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Endothelial&quot;, marks_colors$group)], &quot;Endothelials&quot;, teste$cellType)
+tab &lt;- merge(dims, teste, by.x = &quot;row.names&quot;, by.y = &quot;cells&quot;)
+
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- as.factor(new_cluster)
+data$clusters_sccaf &lt;- new_cluster
+
+infos &lt;- data@meta.data
+infos &lt;- infos[tab$Row.names, ]
+
+final &lt;- merge(infos, tab, by.x = &quot;row.names&quot;, by.y = &quot;Row.names&quot;)
+
+A &lt;- subset(final, cellType == &quot;Adipocytes&quot;)
+E &lt;- subset(final, cellType == &quot;Endothelials&quot;)
+I &lt;- subset(final, cellType == &quot;Immunes&quot;)
+P &lt;- subset(final, cellType == &quot;Progenitors&quot;)
+
+Idents(data) &lt;- data$clusters_sccaf
+new.cluster.ids &lt;- c(&quot;EN1&quot;, &quot;PG1&quot;, &quot;PG2&quot;, &quot;AD1&quot;, &quot;AD2&quot;, &quot;PG3&quot;, &quot;PG4&quot;, &quot;IM1&quot;, &quot;AD3&quot;, &quot;AD4&quot;, &quot;EN2&quot;, &quot;IM2&quot;, &quot;IM3&quot;, &quot;PG5&quot;)
+names(new.cluster.ids) &lt;- levels(data)
+data &lt;- RenameIdents(data, new.cluster.ids)
+Idents(data) &lt;- factor(Idents(data), levels = c('AD1', 'AD2', 'AD3', 'AD4', 'EN1', 'EN2', 'IM1', 'IM2', 'IM3', 'PG1', 'PG2', 'PG3', 'PG4', 'PG5'))
+
+cls &lt;- c(&quot;#FFA500&quot;, &quot;#ffae19&quot;, &quot;#ffb732&quot;, &quot;#ffc04c&quot;, &quot;#66b266&quot;, &quot;#7fbf7f&quot;, &quot;#ffa3a3&quot;, &quot;#ffadad&quot;, &quot;#ffb7b7&quot;, &quot;#4043ff&quot;, &quot;#6666ff&quot;, &quot;#7f7fff&quot;, &quot;#9999ff&quot;, &quot;#adadff&quot;)
+
+TSNEPlot(data, label = FALSE, pt.size = 0.3, cols = cls) +
+  xlab(&quot;t-SNE 1&quot;) + ylab(&quot;t-SNE 2&quot;) +
+  theme_classic() + labs(color = &quot;Cell Type&quot;) +
+  theme(legend.position=&quot;bottom&quot;)
+
+
+a &lt;- round((sum(Idents(data) == &quot;AD1&quot; | Idents(data) == &quot;AD2&quot; | Idents(data) == &quot;AD3&quot; | Idents(data) == &quot;AD4&quot;)/ncol(data))*100, 2); a1 &lt;- sum(Idents(data) == &quot;AD1&quot; | Idents(data) == &quot;AD2&quot; | Idents(data) == &quot;AD3&quot; | Idents(data) == &quot;AD4&quot;)
+b &lt;- round((sum(Idents(data) == &quot;EN1&quot; | Idents(data) == &quot;EN2&quot;)/ncol(data))*100, 2); b1 &lt;- sum(Idents(data) == &quot;EN1&quot; | Idents(data) == &quot;EN2&quot;)
+c &lt;- round((sum(Idents(data) == &quot;IM1&quot; | Idents(data) == &quot;IM2&quot; | Idents(data) == &quot;IM3&quot; | Idents(data) == &quot;IM4&quot;)/ncol(data))*100, 2); c1 &lt;- sum(Idents(data) == &quot;IM1&quot; | Idents(data) == &quot;IM2&quot; | Idents(data) == &quot;IM3&quot; | Idents(data) == &quot;IM4&quot;)
+d &lt;- round((sum(Idents(data) == &quot;PG1&quot; | Idents(data) == &quot;PG2&quot; | Idents(data) == &quot;PG3&quot; | Idents(data) == &quot;PG4&quot;)/ncol(data))*100, 2); d1 &lt;- sum(Idents(data) == &quot;PG1&quot; | Idents(data) == &quot;PG2&quot; | Idents(data) == &quot;PG3&quot; | Idents(data) == &quot;PG4&quot;)
+
+df &lt;- data.frame(
+  class = c(&quot;Adipocyte&quot;, &quot;Endothelial&quot;, &quot;Immune&quot;, &quot;Progenitor&quot;),
+  n = c(a1, b1, c1, d1),
+  value = c(a, b, c, d)
+)
+
+df$class &lt;- factor(df$class, levels = c(&quot;Adipocyte&quot;, &quot;Endothelial&quot;, &quot;Immune&quot;, &quot;Progenitor&quot;))
+
+df &lt;- df %&gt;%
+  arrange(desc(class)) %&gt;%
+  mutate(lab.ypos = cumsum(value) - 0.5*value)
+
+ggplot(df, aes(x = &quot;&quot;, y = value, fill = class)) +
+  geom_bar(width = 1, stat = &quot;identity&quot;, color = &quot;white&quot;) +
+  coord_polar(&quot;y&quot;, start = 0)+
+  geom_text(aes(y = lab.ypos, label = paste0(value, &quot;%&quot;)), color = &quot;white&quot;, fontface = &quot;bold&quot;)+
+  scale_fill_manual(values = c(&quot;#FFA500&quot;, &quot;#329932&quot;, &quot;#ff9999&quot;, &quot;#6666ff&quot;)) +
+  theme_void() + labs(fill = &quot;Cell Type&quot;)
+
+
+
+#################################
+########### Figure 1C ###########
+#################################
+marks_colors &lt;- NULL
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_1&quot;, &quot;Acsl1&quot;, &quot;#0000b3&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_2&quot;, &quot;Plin4&quot;, &quot;#0000cc&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_3&quot;, &quot;Mlxipl&quot;, &quot;#0000e6&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_4&quot;, &quot;Pck1&quot;, &quot;#0000ff&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_5&quot;, &quot;Adrb3&quot;, &quot;#1a1aff&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_1&quot;, &quot;Btnl9&quot;, &quot;#00cd00&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_2&quot;, &quot;Ushbp1&quot;, &quot;#00b300&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_3&quot;, &quot;Egfl7&quot;, &quot;#009a00&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_4&quot;, &quot;Mcf2l&quot;, &quot;#008000&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_5&quot;, &quot;Ptprb&quot;, &quot;#006700&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_1&quot;, &quot;Zeb2&quot;, &quot;#ff7f7f&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_2&quot;, &quot;Trps1&quot;, &quot;#ff6666&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_3&quot;, &quot;Runx1&quot;, &quot;#ff4c4c&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_4&quot;, &quot;Ptprc&quot;, &quot;#ff3232&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_5&quot;, &quot;Adap2&quot;, &quot;#ff1919&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_1&quot;, &quot;Dcn&quot;, &quot;#ffff4d&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_2&quot;, &quot;Celf2&quot;, &quot;#ffff33&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_3&quot;, &quot;Meg3&quot;, &quot;#ffff1a&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_4&quot;, &quot;Col1a2&quot;, &quot;#ffff00&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_5&quot;, &quot;Col3a1&quot;, &quot;#e6e600&quot;, 1, 2.4))
+marks_colors &lt;- as.data.frame(marks_colors)
+colnames(marks_colors) &lt;- c(&quot;group&quot;, &quot;gene&quot;, &quot;color&quot;, &quot;priority&quot;, &quot;T_fold&quot;)
+marks_colors$priority &lt;- as.integer(marks_colors$priority)
+marks_colors$T_fold &lt;- as.numeric(marks_colors$T_fold)
+
+load(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda&quot;)
+dims &lt;- data.frame(x = object@sc_x,
+                   y = object@sc_y)
+
+load(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&quot;)
+tmp1 &lt;- data.frame(cells = names(object@mc), cols = object@mc)
+tmp2 &lt;- data.frame(cols = object@colors)
+teste &lt;- merge(tmp1, tmp2, by.x = &quot;cols&quot;, by.y = &quot;row.names&quot;)
+teste$cols &lt;- NULL
+
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Adipocyte&quot;, marks_colors$group)], &quot;Adipocytes&quot;, &quot;Unknown&quot;)
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Progenitor&quot;, marks_colors$group)], &quot;Progenitors&quot;, teste$cellType)
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Immune&quot;, marks_colors$group)], &quot;Immunes&quot;, teste$cellType)
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Endothelial&quot;, marks_colors$group)], &quot;Endothelials&quot;, teste$cellType)
+tab &lt;- merge(dims, teste, by.x = &quot;row.names&quot;, by.y = &quot;cells&quot;)
+
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- as.factor(new_cluster)
+data$clusters_sccaf &lt;- new_cluster
+
+infos &lt;- data@meta.data
+infos &lt;- infos[tab$Row.names, ]
+
+final &lt;- merge(infos, tab, by.x = &quot;row.names&quot;, by.y = &quot;Row.names&quot;)
+
+Idents(data) &lt;- data$clusters_sccaf
+new.cluster.ids &lt;- c(&quot;EN&quot;, &quot;PG&quot;, &quot;PG&quot;, &quot;AD&quot;, &quot;AD&quot;, &quot;PG&quot;, &quot;PG&quot;, &quot;IM&quot;, &quot;AD&quot;, &quot;AD&quot;, &quot;EN&quot;, &quot;IM&quot;, &quot;IM&quot;, &quot;PG&quot;)
+names(new.cluster.ids) &lt;- levels(data)
+data &lt;- RenameIdents(data, new.cluster.ids)
+Idents(data) &lt;- factor(Idents(data), levels = c('AD', 'EN', 'IM', 'PG'))
+
+markers &lt;- FindAllMarkers(data, only.pos = T)
+
+top20 &lt;- markers %&gt;% group_by(cluster) %&gt;% top_n(n = 20, wt = avg_logFC)
+
+data2 &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&quot;)
+
+Idents(data2) &lt;- Idents(data)
+rm(data)
+data2 &lt;- ScaleData(data2)
+
+cls &lt;- c(&quot;#FFA500&quot;, &quot;#329932&quot;, &quot;#ff9999&quot;, &quot;#6666ff&quot;)
+mapal &lt;- colorRampPalette(brewer.pal(11,&quot;RdBu&quot;))(256)
+
+DoHeatmap(data2, features = top20$gene, group.colors = cls, angle = 0, size = 5, label = F) +
+  scale_fill_gradientn(colours = rev(mapal)) +
+  theme(axis.text=element_text(size=5))
+
+
+
+#################################
+########### Figure 1D ###########
+#################################
+marks_colors &lt;- NULL
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_1&quot;, &quot;Acsl1&quot;, &quot;#0000b3&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_2&quot;, &quot;Plin4&quot;, &quot;#0000cc&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_3&quot;, &quot;Mlxipl&quot;, &quot;#0000e6&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_4&quot;, &quot;Pck1&quot;, &quot;#0000ff&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_5&quot;, &quot;Adrb3&quot;, &quot;#1a1aff&quot;, 1, 2.5))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_1&quot;, &quot;Btnl9&quot;, &quot;#00cd00&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_2&quot;, &quot;Ushbp1&quot;, &quot;#00b300&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_3&quot;, &quot;Egfl7&quot;, &quot;#009a00&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_4&quot;, &quot;Mcf2l&quot;, &quot;#008000&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_5&quot;, &quot;Ptprb&quot;, &quot;#006700&quot;, 1, 1.8))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_1&quot;, &quot;Zeb2&quot;, &quot;#ff7f7f&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_2&quot;, &quot;Trps1&quot;, &quot;#ff6666&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_3&quot;, &quot;Runx1&quot;, &quot;#ff4c4c&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_4&quot;, &quot;Ptprc&quot;, &quot;#ff3232&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_5&quot;, &quot;Adap2&quot;, &quot;#ff1919&quot;, 1, 0.9))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_1&quot;, &quot;Dcn&quot;, &quot;#ffff4d&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_2&quot;, &quot;Celf2&quot;, &quot;#ffff33&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_3&quot;, &quot;Meg3&quot;, &quot;#ffff1a&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_4&quot;, &quot;Col1a2&quot;, &quot;#ffff00&quot;, 1, 2.4))
+marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_5&quot;, &quot;Col3a1&quot;, &quot;#e6e600&quot;, 1, 2.4))
+marks_colors &lt;- as.data.frame(marks_colors)
+colnames(marks_colors) &lt;- c(&quot;group&quot;, &quot;gene&quot;, &quot;color&quot;, &quot;priority&quot;, &quot;T_fold&quot;)
+marks_colors$priority &lt;- as.integer(marks_colors$priority)
+marks_colors$T_fold &lt;- as.numeric(marks_colors$T_fold)
+
+load(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc2d.test_2dproj.Rda&quot;)
+dims &lt;- data.frame(x = object@sc_x,
+                   y = object@sc_y)
+
+load(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda&quot;)
+tmp1 &lt;- data.frame(cells = names(object@mc), cols = object@mc)
+tmp2 &lt;- data.frame(cols = object@colors)
+teste &lt;- merge(tmp1, tmp2, by.x = &quot;cols&quot;, by.y = &quot;row.names&quot;)
+teste$cols &lt;- NULL
+
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Adipocyte&quot;, marks_colors$group)], &quot;Adipocytes&quot;, &quot;Unknown&quot;)
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Progenitor&quot;, marks_colors$group)], &quot;Progenitors&quot;, teste$cellType)
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Immune&quot;, marks_colors$group)], &quot;Immunes&quot;, teste$cellType)
+teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Endothelial&quot;, marks_colors$group)], &quot;Endothelials&quot;, teste$cellType)
+tab &lt;- merge(dims, teste, by.x = &quot;row.names&quot;, by.y = &quot;cells&quot;)
+
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- as.factor(new_cluster)
+data$clusters_sccaf &lt;- new_cluster
+
+infos &lt;- data@meta.data
+infos &lt;- infos[tab$Row.names, ]
+
+final &lt;- merge(infos, tab, by.x = &quot;row.names&quot;, by.y = &quot;Row.names&quot;)
+
+A &lt;- subset(final, cellType == &quot;Adipocytes&quot;)
+E &lt;- subset(final, cellType == &quot;Endothelials&quot;)
+I &lt;- subset(final, cellType == &quot;Immunes&quot;)
+P &lt;- subset(final, cellType == &quot;Progenitors&quot;)
+
+Idents(data) &lt;- data$clusters_sccaf
+new.cluster.ids &lt;- c(&quot;EN1&quot;, &quot;PG1&quot;, &quot;PG2&quot;, &quot;AD1&quot;, &quot;AD2&quot;, &quot;PG3&quot;, &quot;PG4&quot;, &quot;IM1&quot;, &quot;AD3&quot;, &quot;AD4&quot;, &quot;EN2&quot;, &quot;IM2&quot;, &quot;IM3&quot;, &quot;PG5&quot;)
+names(new.cluster.ids) &lt;- levels(data)
+data &lt;- RenameIdents(data, new.cluster.ids)
+Idents(data) &lt;- factor(Idents(data), levels = rev(c('AD1', 'AD2', 'AD3', 'AD4', 'EN1', 'EN2', 'IM1', 'IM2', 'IM3', 'PG1', 'PG2', 'PG3', 'PG4', 'PG5')))
+
+DotPlot(data, features = c(&quot;Acsl1&quot;, &quot;Plin4&quot;, &quot;Mlxipl&quot;, &quot;Pck1&quot;, &quot;Adrb3&quot;,
+                           &quot;Btnl9&quot;, &quot;Ushbp1&quot;, &quot;Egfl7&quot;, &quot;Mcf2l&quot;, &quot;Ptprb&quot;,
+                           &quot;Trps1&quot;, &quot;Runx1&quot;, &quot;Ptprc&quot;, &quot;Adap2&quot;,
+                           &quot;Dcn&quot;, &quot;Celf2&quot;, &quot;Meg3&quot;, &quot;Col1a2&quot;, &quot;Col3a1&quot;), cols = c(&quot;grey&quot;, 'red')) +
+  xlab(&quot;&quot;) + ylab(&quot;&quot;) + theme(axis.text.x = element_text(angle = 45, hjust=1))
+
+
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&quot;)
+
+pt &lt;- FeaturePlot(data, c(&quot;Mlxipl&quot;, &quot;Egfl7&quot;, &quot;Runx1&quot;, &quot;Celf2&quot;),
+                  cols = c(&quot;grey&quot;, 'red'), reduction = 'tsne', pt.size = 0.1, combine = F)
+pt &lt;- lapply(pt, function(x) {
+  x + theme_void() + xlab(&quot;&quot;) + ylab(&quot;&quot;) +
+    theme(plot.title = element_text(hjust = 0.5, face = &quot;italic&quot;),
+          legend.position = &quot;none&quot;)
+})
+
+ggarrange(plotlist = pt)
+
+
+
+#################################
+########### Figure 1E ###########
+#################################
+dbs &lt;- c(&quot;KEGG_2019_Mouse&quot;, &quot;WikiPathways_2019_Mouse&quot;, &quot;Jensen_TISSUES&quot;, &quot;GO_Biological_Process_2018&quot;)
+
+genes_A &lt;- readLines(&quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_A.txt&quot;)
+genes_E &lt;- readLines(&quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_E.txt&quot;)
+genes_I &lt;- readLines(&quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_I.txt&quot;)
+genes_P &lt;- readLines(&quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_P.txt&quot;)
+
+genes &lt;- list(Adipocyte = genes_A,
+              Endothelial = genes_E,
+              Immune = genes_I,
+              Progenitor = genes_P)
+
+results &lt;- lapply(genes, enrichr, dbs)
+
+plotlist &lt;- list()
+pathlist &lt;- NULL
+tmplist &lt;- NULL
+paths &lt;- NULL
+for (i in 1:length(dbs)) {
+  tmp &lt;- lapply(results, `[[`, i)
+  tmp &lt;- mapply(cbind, tmp, &quot;type&quot; = names(tmp), SIMPLIFY=F)
+  tmp &lt;- do.call(&quot;rbind&quot;, tmp)
+  
+  tmp &lt;- subset(tmp, Adjusted.P.value &lt; 0.05)
+  
+  tmp$Adjusted.P.value &lt;- -log10(tmp$Adjusted.P.value)
+  tmp$Combined.Score &lt;- log2(tmp$Combined.Score)
+  
+  tmplist &lt;- rbind(tmplist, data.frame(tmp, class = dbs[i]))
+  
+  if (dbs[i] == &quot;GO_Biological_Process_2018&quot;) {
+    tmp$Term &lt;- gsub(&quot;\\s*\\([^\\)]+\\)&quot;,&quot;&quot;,as.character(tmp$Term))
+  }
+  tmp &lt;- tmp %&gt;% group_by(type) %&gt;% top_n(n = 5, wt = Combined.Score)
+  tmp$Term &lt;- factor(tmp$Term, levels = rev(unique(tmp$Term)))
+  pathlist &lt;- rbind(pathlist, data.frame(tmp %&gt;% group_by(type) %&gt;% top_n(n = 2, wt = Combined.Score), class = dbs[i]))
+  paths &lt;- rbind(paths, data.frame(tmp, class = dbs[i]))
+  
+  plotlist[[i]] &lt;- ggplot(tmp, aes(x = type, y = Term)) +
+    geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
+    theme_bw(base_size = 9) +
+    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = &quot;#2b9348&quot;, low = &quot;#eeef20&quot;) +
+    xlab(NULL) + ylab(NULL) +
+    ggtitle(dbs[i]) + labs(color = &quot;Combined Score&quot;, size = &quot;-log10(padj)&quot;)
+}
+tmplist &lt;- tmplist %&gt;% group_by(type) %&gt;% arrange(desc(Combined.Score), .by_group = TRUE)
+
+paths &lt;- paths[which(paths$Term %in% c(&quot;PPAR signaling pathway&quot;, &quot;AMPK signaling pathway&quot;, &quot;Fatty acid biosynthesis&quot;, &quot;Focal adhesion&quot;, &quot;ECM-receptor interaction&quot;, &quot;Cell adhesion molecules (CAMs)&quot;, &quot;Adherens junction&quot;, &quot;3T3-L1 cell&quot;, &quot;Abdominal adipose tissue&quot;, &quot;Subcutaneous adipose tissue&quot;, &quot;Vasculature&quot;, &quot;Umbilical vein&quot;, &quot;Vascular cell&quot;, &quot;Common cardinal vein&quot;, &quot;Mesenchyme&quot;, &quot;triglyceride biosynthetic process&quot;, &quot;fatty acid transmembrane transport&quot;)), ]
+
+paths &lt;- paths %&gt;%
+  mutate(
+    class_with_color = ifelse(class == &quot;KEGG_2019_Mouse&quot;, glue(&quot;&lt;strong&gt;&lt;span style='color:#0000FF'&gt;{Term}&lt;/span&gt;&lt;/strong&gt;&quot;),
+                              ifelse(class == &quot;GO_Biological_Process_2018&quot;, glue(&quot;&lt;strong&gt;&lt;span style='color:#9900CC'&gt;{Term}&lt;/span&gt;&lt;/strong&gt;&quot;),
+                                     ifelse(class == &quot;Jensen_TISSUES&quot;, glue(&quot;&lt;strong&gt;&lt;span style='color:#CC0000'&gt;{Term}&lt;/span&gt;&lt;/strong&gt;&quot;),
+                                            glue(&quot;&lt;strong&gt;&lt;span style='color:'&gt;{Term}&lt;/span&gt;&lt;/strong&gt;&quot;))))
+  )
+paths &lt;- paths %&gt;% group_by(type) %&gt;% arrange(desc(Combined.Score), .by_group = TRUE)
+paths$class_with_color &lt;- factor(paths$class_with_color, levels = rev(unique(paths$class_with_color)))
+
+ggplot(paths, aes(x = type, y = class_with_color)) +
+  geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
+  theme_bw(base_size = 8) +
+  scale_colour_gradient(limits=c(0, max(paths$Combined.Score)+0.5), high = &quot;#2b9348&quot;, low = &quot;#eeef20&quot;) +
+  xlab(NULL) + ylab(NULL) +
+  ggtitle(NULL) + labs(color = &quot;Combined Score&quot;, size = &quot;-log10(padj)&quot;) +
+  theme(axis.text.y = element_markdown(), axis.text=element_text(size=12))
+</code></pre>
+<h2 id="figure-2">Figure 2</h2>
+<pre><code>## Loading R packages
+library(Seurat)
+library(SeuratWrappers)
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(enrichR)
+library(glue)
+library(ggtext)
+library(ggpubr)
+
+
+#################################
+########### Figure 2A ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+
+TSNEPlot(data, pt.size = 1, cols = c(&quot;#11c78b&quot;, &quot;#800080&quot;, &quot;#e57400&quot;, &quot;#0000FF&quot;, &quot;#dfdf0d&quot;)) +
+  xlab(&quot;t-SNE 1&quot;) + ylab(&quot;t-SNE 2&quot;) +
+  theme_classic() + labs(color = &quot;Cluster&quot;) +
+  theme(legend.position=&quot;bottom&quot;)
+
+
+
+#################################
+########### Figure 2B ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+
+markers &lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+
+top10 &lt;- markers %&gt;% group_by(cluster) %&gt;% top_n(n = 10, wt = avg_logFC)
+
+data &lt;- SeuratWrappers::RunALRA(data)
+data &lt;- ScaleData(data)
+
+cls &lt;- c(&quot;#11c78b&quot;, &quot;#800080&quot;, &quot;#e57400&quot;, &quot;#0000FF&quot;, &quot;#dfdf0d&quot;)
+mapal &lt;- colorRampPalette(brewer.pal(11,&quot;RdBu&quot;))(256)
+
+DoHeatmap(data, features = top10$gene, group.colors = cls, angle = 0, size = 5, label = F) +
+  scale_fill_gradientn(colours = rev(mapal)) +
+  theme(axis.text=element_text(size=6))
+
+
+
+#################################
+########### Figure 2C ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+
+DotPlot(data, features = c('Adipoq', 'Adrb3', 'Cidec', 'Dgat1', 'Fasn', 'Lipe', 'Pck1', 'Plin1', 'Pnpla2', 'Retn'), cols = c(&quot;grey&quot;, 'red'), assay = &quot;RNA&quot;) +
+  xlab(NULL) + ylab(NULL) +
+  theme_bw(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+
+
+
+#################################
+########### Figure 2D ###########
+#################################
+dbs &lt;- c(&quot;KEGG_2019_Mouse&quot;, &quot;WikiPathways_2019_Mouse&quot;, &quot;Jensen_TISSUES&quot;, &quot;GO_Biological_Process_2018&quot;, &quot;Mouse_Gene_Atlas&quot;)
+
+genes_1 &lt;- readLines(&quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_1.txt&quot;)
+genes_2 &lt;- readLines(&quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_2.txt&quot;)
+genes_3 &lt;- readLines(&quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_3.txt&quot;)
+genes_4 &lt;- readLines(&quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_4.txt&quot;)
+genes_5 &lt;- readLines(&quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_5.txt&quot;)
+
+genes &lt;- list(Ad1 = genes_1,
+              Ad2 = genes_2,
+              Ad3 = genes_3,
+              Ad4 = genes_4,
+              Ad5 = genes_5)
+
+results &lt;- lapply(genes, enrichr, dbs)
+
+plotlist &lt;- list()
+pathlist &lt;- NULL
+tmplist &lt;- NULL
+paths &lt;- NULL
+for (i in 1:length(dbs)) {
+  tmp &lt;- lapply(results, `[[`, i)
+  tmp &lt;- mapply(cbind, tmp, &quot;type&quot; = names(tmp), SIMPLIFY=F)
+  tmp &lt;- do.call(&quot;rbind&quot;, tmp)
+  
+  tmp &lt;- subset(tmp, Adjusted.P.value &lt; 0.05)
+  
+  tmp$Adjusted.P.value &lt;- -log10(tmp$Adjusted.P.value)
+  tmp$Combined.Score &lt;- log2(tmp$Combined.Score)
+  
+  tmplist &lt;- rbind(tmplist, data.frame(tmp, class = dbs[i]))
+  
+  if (dbs[i] == &quot;WikiPathways_2019_Mouse&quot; | dbs[i] == &quot;GO_Biological_Process_2018&quot;) {
+    tmp$Term &lt;- gsub(&quot;\\s*\\([^\\)]+\\)&quot;,&quot;&quot;,as.character(tmp$Term))
+  }
+  tmp &lt;- tmp %&gt;% group_by(type) %&gt;% top_n(n = 5, wt = Combined.Score)
+  tmp$Term &lt;- factor(tmp$Term, levels = rev(unique(tmp$Term)))
+  pathlist &lt;- rbind(pathlist, data.frame(tmp %&gt;% group_by(type) %&gt;% top_n(n = 2, wt = Combined.Score), class = dbs[i]))
+  paths &lt;- rbind(paths, data.frame(tmp, class = dbs[i]))
+  
+  plotlist[[i]] &lt;- ggplot(tmp, aes(x = type, y = Term)) +
+    geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
+    theme_bw(base_size = 9) +
+    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = &quot;#2b9348&quot;, low = &quot;#eeef20&quot;) +
+    xlab(NULL) + ylab(NULL) +
+    ggtitle(dbs[i]) + labs(color = &quot;Combined Score&quot;, size = &quot;-log10(padj)&quot;)
+}
+tmplist &lt;- tmplist %&gt;% group_by(type) %&gt;% arrange(desc(Combined.Score), .by_group = TRUE)
+
+paths &lt;- paths[which(paths$Term %in% c(&quot;PPAR signaling pathway&quot;, &quot;Fatty acid degradation&quot;, &quot;Glyoxylate and dicarboxylate metabolism&quot;, &quot;Insulin resistance&quot;, &quot;Biosynthesis of unsaturated fatty acids&quot;, &quot;Fatty acid biosynthesis&quot;, &quot;Adipocytokine signaling pathway&quot;, &quot;Propanoate metabolism&quot;, &quot;IL-17 signaling pathway&quot;, &quot;Fat digestion and absorption&quot;, &quot;Mitochondrial Gene Expression WP1263&quot;, &quot;Fatty acid oxidation WP2318&quot;, &quot;Fatty Acid Biosynthesis WP336&quot;, &quot;TCA Cycle WP434&quot;, &quot;Cholesterol metabolism WP4346&quot;, &quot;Subcutaneous adipose tissue&quot;, &quot;3T3-L1 cell&quot;, &quot;triglyceride biosynthetic process&quot;, &quot;triglyceride metabolic process&quot;, &quot;long-chain fatty acid transport&quot;, &quot;neutral amino acid transport&quot;, &quot;regulation of sequestering of triglyceride&quot;, &quot;cardiolipin acyl-chain remodeling&quot;, &quot;acylglycerol acyl-chain remodeling&quot;, &quot;adipose brown&quot;)), ]
+
+paths &lt;- paths %&gt;%
+  mutate(
+    class_with_color = ifelse(class == &quot;KEGG_2019_Mouse&quot;, glue(&quot;&lt;strong&gt;&lt;span style='color:#0000FF'&gt;{Term}&lt;/span&gt;&lt;/strong&gt;&quot;),
+                              ifelse(class == &quot;WikiPathways_2019_Mouse&quot;, glue(&quot;&lt;strong&gt;&lt;span style='color:#f28804'&gt;{Term}&lt;/span&gt;&lt;/strong&gt;&quot;),
+                                     ifelse(class == &quot;Jensen_TISSUES&quot;, glue(&quot;&lt;strong&gt;&lt;span style='color:#CC0000'&gt;{Term}&lt;/span&gt;&lt;/strong&gt;&quot;),
+                                            ifelse(class == &quot;GO_Biological_Process_2018&quot;, glue(&quot;&lt;strong&gt;&lt;span style='color:#9900CC'&gt;{Term}&lt;/span&gt;&lt;/strong&gt;&quot;),
+                                                   glue(&quot;&lt;strong&gt;&lt;span style='color:#18a997'&gt;{Term}&lt;/span&gt;&lt;/strong&gt;&quot;)))))
+  )
+
+paths &lt;- paths %&gt;% group_by(type) %&gt;% arrange(desc(Combined.Score), .by_group = TRUE)
+paths$class_with_color &lt;- factor(paths$class_with_color, levels = rev(unique(paths$class_with_color)))
+
+ggplot(paths, aes(x = type, y = class_with_color)) +
+  geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
+  theme_bw(base_size = 8) +
+  scale_colour_gradient(limits=c(0, max(paths$Combined.Score)+0.5), high = &quot;#2b9348&quot;, low = &quot;#eeef20&quot;) +
+  xlab(NULL) + ylab(NULL) +
+  ggtitle(NULL) + labs(color = &quot;Combined Score&quot;, size = &quot;-log10(padj)&quot;) +
+  theme(axis.text.y = element_markdown(), axis.text=element_text(size=12))
+
+
+
+#################################
+########### Figure 2E ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+data$clusters &lt;- Idents(data)
+
+data &lt;- SeuratWrappers::RunALRA(data)
+data &lt;- ScaleData(data)
+
+genes &lt;- c('Adipoq', 'Pnpla2', 'Fasn', 'Lep', 'Cebpa', 'Pparg', 'Cidec', 'Car3', 'Gpx3', 'Col1a2', 'Serpine1', 'Vegfa')
+genes &lt;- genes[genes %in% rownames(data)]
+
+df &lt;- NULL
+for (i in 1:length(genes)) {
+  c3 &lt;- data.frame(value = data@assays$alra@data[genes[i], names(Idents(data))[which(Idents(data) == 'Ad3')]], cluster = 'Ad3', gene = genes[i])
+  c4 &lt;- data.frame(value = data@assays$alra@data[genes[i], names(Idents(data))[which(Idents(data) == 'Ad4')]], cluster = 'Ad4', gene = genes[i])
+  df &lt;- rbind(df, rbind(c3, c4))
+}
+df$cluster &lt;- as.factor(df$cluster)
+df$gene &lt;- factor(df$gene, levels = genes)
+
+intr &lt;- aggregate(df[, 1], list(df$gene), mean)
+colnames(intr) &lt;- c('gene', 'Z')
+
+ggboxplot(df, x = &quot;cluster&quot;, y = &quot;value&quot;,
+                 color = &quot;cluster&quot;, add = &quot;jitter&quot;) +
+  facet_wrap(~ gene) + geom_hline(data = intr, aes(yintercept = Z), linetype = 'dashed') +
+  stat_compare_means(label = 'p.signif', method = 't.test', label.x = 1.5, label.y = 3.4) +
+  xlab(NULL) + ylab('Normalized Expression') + theme_bw() +
+  scale_color_manual(values = c('Ad3' = &quot;#e57400&quot;, 'Ad4' = &quot;#0000FF&quot;))
+</code></pre>
+<h2 id="figure-3">Figure 3</h2>
+<pre><code>## Loading R packages
+library(Seurat)
+library(SeuratWrappers)
+library(ggplot2)
+library(ggpubr)
+library(fgsea)
+library(dplyr)
+library(ggrepel)
+library(RColorBrewer)
+library(monocle)
+library(scales)
+library(viridis)
+
+source('/Users/biagi/PhD/AdipoSNAP/2_Functions.R')
+
+
+#################################
+########### Figure 3A ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+Idents(data) &lt;- as.factor(data$timpoint)
+data &lt;- subset(data, cells = names(which(data$timpoint == '4day' | data$timpoint == 'RT' | data$timpoint == 'CL')))
+data$timpoint &lt;- gsub('4day', 'Cold', data$timpoint)
+
+TSNEPlot(data, pt.size = 1, group.by = 'timpoint') +
+  xlab(&quot;t-SNE 1&quot;) + ylab(&quot;t-SNE 2&quot;) +
+  theme_classic() + labs(color = &quot;Cluster&quot;) +
+  theme(legend.position=&quot;bottom&quot;)
+
+
+
+#################################
+########### Figure 3B ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+Idents(data) &lt;- as.factor(data$timpoint)
+data &lt;- subset(data, cells = names(which(data$timpoint == '4day' | data$timpoint == 'RT' | data$timpoint == 'CL')))
+
+data &lt;- SeuratWrappers::RunALRA(data)
+data &lt;- ScaleData(data)
+
+genes &lt;- c('Lipe', 'Adrb3', 'Pnpla2', 'Plin1', 'Fasn', 'Acadm', 'Gk', 'Adipoq', 'Retn', 'Cidec', 'Ppara', 'Ucp1', 'Dio2', 'Prdm16', 'Elovl3')
+genes &lt;- genes[genes %in% rownames(data)]
+
+pt &lt;- FeaturePlot(data, genes,
+                  cols = c(&quot;grey&quot;, 'red'), reduction = 'tsne', pt.size = 0.1, combine = F)
+pt &lt;- lapply(pt, function(x) {
+  x + theme_classic() + xlab(&quot;t-SNE 1&quot;) + ylab(&quot;t-SNE 2&quot;) +
+    theme(plot.title = element_text(hjust = 0.5, face = &quot;italic&quot;, size = 10), legend.position = &quot;none&quot;)
+})
+
+ggarrange(plotlist = pt, ncol = 5, nrow = 3, common.legend = T)
+
+
+
+#################################
+########### Figure 3C ###########
+#################################
+ort &lt;- read.table(&quot;/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt&quot;, sep = &quot;,&quot;, header = T)
+pathways &lt;- gmtPathways('/Users/biagi/PhD/AdipoSNAP/msigdb.v7.1.symbols.gmt')
+
+#ColdxRT
+comp1 &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_ColdxRT_ALL.txt&quot;)
+comp1 &lt;- subset(comp1, p_val_adj &lt; 0.05)
+comp1 &lt;- comp1[order(comp1$avg_logFC, decreasing = T), ]
+comp1 &lt;- rbind(head(comp1, 50), tail(comp1, 50))
+comp1 &lt;- merge(ort, comp1, by.x = &quot;Mouse.gene.name&quot;, by.y = &quot;row.names&quot;)
+comp1$Mouse.gene.name &lt;- comp1$Gene.stable.ID &lt;- comp1$Mouse.gene.stable.ID &lt;- NULL
+colnames(comp1)[1] &lt;- &quot;Gene&quot;
+ranks &lt;- structure(comp1$avg_logFC, names = comp1$Gene)
+ranks &lt;- sort(ranks)
+fgseaRes1 &lt;- fgsea(pathways, ranks, minSize=5)
+fgseaRes1 &lt;- subset(fgseaRes1, padj &lt; 0.05)
+fgseaRes1 &lt;- fgseaRes1[order(fgseaRes1$NES, decreasing = T), ]
+genes1 &lt;- fgseaRes1$leadingEdge
+for (i in 1:length(genes1)) {
+  fgseaRes1$genes[i] &lt;- paste(genes1[[i]], collapse = ';')
+}
+fgseaRes1$leadingEdge &lt;- NULL
+enrich_ColdxRT &lt;- read.table('/Users/biagi/PhD/AdipoSNAP/Figures/update/fgsea_ColdxRT.txt', header = T)
+pathways_ColdxRT &lt;- c('GO_ORGANOPHOSPHATE_BIOSYNTHETIC_PROCESS', 'GO_FATTY_ACID_TRANSPORT', 'GO_LONG_CHAIN_FATTY_ACID_TRANSPORT', 'GO_MONOCARBOXYLIC_ACID_TRANSPORT', 'GO_RESPONSE_TO_FATTY_ACID', 'REACTOME_NGF_STIMULATED_TRANSCRIPTION', 'REACTOME_NUCLEAR_EVENTS_KINASE_AND_TRANSCRIPTION_FACTOR_ACTIVATION', 'OSWALD_HEMATOPOIETIC_STEM_CELL_IN_COLLAGEN_GEL_UP', 'NAGASHIMA_EGF_SIGNALING_UP', 'NAGASHIMA_NRG1_SIGNALING_UP')
+enrich_ColdxRT &lt;- enrich_ColdxRT[which(enrich_ColdxRT$pathway %in% pathways_ColdxRT), ]
+enrich_ColdxRT$class &lt;- ifelse(enrich_ColdxRT$NES &gt; 0, 'Up-regulated', 'Down-regulated')
+enrich_ColdxRT &lt;- enrich_ColdxRT[order(enrich_ColdxRT$class, enrich_ColdxRT$NES), ]
+enrich_ColdxRT$order &lt;- seq_len(nrow(enrich_ColdxRT))
+
+ggplot(enrich_ColdxRT, aes(order, NES, fill = class)) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = TRUE) +
+  xlab(NULL) + ylab(&quot;Normalized Enrichment Score (NES)&quot;) +
+  theme_bw() +
+  coord_flip() +
+  theme(legend.position = &quot;right&quot;, legend.title = element_text(size = 10), plot.title = element_text(hjust = 0.5)) +
+  scale_fill_discrete(name = &quot;Enrichment&quot;) +
+  scale_x_continuous(breaks = enrich_ColdxRT$order, labels = enrich_ColdxRT$pathway, expand = c(0, 0)) +
+  ggtitle('GSEA for Cold x RT')
+
+#CLxRT
+comp2 &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_CLxRT_ALL.txt&quot;)
+comp2 &lt;- subset(comp2, p_val_adj &lt; 0.05)
+comp2 &lt;- comp2[order(comp2$avg_logFC, decreasing = T), ]
+comp2 &lt;- rbind(head(comp2, 50), tail(comp2, 50))
+comp2 &lt;- merge(ort, comp2, by.x = &quot;Mouse.gene.name&quot;, by.y = &quot;row.names&quot;)
+comp2$Mouse.gene.name &lt;- comp2$Gene.stable.ID &lt;- comp2$Mouse.gene.stable.ID &lt;- NULL
+colnames(comp2)[1] &lt;- &quot;Gene&quot;
+ranks &lt;- structure(comp2$avg_logFC, names = comp2$Gene)
+ranks &lt;- sort(ranks)
+fgseaRes2 &lt;- fgsea(pathways, ranks, minSize=5)
+fgseaRes2 &lt;- subset(fgseaRes2, padj &lt; 0.05)
+fgseaRes2 &lt;- fgseaRes2[order(fgseaRes2$NES, decreasing = T), ]
+genes2 &lt;- fgseaRes2$leadingEdge
+for (i in 1:length(genes2)) {
+  fgseaRes2$genes[i] &lt;- paste(genes2[[i]], collapse = ';')
+}
+fgseaRes2$leadingEdge &lt;- NULL
+enrich_CLxRT &lt;- read.table('/Users/biagi/PhD/AdipoSNAP/Figures/update/fgsea_CLxRT.txt', header = T)
+pathways_CLxRT &lt;- c('GO_ORGANOPHOSPHATE_METABOLIC_PROCESS', 'GO_MITOCHONDRIAL_ENVELOPE', 'GO_ATP_METABOLIC_PROCESS', 'GO_OXIDOREDUCTASE_ACTIVITY', 'GO_OXIDATIVE_PHOSPHORYLATION', 'GO_NEGATIVE_REGULATION_OF_PROTEIN_METABOLIC_PROCESS', 'GO_RESPONSE_TO_MECHANICAL_STIMULUS', 'GO_NEGATIVE_REGULATION_OF_BIOSYNTHETIC_PROCESS', 'NAGASHIMA_EGF_SIGNALING_UP', 'NAGASHIMA_NRG1_SIGNALING_UP')
+enrich_CLxRT &lt;- enrich_CLxRT[which(enrich_CLxRT$pathway %in% pathways_CLxRT), ]
+enrich_CLxRT$class &lt;- ifelse(enrich_CLxRT$NES &gt; 0, 'Up-regulated', 'Down-regulated')
+enrich_CLxRT &lt;- enrich_CLxRT[order(enrich_CLxRT$class, enrich_CLxRT$NES), ]
+enrich_CLxRT$order &lt;- seq_len(nrow(enrich_CLxRT))
+
+ggplot(enrich_CLxRT, aes(order, NES, fill = class)) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = TRUE) +
+  xlab(NULL) + ylab(&quot;Normalized Enrichment Score (NES)&quot;) +
+  theme_bw() +
+  coord_flip() +
+  theme(legend.position = &quot;right&quot;, legend.title = element_text(size = 10), plot.title = element_text(hjust = 0.5)) +
+  scale_fill_discrete(name = &quot;Enrichment&quot;) +
+  scale_x_continuous(breaks = enrich_CLxRT$order, labels = enrich_CLxRT$pathway, expand = c(0, 0)) +
+  ggtitle('GSEA for CL x RT')
+
+
+
+#################################
+########### Figure 3D ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+data$timpoint &lt;- gsub('4day', 'Cold', data$timpoint)
+
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+data$clusters &lt;- Idents(data)
+
+data &lt;- SeuratWrappers::RunALRA(data)
+data &lt;- ScaleData(data)
+
+anno_CL &lt;- subset(data@meta.data, timpoint == 'CL')
+anno_RT &lt;- subset(data@meta.data, timpoint == 'RT')
+anno_24hr &lt;- subset(data@meta.data, timpoint == '24hr')
+anno_48hr &lt;- subset(data@meta.data, timpoint == '48hr')
+anno_Cold &lt;- subset(data@meta.data, timpoint == 'Cold')
+
+tsne &lt;- as.data.frame(Embeddings(data, 'tsne'))
+meta &lt;- data@meta.data
+df &lt;- merge(tsne, meta, by = 'row.names')
+rownames(df) &lt;- df$Row.names
+df$Row.names &lt;- NULL
+
+### CL
+ggplot() +
+  geom_point(data = df, aes(x = tSNE_1, y = tSNE_2, color = timpoint), size = 0.5) +
+  scale_color_manual(values = rep(&quot;gray75&quot;, 5)) +
+  guides(color = guide_legend(override.aes = list(size=7))) +
+  xlab(&quot;t-SNE 1&quot;) + ylab(&quot;t-SNE 2&quot;) +
+  labs(color = '') + ggtitle(paste0('CL (', nrow(anno_CL), ' cells)')) +
+  theme_classic() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        legend.position=&quot;none&quot;, plot.title = element_text(hjust = 0.5, size=8)) +
+  annotate(&quot;point&quot;, df[rownames(anno_CL)[anno_CL$clusters == 'Ad1'], 'tSNE_1'],
+           df[rownames(anno_CL)[anno_CL$clusters == 'Ad1'], 'tSNE_2'], colour = &quot;#11c78b&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_CL)[anno_CL$clusters == 'Ad2'], 'tSNE_1'],
+           df[rownames(anno_CL)[anno_CL$clusters == 'Ad2'], 'tSNE_2'], colour = &quot;#800080&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_CL)[anno_CL$clusters == 'Ad3'], 'tSNE_1'],
+           df[rownames(anno_CL)[anno_CL$clusters == 'Ad3'], 'tSNE_2'], colour = &quot;#e57400&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_CL)[anno_CL$clusters == 'Ad4'], 'tSNE_1'],
+           df[rownames(anno_CL)[anno_CL$clusters == 'Ad4'], 'tSNE_2'], colour = &quot;#0000FF&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_CL)[anno_CL$clusters == 'Ad5'], 'tSNE_1'],
+           df[rownames(anno_CL)[anno_CL$clusters == 'Ad5'], 'tSNE_2'], colour = &quot;#dfdf0d&quot;, size = 1)
+
+df2 &lt;- data.frame(
+  class = c(&quot;Ad1&quot;, &quot;Ad2&quot;, &quot;Ad3&quot;, &quot;Ad4&quot;, 'Ad5'),
+  n = c(sum(anno_CL == &quot;Ad1&quot;), sum(anno_CL == &quot;Ad2&quot;), sum(anno_CL == &quot;Ad3&quot;), sum(anno_CL == &quot;Ad4&quot;), sum(anno_CL == &quot;Ad5&quot;)),
+  value = c(round((sum(anno_CL == &quot;Ad1&quot;)/nrow(anno_CL))*100, 2), round((sum(anno_CL == &quot;Ad2&quot;)/nrow(anno_CL))*100, 2), round((sum(anno_CL == &quot;Ad3&quot;)/nrow(anno_CL))*100, 2), round((sum(anno_CL == &quot;Ad4&quot;)/nrow(anno_CL))*100, 2), round((sum(anno_CL == &quot;Ad5&quot;)/nrow(anno_CL))*100, 2))
+)
+df2$class &lt;- factor(df2$class, levels = c(&quot;Ad1&quot;, &quot;Ad2&quot;, &quot;Ad3&quot;, &quot;Ad4&quot;, &quot;Ad5&quot;))
+
+df2 &lt;- df2 %&gt;%
+  arrange(desc(class)) %&gt;%
+  mutate(text_y = cumsum(value) - value/2)
+df2$pos = (cumsum(c(0, df2$value)) + c(df2$value / 2, .01))[1:nrow(df2)]
+
+ggplot(df2, aes(x = &quot;&quot;, y = value, fill = class)) +
+  geom_bar(width = 1, stat = &quot;identity&quot;, color = &quot;white&quot;) +
+  coord_polar(&quot;y&quot;, start = 0)+
+  scale_fill_manual(values = c(&quot;#11c78b&quot;, &quot;#800080&quot;, &quot;#e57400&quot;, &quot;#0000FF&quot;, &quot;#dfdf0d&quot;)) +
+  theme_void() + labs(fill = &quot;Clusters&quot;) +
+  geom_text_repel(aes(x = 1.5, y = pos, label = paste0(value, &quot;%&quot;)), nudge_x = .1,
+                  segment.size = .7, show.legend = FALSE)
+
+### RT
+ggplot() +
+  geom_point(data = df, aes(x = tSNE_1, y = tSNE_2, color = timpoint), size = 0.5) +
+  scale_color_manual(values = rep(&quot;gray75&quot;, 5)) +
+  guides(color = guide_legend(override.aes = list(size=7))) +
+  xlab(&quot;t-SNE 1&quot;) + ylab(&quot;t-SNE 2&quot;) +
+  labs(color = '') + ggtitle(paste0('RT (', nrow(anno_RT), ' cells)')) +
+  theme_classic() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        legend.position=&quot;none&quot;, plot.title = element_text(hjust = 0.5, size=8)) +
+  annotate(&quot;point&quot;, df[rownames(anno_RT)[anno_RT$clusters == 'Ad1'], 'tSNE_1'],
+           df[rownames(anno_RT)[anno_RT$clusters == 'Ad1'], 'tSNE_2'], colour = &quot;#11c78b&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_RT)[anno_RT$clusters == 'Ad2'], 'tSNE_1'],
+           df[rownames(anno_RT)[anno_RT$clusters == 'Ad2'], 'tSNE_2'], colour = &quot;#800080&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_RT)[anno_RT$clusters == 'Ad3'], 'tSNE_1'],
+           df[rownames(anno_RT)[anno_RT$clusters == 'Ad3'], 'tSNE_2'], colour = &quot;#e57400&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_RT)[anno_RT$clusters == 'Ad4'], 'tSNE_1'],
+           df[rownames(anno_RT)[anno_RT$clusters == 'Ad4'], 'tSNE_2'], colour = &quot;#0000FF&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_RT)[anno_RT$clusters == 'Ad5'], 'tSNE_1'],
+           df[rownames(anno_RT)[anno_RT$clusters == 'Ad5'], 'tSNE_2'], colour = &quot;#dfdf0d&quot;, size = 1)
+
+df2 &lt;- data.frame(
+  class = c(&quot;Ad1&quot;, &quot;Ad2&quot;, &quot;Ad3&quot;, &quot;Ad4&quot;, 'Ad5'),
+  n = c(sum(anno_RT == &quot;Ad1&quot;), sum(anno_RT == &quot;Ad2&quot;), sum(anno_RT == &quot;Ad3&quot;), sum(anno_RT == &quot;Ad4&quot;), sum(anno_RT == &quot;Ad5&quot;)),
+  value = c(round((sum(anno_RT == &quot;Ad1&quot;)/nrow(anno_RT))*100, 2), round((sum(anno_RT == &quot;Ad2&quot;)/nrow(anno_RT))*100, 2), round((sum(anno_RT == &quot;Ad3&quot;)/nrow(anno_RT))*100, 2), round((sum(anno_RT == &quot;Ad4&quot;)/nrow(anno_RT))*100, 2), round((sum(anno_RT == &quot;Ad5&quot;)/nrow(anno_RT))*100, 2))
+)
+df2$class &lt;- factor(df2$class, levels = c(&quot;Ad1&quot;, &quot;Ad2&quot;, &quot;Ad3&quot;, &quot;Ad4&quot;, &quot;Ad5&quot;))
+
+df2 &lt;- df2 %&gt;%
+  arrange(desc(class)) %&gt;%
+  mutate(text_y = cumsum(value) - value/2)
+df2$pos = (cumsum(c(0, df2$value)) + c(df2$value / 2, .01))[1:nrow(df2)]
+
+ggplot(df2, aes(x = &quot;&quot;, y = value, fill = class)) +
+  geom_bar(width = 1, stat = &quot;identity&quot;, color = &quot;white&quot;) +
+  coord_polar(&quot;y&quot;, start = 0)+
+  scale_fill_manual(values = c(&quot;#11c78b&quot;, &quot;#800080&quot;, &quot;#e57400&quot;, &quot;#0000FF&quot;, &quot;#dfdf0d&quot;)) +
+  theme_void() + labs(fill = &quot;Clusters&quot;) +
+  geom_text_repel(aes(x = 1.5, y = pos, label = paste0(value, &quot;%&quot;)), nudge_x = .1,
+                  segment.size = .7, show.legend = FALSE)
+
+### Cold
+ggplot() +
+  geom_point(data = df, aes(x = tSNE_1, y = tSNE_2, color = timpoint), size = 0.5) +
+  scale_color_manual(values = rep(&quot;gray75&quot;, 5)) +
+  xlab(&quot;t-SNE 1&quot;) + ylab(&quot;t-SNE 2&quot;) +
+  guides(color = guide_legend(override.aes = list(size=7))) +
+  labs(color = '') + ggtitle(paste0('Cold (', nrow(anno_Cold), ' cells)')) +
+  theme_classic() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        legend.position = &quot;none&quot;, plot.title = element_text(hjust = 0.5, size=8)) +
+  annotate(&quot;point&quot;, df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad1'], 'tSNE_1'],
+           df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad1'], 'tSNE_2'], colour = &quot;#11c78b&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad2'], 'tSNE_1'],
+           df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad2'], 'tSNE_2'], colour = &quot;#800080&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad3'], 'tSNE_1'],
+           df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad3'], 'tSNE_2'], colour = &quot;#e57400&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad4'], 'tSNE_1'],
+           df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad4'], 'tSNE_2'], colour = &quot;#0000FF&quot;, size = 1) +
+  annotate(&quot;point&quot;, df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad5'], 'tSNE_1'],
+           df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad5'], 'tSNE_2'], colour = &quot;#dfdf0d&quot;, size = 1)
+
+df2 &lt;- data.frame(
+  class = c(&quot;Ad1&quot;, &quot;Ad2&quot;, &quot;Ad3&quot;, &quot;Ad4&quot;, 'Ad5'),
+  n = c(sum(anno_Cold == &quot;Ad1&quot;), sum(anno_Cold == &quot;Ad2&quot;), sum(anno_Cold == &quot;Ad3&quot;), sum(anno_Cold == &quot;Ad4&quot;), sum(anno_Cold == &quot;Ad5&quot;)),
+  value = c(round((sum(anno_Cold == &quot;Ad1&quot;)/nrow(anno_Cold))*100, 2), round((sum(anno_Cold == &quot;Ad2&quot;)/nrow(anno_Cold))*100, 2), round((sum(anno_Cold == &quot;Ad3&quot;)/nrow(anno_Cold))*100, 2), round((sum(anno_Cold == &quot;Ad4&quot;)/nrow(anno_Cold))*100, 2), round((sum(anno_Cold == &quot;Ad5&quot;)/nrow(anno_Cold))*100, 2))
+)
+df2$class &lt;- factor(df2$class, levels = c(&quot;Ad1&quot;, &quot;Ad2&quot;, &quot;Ad3&quot;, &quot;Ad4&quot;, &quot;Ad5&quot;))
+
+df2 &lt;- df2 %&gt;%
+  arrange(desc(class)) %&gt;%
+  mutate(text_y = cumsum(value) - value/2)
+df2$pos = (cumsum(c(0, df2$value)) + c(df2$value / 2, .01))[1:nrow(df2)]
+
+ggplot(df2, aes(x = &quot;&quot;, y = value, fill = class)) +
+  geom_bar(width = 1, stat = &quot;identity&quot;, color = &quot;white&quot;) +
+  coord_polar(&quot;y&quot;, start = 0)+
+  scale_fill_manual(values = c(&quot;#11c78b&quot;, &quot;#800080&quot;, &quot;#e57400&quot;, &quot;#0000FF&quot;, &quot;#dfdf0d&quot;)) +
+  theme_void() + labs(fill = &quot;Clusters&quot;) +
+  geom_text_repel(aes(x = 1.5, y = pos, label = paste0(value, &quot;%&quot;)), nudge_x = .1,
+                  segment.size = .7, show.legend = FALSE)
+
+
+
+#################################
+########### Figure 3E ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- factor(data$timpoint)
+data$cluster &lt;- factor(new_cluster)
+
+data &lt;-SeuratWrappers:: RunALRA(data)
+data &lt;- ScaleData(data, features = rownames(data))
+
+genes &lt;- c('Acaa2', 'Ehhadh', 'Slc27a2', 'Acadm', 'Scp2', 'Acadvl', 'Hadha', 'Hadhb', 'Acaa1b', 'Abcd3', 
+           'Sdhaf2', 'Pdha1', 'Pdhb', 'Idh3g', 'Mdh1', 'Sdha', 'Ndufs4', 'Sdhc', 'Suclg1', 'Mdh2', 
+           'Akt1', 'Kiss1r', 'Mif', 'Cpt1b', 'Fabp3', 'Acsl5', 'Mfsd2a', 'Abcc4', 'Acsl3', 'Pla2g12a', 
+           'Aldoa', 'Gpi1', 'Pgk1', 'Gapdh', 'Pfkp', 'Pkm', 'Ogdh', 'Ppara', 'Prkaa1', 'Gale', 'Entpd5', 'Stat3', 'Foxk2', 'Igf1', 
+           &quot;Daglb&quot;, &quot;Slc2a4&quot;, &quot;Gpd1&quot;, &quot;Pcx&quot;, &quot;Abhd5&quot;, &quot;Adrb3&quot;, &quot;Lipe&quot;, &quot;Pck1&quot;, &quot;Pnpla2&quot;)
+genes &lt;- genes[genes %in% rownames(data)]
+
+mapal &lt;- colorRampPalette(brewer.pal(11,&quot;RdBu&quot;))(256)
+DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = 'cluster') +
+  scale_fill_gradientn(colours = rev(mapal)) +
+  theme(axis.text=element_text(size=6)) +
+  labs(color='UCP1 Expression')
+
+
+
+#################################
+########### Figure 3G ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+data$clusters &lt;- Idents(data)
+
+data &lt;- SeuratWrappers::RunALRA(data)
+data &lt;- ScaleData(data)
+
+genes &lt;- c('Acadm', 'Adipoq', 'Adrb3', 'Lep', 'Fasn', 
+           'Ucp1', 'Cidea', 'Dio2', 'Elovl3', 'Cox8b', 
+           'Cpt1b', 'Gk', 'Plin5', 'Pnpla2', 'Lpl', 
+           'Acaa2', 'Sdhc', 'Fabp3', 'Ppara', 'Slc2a4')
+genes &lt;- genes[genes %in% rownames(data)]
+
+df &lt;- NULL
+for (i in 1:length(genes)) {
+  c1 &lt;- data.frame(value = data@assays$alra@data[genes[i], names(Idents(data))[which(Idents(data) == 'Ad1')]], cluster = 'Ad1', gene = genes[i])
+  c2 &lt;- data.frame(value = data@assays$alra@data[genes[i], names(Idents(data))[which(Idents(data) == 'Ad2')]], cluster = 'Ad2', gene = genes[i])
+  c3 &lt;- data.frame(value = data@assays$alra@data[genes[i], names(Idents(data))[which(Idents(data) == 'Ad3')]], cluster = 'Ad3', gene = genes[i])
+  c4 &lt;- data.frame(value = data@assays$alra@data[genes[i], names(Idents(data))[which(Idents(data) == 'Ad4')]], cluster = 'Ad4', gene = genes[i])
+  c5 &lt;- data.frame(value = data@assays$alra@data[genes[i], names(Idents(data))[which(Idents(data) == 'Ad5')]], cluster = 'Ad5', gene = genes[i])
+  
+  df &lt;- rbind(df, rbind(c1, c2, c3, c4, c5))
+}
+df$cluster &lt;- as.factor(df$cluster)
+df$gene &lt;- factor(df$gene, levels = genes)
+
+intr &lt;- aggregate(df[, 1], list(df$gene), mean)
+colnames(intr) &lt;- c('gene', 'Z')
+
+ggboxplot(df, x = &quot;cluster&quot;, y = &quot;value&quot;,
+                 color = &quot;cluster&quot;, add = &quot;jitter&quot;) +
+  facet_wrap(~ gene) + geom_hline(data = intr, aes(yintercept = Z), linetype = 'dashed') +
+  stat_compare_means(label = &quot;p.signif&quot;, method = &quot;t.test&quot;, ref.group = &quot;.all.&quot;, label.x = 1.5, label.y = 3.5) +
+  xlab(NULL) + ylab('Normalized Expression') + theme_bw() +
+  scale_color_manual(values = c('Ad1' = &quot;#11c78b&quot;, 'Ad2' = &quot;#800080&quot;, 'Ad3' = &quot;#e57400&quot;, 'Ad4' = &quot;#0000FF&quot;, 'Ad5' = &quot;#dfdf0d&quot;))
+
+
+
+#################################
+########### Figure 3H ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+data$timpoint &lt;- gsub('4day', 'Cold', data$timpoint)
+
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+data$cluster &lt;- Idents(data)
+
+Idents(data) &lt;- as.factor(data$timpoint)
+data &lt;- subset(data, cells = names(which(data$timpoint == 'CL' | data$timpoint == 'RT')))
+
+DefaultAssay(data) &lt;- &quot;RNA&quot;
+mat &lt;- data@assays$RNA@data
+
+fdata &lt;- data.frame(gene_short_name = rownames(data), row.names = rownames(data))
+pdata &lt;- data@meta.data
+
+pd &lt;- new(&quot;AnnotatedDataFrame&quot;, data = pdata)
+fd &lt;- new(&quot;AnnotatedDataFrame&quot;, data = fdata)
+cds &lt;- newCellDataSet(as(mat, &quot;dgCMatrix&quot;),
+                      phenoData = pd,
+                      featureData = fd, 
+                      expressionFamily=negbinomial.size())
+
+rm(data, mat, fdata, pdata, fd, pd)
+
+cds &lt;- estimateSizeFactors(cds)
+cds &lt;- estimateDispersions(cds)
+
+cds &lt;- detectGenes(cds, min_expr = 0.1)
+expressed_genes &lt;- row.names(subset(fData(cds), num_cells_expressed &gt;= 10))
+
+diff_test_res &lt;- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = &quot;~cluster&quot;, cores = 6, verbose = T)
+ordering_genes &lt;- row.names(subset(diff_test_res, qval &lt; 0.01))
+cds &lt;- setOrderingFilter(cds, ordering_genes)
+
+cds &lt;- reduceDimension(cds, max_components = 2, method = 'DDRTree', verbose = TRUE)
+cds &lt;- orderCells(cds)
+cds &lt;- orderCells(cds, root_state = 3)
+
+plot_cell_trajectory(cds, color_by = &quot;Pseudotime&quot;)
+
+plot_cell_trajectory(cds, color_by = &quot;cluster&quot;) + 
+  scale_color_manual(values = c(&quot;Ad1&quot; = &quot;#11c78b&quot;, &quot;Ad2&quot; = &quot;#800080&quot;, &quot;Ad3&quot; = &quot;#e57400&quot;, &quot;Ad4&quot; = &quot;#0000FF&quot;, &quot;Ad5&quot; = &quot;#dfdf0d&quot;))
+
+plotMonocle(cds, c('Pparg', 'Creb1', 'Atf2', 'Egr2', 'Dbp', 'Xbp1', 'Clock', 'Zbtb43', 'Zbtb7a'))
+
+
+
+#################################
+########### Figure 3I ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+data$timpoint &lt;- gsub('4day', 'Cold', data$timpoint)
+
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+data$cluster &lt;- Idents(data)
+
+Idents(data) &lt;- as.factor(data$timpoint)
+data &lt;- subset(data, cells = names(which(data$timpoint == 'Cold' | data$timpoint == 'RT')))
+
+DefaultAssay(data) &lt;- &quot;RNA&quot;
+mat &lt;- data@assays$RNA@data
+
+fdata &lt;- data.frame(gene_short_name = rownames(data), row.names = rownames(data))
+pdata &lt;- data@meta.data
+
+pd &lt;- new(&quot;AnnotatedDataFrame&quot;, data = pdata)
+fd &lt;- new(&quot;AnnotatedDataFrame&quot;, data = fdata)
+cds &lt;- newCellDataSet(as(mat, &quot;dgCMatrix&quot;),
+                      phenoData = pd,
+                      featureData = fd, 
+                      expressionFamily=negbinomial.size())
+
+rm(data, mat, fdata, pdata, fd, pd)
+
+cds &lt;- estimateSizeFactors(cds)
+cds &lt;- estimateDispersions(cds)
+
+cds &lt;- detectGenes(cds, min_expr = 0.1)
+expressed_genes &lt;- row.names(subset(fData(cds), num_cells_expressed &gt;= 10))
+
+diff_test_res &lt;- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = &quot;~cluster&quot;, cores = 6, verbose = T)
+ordering_genes &lt;- row.names(subset(diff_test_res, qval &lt; 0.01))
+cds &lt;- setOrderingFilter(cds, ordering_genes)
+
+cds &lt;- reduceDimension(cds, max_components = 2, method = 'DDRTree', verbose = TRUE)
+cds &lt;- orderCells(cds)
+cds &lt;- orderCells(cds, root_state = 4)
+
+plot_cell_trajectory(cds, color_by = &quot;Pseudotime&quot;)
+
+plot_cell_trajectory(cds, color_by = &quot;cluster&quot;) + 
+  scale_color_manual(values = c(&quot;Ad1&quot; = &quot;#11c78b&quot;, &quot;Ad2&quot; = &quot;#800080&quot;, &quot;Ad3&quot; = &quot;#e57400&quot;, &quot;Ad4&quot; = &quot;#0000FF&quot;, &quot;Ad5&quot; = &quot;#dfdf0d&quot;))
+
+plotMonocle(cds, c('Pparg', 'Creb1', 'Atf2', 'Srebf1', 'Cebpa', 'Egr1', 'Foxn3', 'Esrra', 'Gtf2ird1'))
+</code></pre>
+<h2 id="figure-4">Figure 4</h2>
+<pre><code>## Loading R packages
+library(Seurat)
+library(SeuratWrappers)
+library(ggplot2)
+library(dplyr)
+library(ggrepel)
+library(RColorBrewer)
+library(fgsea)
+library(UpSetR)
+library(ComplexHeatmap)
+library(circlize)
+
+
+#################################
+########### Figure 4A ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+data$clusters &lt;- new_cluster
+
+Idents(data) &lt;- as.factor(data$timpoint)
+data &lt;- subset(data, cells = names(which(data$timpoint == '4day' | data$timpoint == 'RT' | data$timpoint == 'CL')))
+
+Idents(data) &lt;- data$clusters
+
+data$UCP1 &lt;- factor(ifelse(data@assays$SCT@data[&quot;Ucp1&quot;, ] &gt; 0, &quot;High&quot;, &quot;Low&quot;))
+
+cols = c(&quot;#11c78b&quot;, &quot;#800080&quot;, &quot;#e57400&quot;, &quot;#0000FF&quot;, &quot;#dfdf0d&quot;)
+
+cid &lt;- as.numeric(1:length(unique(data$clusters)))[data$clusters]
+dic_cid &lt;- data.frame(grp = levels(data$clusters))
+
+dims &lt;- data.frame(sample_id = rownames(Embeddings(data, 'tsne')), 
+                   cluster_id = data$clusters, 
+                   x = Embeddings(data, 'tsne')[,1], 
+                   y = Embeddings(data, 'tsne')[,2])
+
+ggplot() +
+  geom_point(data = dims,
+             aes(x = x,
+                 y = y,
+                 color = factor(cluster_id)), 
+             size = 1) + 
+  scale_color_manual(values = rep(&quot;#F5F5F5&quot;, length(cols))) + 
+  guides(color = guide_legend(override.aes = list(size=7))) + 
+  labs(color = '', x = 't-SNE1', y = 't-SNE2') +
+  theme_classic() + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        legend.position = &quot;none&quot;, 
+        plot.title = element_text(hjust = 0.5, size=8)) + 
+  annotate(&quot;point&quot;,
+           dims[[&quot;x&quot;]][which(dims[[&quot;cluster_id&quot;]] == 'Ad1')],
+           dims[[&quot;y&quot;]][which(dims[[&quot;cluster_id&quot;]] == 'Ad1')], 
+           colour = cols[1], size = 1) + 
+  annotate(&quot;point&quot;,
+           dims[[&quot;x&quot;]][which(dims[[&quot;cluster_id&quot;]] == 'Ad2')],
+           dims[[&quot;y&quot;]][which(dims[[&quot;cluster_id&quot;]] == 'Ad2')], 
+           colour = cols[2], size = 1) +
+  annotate(&quot;point&quot;,
+           dims[[&quot;x&quot;]][which(dims[[&quot;cluster_id&quot;]] == 'Ad5')],
+           dims[[&quot;y&quot;]][which(dims[[&quot;cluster_id&quot;]] == 'Ad5')], 
+           colour = cols[5], size = 1) + 
+  annotate(&quot;point&quot;,
+           dims[names(data$UCP1[which(data$UCP1 == 'High')]), 3],
+           dims[names(data$UCP1[which(data$UCP1 == 'High')]), 4], 
+           colour = 'red', size = 1.5)
+
+#pieplot UCP1 High
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+data$cluster &lt;- Idents(data)
+
+Idents(data) &lt;- as.factor(data$timpoint)
+data &lt;- subset(data, cells = names(which(data$timpoint == '4day' | data$timpoint == 'RT' | data$timpoint == 'CL')))
+
+Idents(data) &lt;- data$cluster
+data &lt;- subset(data, idents = list('Ad1', 'Ad2', 'Ad5'))
+
+data$gene &lt;- factor(ifelse(data@assays$SCT@data['Ucp1', ] &gt; 0, &quot;High&quot;, &quot;Low&quot;))
+
+df &lt;- data.frame(
+  class = c(&quot;Ad1&quot;, &quot;Ad2&quot;, 'Ad5'),
+  n = c(sum(Idents(data) == 'Ad1'), sum(Idents(data) == 'Ad2'), sum(Idents(data) == 'Ad5')),
+  value = c(round((length(names(data$cluster[data$cluster == 'Ad1'])[names(data$cluster[data$cluster == 'Ad1']) %in% names(data$gene[which(data$gene == 'High')])])/sum(Idents(data) == 'Ad1'))*100, 2), round((length(names(data$cluster[data$cluster == 'Ad2'])[names(data$cluster[data$cluster == 'Ad2']) %in% names(data$gene[which(data$gene == 'High')])])/sum(Idents(data) == 'Ad2'))*100, 2), round((length(names(data$cluster[data$cluster == 'Ad5'])[names(data$cluster[data$cluster == 'Ad5']) %in% names(data$gene[which(data$gene == 'High')])])/sum(Idents(data) == 'Ad5'))*100, 2)))
+df$class &lt;- factor(df$class, levels = c(&quot;Ad1&quot;, &quot;Ad2&quot;, &quot;Ad5&quot;))
+
+df &lt;- df %&gt;%
+  arrange(desc(class)) %&gt;%
+  mutate(text_y = cumsum(value) - value/2)
+df$pos = (cumsum(c(0, df$value)) + c(df$value / 2, .01))[1:nrow(df)]
+
+ggplot(df, aes(x = &quot;&quot;, y = value, fill = class)) +
+  geom_bar(width = 1, stat = &quot;identity&quot;, color = &quot;white&quot;) +
+  coord_polar(&quot;y&quot;, start = 0)+
+  scale_fill_manual(values = c(&quot;#11c78b&quot;, &quot;#800080&quot;, &quot;#dfdf0d&quot;)) +
+  theme_void() + labs(fill = &quot;Clusters&quot;) +
+  geom_text_repel(aes(x = 1.5, y = pos, label = paste0(value, &quot;%&quot;)), nudge_x = .1, segment.size = .7, show.legend = FALSE) +
+  ggtitle('Ucp1')
+
+
+
+#################################
+########### Figure 4B ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+data$cluster &lt;- Idents(data)
+
+data &lt;- subset(data, idents = list('Ad1'))
+data &lt;- ScaleData(data, features = rownames(data))
+
+data$UCP1 &lt;- factor(ifelse(data@assays$SCT@data[&quot;Ucp1&quot;, ] &gt; 0, &quot;High&quot;, &quot;Low&quot;))
+Idents(data) &lt;- data$UCP1
+
+markers &lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+
+markers &lt;- subset(markers, p_val_adj &lt; 0.05 &amp; cluster == 'High')
+markers &lt;- markers[order(markers$avg_logFC, decreasing = T), ]
+
+genes1 &lt;- c(head(markers$gene, 10), tail(markers$gene, 10))
+
+mapal &lt;- colorRampPalette(brewer.pal(11,&quot;RdBu&quot;))(256)
+
+DoHeatmap(data, features = genes1, angle = 0, size = 5, label = F) +
+  scale_fill_gradientn(colours = rev(mapal)) +
+  theme(axis.text=element_text(size=6)) +
+  labs(color='UCP1 Expression')
+
+
+
+#################################
+########### Figure 4C ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+data$cluster &lt;- Idents(data)
+
+data &lt;- subset(data, idents = list('Ad1'))
+data &lt;- ScaleData(data, features = rownames(data))
+
+data$UCP1 &lt;- factor(ifelse(data@assays$SCT@data[&quot;Ucp1&quot;, ] &gt; 0, &quot;High&quot;, &quot;Low&quot;))
+Idents(data) &lt;- data$UCP1
+
+markers &lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+
+markers &lt;- subset(markers, p_val_adj &lt; 0.05 &amp; cluster == 'High')
+markers &lt;- markers[order(markers$avg_logFC, decreasing = T), ]
+
+ort &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt&quot;, sep = &quot;,&quot;, header = T)
+pathways &lt;- gmtPathways('/Users/biagi/PhD/AdipoSNAP/msigdb.v7.1.symbols.gmt')
+
+comp1 &lt;- rbind(head(markers, 50), tail(markers, 35))
+
+comp1 &lt;- merge(ort, comp1, by.x = &quot;Mouse.gene.name&quot;, by.y = &quot;gene&quot;)
+comp1$Mouse.gene.name &lt;- comp1$Gene.stable.ID &lt;- comp1$Mouse.gene.stable.ID &lt;- NULL
+colnames(comp1)[1] &lt;- &quot;Gene&quot;
+ranks &lt;- structure(comp1$avg_logFC, names = comp1$Gene)
+ranks &lt;- sort(ranks)
+fgseaRes1 &lt;- fgsea(pathways, ranks, minSize=5)
+fgseaRes1 &lt;- subset(fgseaRes1, pval &lt; 0.05)
+fgseaRes1 &lt;- fgseaRes1[order(fgseaRes1$NES, decreasing = T), ]
+genes1 &lt;- fgseaRes1$leadingEdge
+for (i in 1:length(genes1)) {
+  fgseaRes1$genes[i] &lt;- paste(genes1[[i]], collapse = ';')
+}
+fgseaRes1$leadingEdge &lt;- NULL
+
+pathways &lt;- c('GO_POSITIVE_REGULATION_OF_COLD_INDUCED_THERMOGENESIS', 'GO_CELLULAR_CARBOHYDRATE_METABOLIC_PROCESS', 'GO_RESPONSE_TO_EXTRACELLULAR_STIMULUS', 'GO_MITOCHONDRION', 'GO_LIPID_OXIDATION', 'GO_CELLULAR_KETONE_METABOLIC_PROCESS', 'GO_INTRINSIC_COMPONENT_OF_PLASMA_MEMBRANE', 'GO_PROTEIN_HOMODIMERIZATION_ACTIVITY', 'GO_RESPONSE_TO_CYTOKINE', 'GO_REGULATION_OF_KINASE_ACTIVITY', 'RUAN_RESPONSE_TO_TROGLITAZONE_UP', 'GERHOLD_ADIPOGENESIS_UP')
+fgseaRes1 &lt;- fgseaRes1[which(fgseaRes1$pathway %in% pathways), ]
+fgseaRes1$class &lt;- ifelse(fgseaRes1$NES &gt; 0, 'Up-regulated', 'Down-regulated')
+fgseaRes1 &lt;- fgseaRes1[order(fgseaRes1$class, fgseaRes1$NES), ]
+fgseaRes1$order &lt;- seq_len(nrow(fgseaRes1))
+
+ggplot(fgseaRes1, aes(order, NES, fill = class)) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = TRUE) +
+  xlab(NULL) + ylab(&quot;Normalized Enrichment Score (NES)&quot;) +
+  theme_bw() +
+  coord_flip() +
+  theme(legend.position = &quot;right&quot;, legend.title = element_text(size = 10), plot.title = element_text(hjust = 0.5)) +
+  scale_fill_discrete(name = &quot;Enrichment&quot;) +
+  scale_x_continuous(breaks = fgseaRes1$order, labels = fgseaRes1$pathway, expand = c(0, 0)) +
+  ggtitle('GSEA for UCP1 High/Low for AD1 cluster')
+
+
+
+#################################
+########### Figure 4D ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+data$cluster &lt;- Idents(data)
+data &lt;- subset(data, idents = list('Ad1'))
+tmp1 &lt;- factor(ifelse(data@assays$SCT@data[&quot;Ucp1&quot;, ] &gt; 0, &quot;Ad1_High&quot;, &quot;Ad1_Low&quot;))
+
+
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+data$cluster &lt;- Idents(data)
+data &lt;- subset(data, idents = list('Ad1'))
+
+tmp2 &lt;- as.character(Idents(data))
+tmp3 &lt;- names(Idents(data))
+tmp2[which(tmp3 %in% names(tmp1[tmp1 == 'Ad1_High']))] &lt;- 'Ad1_High'
+tmp2[which(tmp3 %in% names(tmp1[tmp1 == 'Ad1_Low']))] &lt;- 'Ad1_Low'
+
+tmp &lt;- as.factor(structure(tmp2, names = tmp3))
+Idents(data) &lt;- tmp
+data$cluster &lt;- Idents(data)
+
+data &lt;- SeuratWrappers::RunALRA(data)
+data &lt;- ScaleData(data, features = rownames(data))
+
+genes &lt;- c('Acaa2', 'Ehhadh', 'Slc27a2', 'Acadm', 'Scp2', 'Acadvl', 'Hadha', 'Hadhb', 'Acaa1b', 'Abcd3', 
+           'Sdhaf2', 'Pdha1', 'Pdhb', 'Idh3g', 'Mdh1', 'Sdha', 'Ndufs4', 'Sdhc', 'Suclg1', 'Mdh2', 
+           'Akt1', 'Kiss1r', 'Mif', 'Cpt1b', 'Fabp3', 'Acsl5', 'Mfsd2a', 'Abcc4', 'Acsl3', 'Pla2g12a', 
+           'Aldoa', 'Gpi1', 'Pgk1', 'Gapdh', 'Pfkp', 'Pkm', 'Ogdh', 'Ppara', 'Prkaa1', 'Gale', 'Entpd5', 'Stat3', 'Foxk2', 'Igf1', 
+           &quot;Daglb&quot;, &quot;Slc2a4&quot;, &quot;Gpd1&quot;, &quot;Pcx&quot;, &quot;Abhd5&quot;, &quot;Adrb3&quot;, &quot;Lipe&quot;, &quot;Pck1&quot;, &quot;Pnpla2&quot;)
+genes &lt;- genes[genes %in% rownames(data)]
+
+mapal &lt;- colorRampPalette(brewer.pal(11,&quot;RdBu&quot;))(256)
+
+DoHeatmap(data, features = genes, angle = 0, size = 5, label = F) +
+  scale_fill_gradientn(colours = rev(mapal)) +
+  theme(axis.text=element_text(size=6)) +
+  labs(color='UCP1 Expression')
+
+
+
+#################################
+########### Figure 4F ###########
+#################################
+expressionInput &lt;- c(Set1 = 962, Set2 = 244, Set3 = 73, Set4 = 35, `Set1&amp;Set2` = 315, `Set1&amp;Set3` = 16, `Set2&amp;Set3` = 1, `Set1&amp;Set2&amp;Set3` = 46)
+
+upset(fromExpression(expressionInput), set_size.show = T, shade.alpha	= 1)
+
+
+
+#################################
+########### Figure 4G ###########
+#################################
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&quot;)
+
+ort &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt&quot;, sep = &quot;,&quot;, header = T)
+
+new_cluster &lt;- infos$L1_result
+names(new_cluster) &lt;- rownames(infos)
+new_cluster &lt;- new_cluster + 1
+new_cluster &lt;- paste0(&quot;Ad&quot;, new_cluster)
+new_cluster &lt;- as.factor(new_cluster)
+Idents(data) &lt;- new_cluster
+data$cluster &lt;- Idents(data)
+
+data &lt;- subset(data, idents = list('Ad1'))
+data &lt;- ScaleData(data, features = rownames(data))
+
+data$UCP1 &lt;- factor(ifelse(data@assays$SCT@data[&quot;Ucp1&quot;, ] &gt; 0, &quot;High&quot;, &quot;Low&quot;))
+Idents(data) &lt;- data$UCP1
+
+genes_High &lt;- c('PPARD', 'HNF4A', 'ESR1', 'PPARG', 'SALL4', 'CEBPD', 'EGR1', 'NANOG', 'STAT3', 'BHLHE40')
+genes_High &lt;- ort$Mouse.gene.name[which(ort$Gene.name %in% genes_High)]
+genes_High &lt;- genes_High[genes_High %in% rownames(data)]
+tabHigh &lt;- as.matrix(data@assays$SCT@data[genes_High, names(data$UCP1)[which(data$UCP1 == 'High')]])
+tabLow &lt;- as.matrix(data@assays$SCT@data[genes_High, names(data$UCP1)[which(data$UCP1 == 'Low')]])
+
+df &lt;- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
+df &lt;- t(df)
+
+x &lt;- as.matrix(df)
+m = apply(x, 1, mean, na.rm = T)
+s = apply(x, 1, sd, na.rm = T)
+res &lt;- (x - m)/s
+cn = colnames(res)
+
+ba &lt;- HeatmapAnnotation(
+  text = anno_text(cn, rot = 0, location = unit(0.9, &quot;npc&quot;), just = &quot;centre&quot;, gp = gpar(fontsize = 8)),
+  annotation_height = max_text_width(cn)
+)
+
+breaks &lt;- seq(-2,2, by= 0.1)
+Heatmap(as.matrix(res), 
+        bottom_annotation = ba, 
+        name = &quot;zscore&quot;, column_title = &quot;Ad1 UCP1 High&quot;, width = 1, 
+        show_row_names = T, show_column_names = F,
+        cluster_rows = F, cluster_columns = T,
+        col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = &quot;RdBu&quot;)))(41)), 
+        heatmap_height = unit(6, &quot;cm&quot;), row_names_gp = gpar(fontsize = 8))
+
+
+genes_Low &lt;- c('PPARG', 'SALL4', 'ESR1', 'TP63', 'AR', 'GATA2')
+genes_Low &lt;- ort$Mouse.gene.name[which(ort$Gene.name %in% genes_Low)]
+genes_Low &lt;- genes_Low[genes_Low %in% rownames(data)]
+tabHigh &lt;- as.matrix(data@assays$SCT@data[genes_Low, names(data$UCP1)[which(data$UCP1 == 'High')]])
+tabLow &lt;- as.matrix(data@assays$SCT@data[genes_Low, names(data$UCP1)[which(data$UCP1 == 'Low')]])
+
+df &lt;- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
+df &lt;- t(df)
+
+x &lt;- as.matrix(df)
+m = apply(x, 1, mean, na.rm = T)
+s = apply(x, 1, sd, na.rm = T)
+res &lt;- (x - m)/s
+cn = colnames(res)
+
+ba &lt;- HeatmapAnnotation(
+  text = anno_text(cn, rot = 0, location = unit(0.9, &quot;npc&quot;), just = &quot;centre&quot;, gp = gpar(fontsize = 8)),
+  annotation_height = max_text_width(cn)
+)
+
+breaks &lt;- seq(-2,2, by= 0.1)
+Heatmap(as.matrix(res), 
+        bottom_annotation = ba, 
+        name = &quot;zscore&quot;, column_title = &quot;Ad1 UCP1 Low&quot;, width = 1, 
+        show_row_names = T, show_column_names = F,
+        cluster_rows = F, cluster_columns = T,
+        col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = &quot;RdBu&quot;)))(41)), 
+        heatmap_height = unit(6, &quot;cm&quot;), row_names_gp = gpar(fontsize = 8))
+</code></pre>
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.4.8/mermaid.min.js" integrity="sha256-lyWCDMnMeZiXRi7Zl54sZGKYmgQs4izcT7+tKc+KUBk=" crossorigin="anonymous" title="mermaid"></script>
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    <script>const isSiteThemeDark = true;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/AdipoSNAP/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"No results found","placeholder":"Search...","results":"results found"};
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks",
+        'slides' : "Slides"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/AdipoSNAP/js/academic.min.66c553246b0f279a03be6e5597f72b52.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    Published with
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic Website Builder</a>
+    
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
