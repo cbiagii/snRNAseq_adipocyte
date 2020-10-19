@@ -30,7 +30,7 @@
   
     
   
-  <meta name="description" content="# Install additional CRAN packages CRAN_packages &lt;- c(&#39;BiocManager&#39;, &#39;circlize&#39;, &#39;dplyr&#39;, &#39;enrichR&#39;, &#39;future&#39;, &#39;ggplot2&#39;, &#39;ggpubr&#39;, &#39;ggrepel&#39;, &#39;ggtext&#39;, &#39;glue&#39;, &#39;pheatmap&#39;, &#39;RColorBrewer&#39;, &#39;scales&#39;, &#39;tibble&#39;, &#39;tidyr&#39;, &#39;UpSetR&#39;, &#39;viridis&#39;) new.packages &lt;- CRAN_packages[!(CRAN_packages %in% installed.packages()[,&quot;Package&quot;])] if(length(new.packages)) install.">
+  <meta name="description" content="In this section we will show you how to configure your R environment by installing all the necessary dependencies to run the following codes. The dependencies. The dependencies include packages from the CRAN and Bioconductor repositories.">
 
   
   <link rel="alternate" hreflang="en-us" href="https://cbiagii.github.io/AdipoSNAP/post/1_setup/">
@@ -253,8 +253,8 @@
   
   <meta property="og:site_name" content="AdipoSNAP">
   <meta property="og:url" content="https://cbiagii.github.io/AdipoSNAP/post/1_setup/">
-  <meta property="og:title" content="1 - Setup | AdipoSNAP">
-  <meta property="og:description" content="# Install additional CRAN packages CRAN_packages &lt;- c(&#39;BiocManager&#39;, &#39;circlize&#39;, &#39;dplyr&#39;, &#39;enrichR&#39;, &#39;future&#39;, &#39;ggplot2&#39;, &#39;ggpubr&#39;, &#39;ggrepel&#39;, &#39;ggtext&#39;, &#39;glue&#39;, &#39;pheatmap&#39;, &#39;RColorBrewer&#39;, &#39;scales&#39;, &#39;tibble&#39;, &#39;tidyr&#39;, &#39;UpSetR&#39;, &#39;viridis&#39;) new.packages &lt;- CRAN_packages[!(CRAN_packages %in% installed.packages()[,&quot;Package&quot;])] if(length(new.packages)) install."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
+  <meta property="og:title" content="1 - Setting up R environment | AdipoSNAP">
+  <meta property="og:description" content="In this section we will show you how to configure your R environment by installing all the necessary dependencies to run the following codes. The dependencies. The dependencies include packages from the CRAN and Bioconductor repositories."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
@@ -286,7 +286,7 @@
     "@type": "WebPage",
     "@id": "https://cbiagii.github.io/AdipoSNAP/post/1_setup/"
   },
-  "headline": "1 - Setup",
+  "headline": "1 - Setting up R environment",
   
   "datePublished": "2020-10-18T00:00:00Z",
   "dateModified": "2020-10-18T00:00:00Z",
@@ -304,7 +304,7 @@
       "url": "https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "# Install additional CRAN packages CRAN_packages \u0026lt;- c('BiocManager', 'circlize', 'dplyr', 'enrichR', 'future', 'ggplot2', 'ggpubr', 'ggrepel', 'ggtext', 'glue', 'pheatmap', 'RColorBrewer', 'scales', 'tibble', 'tidyr', 'UpSetR', 'viridis') new.packages \u0026lt;- CRAN_packages[!(CRAN_packages %in% installed.packages()[,\u0026quot;Package\u0026quot;])] if(length(new.packages)) install."
+  "description": "In this section we will show you how to configure your R environment by installing all the necessary dependencies to run the following codes. The dependencies. The dependencies include packages from the CRAN and Bioconductor repositories."
 }
 </script>
 
@@ -322,7 +322,7 @@
 
 
 
-  <title>1 - Setup | AdipoSNAP</title>
+  <title>1 - Setting up R environment | AdipoSNAP</title>
 
 </head>
 <body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="dark">
@@ -482,7 +482,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>1 - Setup</h1>
+  <h1>1 - Setting up R environment</h1>
 
   
 
@@ -541,16 +541,23 @@
   <div class="article-container">
 
     <div class="article-style">
-      <pre><code># Install additional CRAN packages
-CRAN_packages &lt;- c('BiocManager', 'circlize', 'dplyr', 'enrichR', 'future', 'ggplot2', 'ggpubr', 'ggrepel', 'ggtext', 'glue', 'pheatmap', 'RColorBrewer', 'scales', 'tibble', 'tidyr', 'UpSetR', 'viridis')
+      <p>In this section we will show you how to configure your R environment by installing all the necessary dependencies to run the following codes. The dependencies. The dependencies include packages from the CRAN and Bioconductor repositories. To install, just use the following commands:</p>
+<pre><code class="language-r"># Install additional CRAN packages
+CRAN_packages &lt;- c('BiocManager', 'circlize', 'dplyr', 'enrichR', 'future', 'ggplot2', 
+                   'ggpubr', 'ggrepel', 'ggtext', 'glue', 'pheatmap', 'RColorBrewer', 
+                   'scales', 'tibble', 'tidyr', 'UpSetR', 'viridis')
 new.packages &lt;- CRAN_packages[!(CRAN_packages %in% installed.packages()[,&quot;Package&quot;])]
-if(length(new.packages)) install.packages(new.packages)
-
+if(length(new.packages)) {
+  install.packages(new.packages)
+}
+  
 # Install additional Bioconductor packages
 Bioconductor_packages &lt;- c('ComplexHeatmap', 'DropletUtils', 'fgsea', 'monocle')
 new.packages &lt;- Bioconductor_packages[!(Bioconductor_packages %in% installed.packages()[,&quot;Package&quot;])]
-if(length(new.packages)) BiocManager::install(new.packages)
-
+if(length(new.packages)) {
+  BiocManager::install(new.packages)
+}
+  
 # Install reticulate package
 install.packages('reticulate')
 
@@ -559,7 +566,9 @@ install.packages('Seurat')
 remotes::install_github('satijalab/seurat-wrappers')
 
 # Install metacell package
-if(length('metacell'[!('metacell' %in% installed.packages()[,&quot;Package&quot;])])) BiocManager::install(&quot;tanaylab/metacell&quot;)
+if(length('metacell'[!('metacell' %in% installed.packages()[,&quot;Package&quot;])])) {
+  BiocManager::install(&quot;tanaylab/metacell&quot;)
+}
 </code></pre>
 
     </div>

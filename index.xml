@@ -13,20 +13,27 @@
     </image>
     
     <item>
-      <title>1 - Setup</title>
+      <title>1 - Setting up R environment</title>
       <link>https://cbiagii.github.io/AdipoSNAP/post/1_setup/</link>
       <pubDate>Sun, 18 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/1_setup/</guid>
-      <description>&lt;pre&gt;&lt;code&gt;# Install additional CRAN packages
-CRAN_packages &amp;lt;- c(&#39;BiocManager&#39;, &#39;circlize&#39;, &#39;dplyr&#39;, &#39;enrichR&#39;, &#39;future&#39;, &#39;ggplot2&#39;, &#39;ggpubr&#39;, &#39;ggrepel&#39;, &#39;ggtext&#39;, &#39;glue&#39;, &#39;pheatmap&#39;, &#39;RColorBrewer&#39;, &#39;scales&#39;, &#39;tibble&#39;, &#39;tidyr&#39;, &#39;UpSetR&#39;, &#39;viridis&#39;)
+      <description>&lt;p&gt;In this section we will show you how to configure your R environment by installing all the necessary dependencies to run the following codes. The dependencies. The dependencies include packages from the CRAN and Bioconductor repositories. To install, just use the following commands:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;# Install additional CRAN packages
+CRAN_packages &amp;lt;- c(&#39;BiocManager&#39;, &#39;circlize&#39;, &#39;dplyr&#39;, &#39;enrichR&#39;, &#39;future&#39;, &#39;ggplot2&#39;, 
+                   &#39;ggpubr&#39;, &#39;ggrepel&#39;, &#39;ggtext&#39;, &#39;glue&#39;, &#39;pheatmap&#39;, &#39;RColorBrewer&#39;, 
+                   &#39;scales&#39;, &#39;tibble&#39;, &#39;tidyr&#39;, &#39;UpSetR&#39;, &#39;viridis&#39;)
 new.packages &amp;lt;- CRAN_packages[!(CRAN_packages %in% installed.packages()[,&amp;quot;Package&amp;quot;])]
-if(length(new.packages)) install.packages(new.packages)
-
+if(length(new.packages)) {
+  install.packages(new.packages)
+}
+  
 # Install additional Bioconductor packages
 Bioconductor_packages &amp;lt;- c(&#39;ComplexHeatmap&#39;, &#39;DropletUtils&#39;, &#39;fgsea&#39;, &#39;monocle&#39;)
 new.packages &amp;lt;- Bioconductor_packages[!(Bioconductor_packages %in% installed.packages()[,&amp;quot;Package&amp;quot;])]
-if(length(new.packages)) BiocManager::install(new.packages)
-
+if(length(new.packages)) {
+  BiocManager::install(new.packages)
+}
+  
 # Install reticulate package
 install.packages(&#39;reticulate&#39;)
 
@@ -35,18 +42,134 @@ install.packages(&#39;Seurat&#39;)
 remotes::install_github(&#39;satijalab/seurat-wrappers&#39;)
 
 # Install metacell package
-if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&amp;quot;Package&amp;quot;])])) BiocManager::install(&amp;quot;tanaylab/metacell&amp;quot;)
+if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&amp;quot;Package&amp;quot;])])) {
+  BiocManager::install(&amp;quot;tanaylab/metacell&amp;quot;)
+}
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     
     <item>
-      <title>2 - Functions</title>
+      <title>2 - Loading functions</title>
       <link>https://cbiagii.github.io/AdipoSNAP/post/2_functions/</link>
       <pubDate>Sat, 17 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/2_functions/</guid>
-      <description>&lt;pre&gt;&lt;code&gt;## plotMonocle
-plotMonocle &amp;lt;- function(cds, gene) {
+      <description>&lt;p&gt;It is necessary to load some functions that were written directly to plot some results in the following codes.&lt;/p&gt;
+&lt;h3 id=&#34;seurattoh5ad&#34;&gt;SeuratToH5ad&lt;/h3&gt;
+&lt;p&gt;This function converts a &lt;code&gt;Seurat Object&lt;/code&gt; to &lt;code&gt;h5ad&lt;/code&gt; file to perform SCCAF analysis:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;SeuratToH5ad &amp;lt;- function(seurat_object, filename, assay = NULL, res = 1) {
+  library(reticulate)
+  
+  if (!py_module_available(&amp;quot;anndata&amp;quot;) | !py_module_available(&amp;quot;scanpy&amp;quot;) | !py_module_available(&amp;quot;igraph&amp;quot;) | !py_module_available(&amp;quot;louvain&amp;quot;)) {
+    stop(&amp;quot;Please install the anndata python module&amp;quot;)
+  }
+  ad &amp;lt;- import(&amp;quot;anndata&amp;quot;)
+  sc &amp;lt;- import(&amp;quot;scanpy&amp;quot;)
+  
+  message(paste(&amp;quot;Starting to fix the mess...&amp;quot;))
+  
+  raw &amp;lt;- seurat_object@assays$RNA@data
+  if (assay == &amp;quot;RNA&amp;quot;) {
+    X &amp;lt;- as.matrix(seurat_object@assays$RNA@data)
+  } else if (assay == &amp;quot;SCT&amp;quot;) {
+    X &amp;lt;- as.matrix(seurat_object@assays$SCT@data)
+  } else {
+    stop(&amp;quot;Please select an existent assay&amp;quot;)
+  }
+  
+  cell_names &amp;lt;- colnames(x = X)
+  gene_names &amp;lt;- rownames(x = X)
+  raw &amp;lt;- as(object = raw, Class = &amp;quot;dgCMatrix&amp;quot;)
+  
+  scipy &amp;lt;- import(module = &#39;scipy.sparse&#39;, convert = FALSE)
+  sp_sparse_csc &amp;lt;- scipy$csc_matrix
+  raw.rownames &amp;lt;- rownames(x = raw)
+  raw &amp;lt;- sp_sparse_csc(
+    tuple(np_array(raw@x), np_array(raw@i), np_array(raw@p)),
+    shape = tuple(raw@Dim[1], raw@Dim[2])
+  )
+  
+  raw &amp;lt;- raw$T
+  raw &amp;lt;- dict(X = raw, var = dict(var_names = raw.rownames))
+  
+  X &amp;lt;- np_array(t(x = X))
+  
+  obsm &amp;lt;- list()
+  for (dr in names(seurat_object@reductions)) {
+    obsm[[paste0(&amp;quot;X_&amp;quot;,dr)]] &amp;lt;- np_array(Embeddings(
+      object = seurat_object,
+      reduction = dr
+    ))
+  }
+  obsm &amp;lt;- dict(obsm)
+  meta_data &amp;lt;- seurat_object@meta.data
+  if (&amp;quot;nCount_RNA&amp;quot; %in% colnames(x = meta_data)) {
+    colnames(x = meta_data) &amp;lt;- gsub(
+      pattern = &amp;quot;nCount_RNA&amp;quot;,
+      replacement = &amp;quot;n_counts&amp;quot;,
+      x = colnames(x = meta_data)
+    )
+  }
+  if (&amp;quot;nFeature_RNA&amp;quot; %in% colnames(x = meta_data)) {
+    colnames(x = meta_data) &amp;lt;- gsub(
+      pattern = &amp;quot;nFeature_RNA&amp;quot;,
+      replacement = &amp;quot;n_genes&amp;quot;,
+      x = colnames(x = meta_data)
+    )
+  }
+  colnames(x = meta_data) &amp;lt;- gsub(
+    pattern = &amp;quot;\\.&amp;quot;,
+    replacement = &amp;quot;_&amp;quot;,
+    x = colnames(x = meta_data)
+  )
+  
+  anndata.object &amp;lt;- ad$AnnData(
+    raw = raw,
+    X = X,
+    obs = meta_data,
+    obsm = obsm
+  )
+  anndata.object$var_names &amp;lt;- gene_names
+  anndata.object$obs_names &amp;lt;- cell_names
+  
+  message(paste(&amp;quot;Clustering for resolution:&amp;quot;, res))
+  sc$pp$neighbors(anndata.object)
+  sc$tl$louvain(anndata.object, resolution=res, key_added = &amp;quot;L1_Round0&amp;quot;)
+  
+  message(paste(&amp;quot;Writing to h5ad file...&amp;quot;))
+  anndata.object$write(filename)
+  message(paste(&amp;quot;Finished!!&amp;quot;))
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;volcanoplot&#34;&gt;volcano.plot&lt;/h3&gt;
+&lt;p&gt;This function plot a &lt;code&gt;volcano plot&lt;/code&gt; with results of function &lt;code&gt;FindAllMarkers&lt;/code&gt; from Seurat package:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;volcano.plot &amp;lt;- function(res, upGenes = NULL, downGenes = NULL){
+  mut &amp;lt;- as.data.frame(res)
+  mut &amp;lt;- na.omit(mut)
+  mutateddf &amp;lt;- mutate(mut, sig=ifelse(mut$gene %in% upGenes,&amp;quot;Up_regulated&amp;quot;, ifelse(mut$gene %in% downGenes , &amp;quot;Down_regulated&amp;quot;, &amp;quot;Not_different&amp;quot;)))
+  rownames(mutateddf) &amp;lt;- rownames(mut)
+  input &amp;lt;- cbind(gene=rownames(mutateddf), mutateddf)
+  colnames(input)[which(colnames(input)==&amp;quot;sig&amp;quot;)] &amp;lt;- &amp;quot;Significance&amp;quot;
+  input[,1] &amp;lt;- NULL
+  input[which(input[[&amp;quot;p_val_adj&amp;quot;]] == 0), &amp;quot;p_val_adj&amp;quot;] &amp;lt;- min(input[which(input[[&amp;quot;p_val_adj&amp;quot;]] != 0), &amp;quot;p_val_adj&amp;quot;], na.rm = TRUE) * 10^-1
+  
+  p &amp;lt;- ggplot(input, aes(avg_logFC, -log10(p_val_adj))) +
+    geom_point(colour=&amp;quot;white&amp;quot;) +
+    ggtitle(&amp;quot;&amp;quot;) +
+    theme_bw() +
+    scale_y_continuous(limits = c(0, -log10(input$p_val_adj)))
+  p &amp;lt;- p + geom_point(data=subset(input, input$Significance == &#39;Not_different&#39;), aes(avg_logFC, -log10(p_val_adj)), colour=&amp;quot;gray70&amp;quot;) +
+    geom_point(data=subset(input, input$Significance == &#39;Up_regulated&#39;), aes(avg_logFC, -log10(p_val_adj)), colour=&amp;quot;firebrick4&amp;quot;) +
+    geom_point(data=subset(input, input$Significance == &#39;Down_regulated&#39;), aes(avg_logFC, -log10(p_val_adj)), colour=&amp;quot;dodgerblue&amp;quot;) +
+    xlab(&amp;quot;logFC&amp;quot;) + ylab(&amp;quot;-log10(padj)&amp;quot;)
+  p &amp;lt;- p + geom_text_repel(data=input[c(head(upGenes, 5), head(downGenes, 5)), ], aes(label=gene))
+  
+  return(p)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;plotmonocle&#34;&gt;plotMonocle&lt;/h3&gt;
+&lt;p&gt;This function plot the monocle trajectory for one or more genes:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;plotMonocle &amp;lt;- function(cds, gene) {
   if (sum(gene %in% rownames(cds)) == 0) {
     stop(&#39;None gene found in dataset&#39;)
   }
@@ -134,130 +257,17 @@ plotMonocle &amp;lt;- function(cds, gene) {
   
   return(pt2)
 }
-
-
-
-## SeuratToH5ad
-SeuratToH5ad &amp;lt;- function(seurat_object, filename, assay = NULL, res = 1) {
-  library(reticulate)
-  
-  if (!py_module_available(&amp;quot;anndata&amp;quot;) | !py_module_available(&amp;quot;scanpy&amp;quot;) | !py_module_available(&amp;quot;igraph&amp;quot;) | !py_module_available(&amp;quot;louvain&amp;quot;)) {
-    stop(&amp;quot;Please install the anndata python module&amp;quot;)
-  }
-  ad &amp;lt;- import(&amp;quot;anndata&amp;quot;)
-  sc &amp;lt;- import(&amp;quot;scanpy&amp;quot;)
-  
-  message(paste(&amp;quot;Starting to fix the mess...&amp;quot;))
-  
-  raw &amp;lt;- seurat_object@assays$RNA@data
-  if (assay == &amp;quot;RNA&amp;quot;) {
-    X &amp;lt;- as.matrix(seurat_object@assays$RNA@data)
-  } else if (assay == &amp;quot;SCT&amp;quot;) {
-    X &amp;lt;- as.matrix(seurat_object@assays$SCT@data)
-  } else {
-    stop(&amp;quot;Please select an existent assay&amp;quot;)
-  }
-  
-  cell_names &amp;lt;- colnames(x = X)
-  gene_names &amp;lt;- rownames(x = X)
-  raw &amp;lt;- as(object = raw, Class = &amp;quot;dgCMatrix&amp;quot;)
-  
-  scipy &amp;lt;- import(module = &#39;scipy.sparse&#39;, convert = FALSE)
-  sp_sparse_csc &amp;lt;- scipy$csc_matrix
-  raw.rownames &amp;lt;- rownames(x = raw)
-  raw &amp;lt;- sp_sparse_csc(
-    tuple(np_array(raw@x), np_array(raw@i), np_array(raw@p)),
-    shape = tuple(raw@Dim[1], raw@Dim[2])
-  )
-  
-  raw &amp;lt;- raw$T
-  raw &amp;lt;- dict(X = raw, var = dict(var_names = raw.rownames))
-  
-  X &amp;lt;- np_array(t(x = X))
-  
-  obsm &amp;lt;- list()
-  for (dr in names(seurat_object@reductions)) {
-    obsm[[paste0(&amp;quot;X_&amp;quot;,dr)]] &amp;lt;- np_array(Embeddings(
-      object = seurat_object,
-      reduction = dr
-    ))
-  }
-  obsm &amp;lt;- dict(obsm)
-  meta_data &amp;lt;- seurat_object@meta.data
-  if (&amp;quot;nCount_RNA&amp;quot; %in% colnames(x = meta_data)) {
-    colnames(x = meta_data) &amp;lt;- gsub(
-      pattern = &amp;quot;nCount_RNA&amp;quot;,
-      replacement = &amp;quot;n_counts&amp;quot;,
-      x = colnames(x = meta_data)
-    )
-  }
-  if (&amp;quot;nFeature_RNA&amp;quot; %in% colnames(x = meta_data)) {
-    colnames(x = meta_data) &amp;lt;- gsub(
-      pattern = &amp;quot;nFeature_RNA&amp;quot;,
-      replacement = &amp;quot;n_genes&amp;quot;,
-      x = colnames(x = meta_data)
-    )
-  }
-  colnames(x = meta_data) &amp;lt;- gsub(
-    pattern = &amp;quot;\\.&amp;quot;,
-    replacement = &amp;quot;_&amp;quot;,
-    x = colnames(x = meta_data)
-  )
-  
-  anndata.object &amp;lt;- ad$AnnData(
-    raw = raw,
-    X = X,
-    obs = meta_data,
-    obsm = obsm
-  )
-  anndata.object$var_names &amp;lt;- gene_names
-  anndata.object$obs_names &amp;lt;- cell_names
-  
-  message(paste(&amp;quot;Clustering for resolution:&amp;quot;, res))
-  sc$pp$neighbors(anndata.object)
-  sc$tl$louvain(anndata.object, resolution=res, key_added = &amp;quot;L1_Round0&amp;quot;)
-  
-  message(paste(&amp;quot;Writing to h5ad file...&amp;quot;))
-  anndata.object$write(filename)
-  message(paste(&amp;quot;Finished!!&amp;quot;))
-}
-
-
-
-## volcano.plot
-volcano.plot &amp;lt;- function(res, upGenes = NULL, downGenes = NULL){
-  mut &amp;lt;- as.data.frame(res)
-  mut &amp;lt;- na.omit(mut)
-  mutateddf &amp;lt;- mutate(mut, sig=ifelse(mut$gene %in% upGenes,&amp;quot;Up_regulated&amp;quot;, ifelse(mut$gene %in% downGenes , &amp;quot;Down_regulated&amp;quot;, &amp;quot;Not_different&amp;quot;)))
-  rownames(mutateddf) &amp;lt;- rownames(mut)
-  input &amp;lt;- cbind(gene=rownames(mutateddf), mutateddf)
-  colnames(input)[which(colnames(input)==&amp;quot;sig&amp;quot;)] &amp;lt;- &amp;quot;Significance&amp;quot;
-  input[,1] &amp;lt;- NULL
-  input[which(input[[&amp;quot;p_val_adj&amp;quot;]] == 0), &amp;quot;p_val_adj&amp;quot;] &amp;lt;- min(input[which(input[[&amp;quot;p_val_adj&amp;quot;]] != 0), &amp;quot;p_val_adj&amp;quot;], na.rm = TRUE) * 10^-1
-  
-  p &amp;lt;- ggplot(input, aes(avg_logFC, -log10(p_val_adj))) +
-    geom_point(colour=&amp;quot;white&amp;quot;) +
-    ggtitle(&amp;quot;&amp;quot;) +
-    theme_bw() +
-    scale_y_continuous(limits = c(0, -log10(input$p_val_adj)))
-  p &amp;lt;- p + geom_point(data=subset(input, input$Significance == &#39;Not_different&#39;), aes(avg_logFC, -log10(p_val_adj)), colour=&amp;quot;gray70&amp;quot;) +
-    geom_point(data=subset(input, input$Significance == &#39;Up_regulated&#39;), aes(avg_logFC, -log10(p_val_adj)), colour=&amp;quot;firebrick4&amp;quot;) +
-    geom_point(data=subset(input, input$Significance == &#39;Down_regulated&#39;), aes(avg_logFC, -log10(p_val_adj)), colour=&amp;quot;dodgerblue&amp;quot;) +
-    xlab(&amp;quot;logFC&amp;quot;) + ylab(&amp;quot;-log10(padj)&amp;quot;)
-  p &amp;lt;- p + geom_text_repel(data=input[c(head(upGenes, 5), head(downGenes, 5)), ], aes(label=gene))
-  
-  return(p)
-}
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     
     <item>
-      <title>3 - Original Preprocessing</title>
+      <title>3 - Original preprocessing</title>
       <link>https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/</link>
       <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/</guid>
-      <description>&lt;pre&gt;&lt;code&gt;## Loading R packages
+      <description>&lt;p&gt;Performing preprocessing using the original clustering information&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;## Loading R packages
 library(Seurat)
 
 ## Loading data Cellranger output format
@@ -335,11 +345,12 @@ saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds&
     </item>
     
     <item>
-      <title>4 - Metacell Original</title>
+      <title>4 - Classifying cell types from original data using metacell</title>
       <link>https://cbiagii.github.io/AdipoSNAP/post/4_metacell_original/</link>
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/4_metacell_original/</guid>
-      <description>&lt;pre&gt;&lt;code&gt;## Loading R packages
+      <description>&lt;p&gt;In this section we will perform the cell type classification using &lt;code&gt;metacell&lt;/code&gt; package:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## Loading R packages
 library(Seurat)
 library(future)
 library(metacell)
@@ -524,17 +535,106 @@ mcell_mc2d_plot(mc2d_id=&amp;quot;test_2dproj&amp;quot;)
     </item>
     
     <item>
-      <title>5 - SCCAF SCT</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/5_sccaf_sct/</link>
+      <title>5 - SCT Preprocessing</title>
+      <link>https://cbiagii.github.io/AdipoSNAP/post/5_sct_preprocess/</link>
       <pubDate>Wed, 14 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/5_sccaf_sct/</guid>
-      <description>&lt;pre&gt;&lt;code&gt;library(Seurat)
+      <guid>https://cbiagii.github.io/AdipoSNAP/post/5_sct_preprocess/</guid>
+      <description>&lt;p&gt;Performing preprocessing using regularized negative binomial regression to normalize UMI count data.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;## Loading R packages
+library(Seurat)
+library(SeuratWrappers)
+library(future)
+
+## Setting up the threads for 12 workers
+options(future.globals.maxSize = +Inf)
+plan(&amp;quot;multiprocess&amp;quot;, workers = 12)
+
+## Loading data Cellranger output format
+data &amp;lt;- Read10X(&amp;quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&amp;quot;)
+
+## Reading metadata annotation
+anno &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv&amp;quot;)
+
+## Creating Seurat object
+data &amp;lt;- CreateSeuratObject(counts = data,
+                           project = &amp;quot;10x&amp;quot;, 
+                           meta.data = anno, 
+                           min.cells = 3,
+                           min.features = 200)
+
+## Subset remaining only N condition
+data &amp;lt;- subset(data, cells = rownames(data@meta.data)[which(data@meta.data$condition == &amp;quot;N&amp;quot;)])
+
+## Cell cycle genes
+m.s.genes &amp;lt;- c(&amp;quot;Gmnn&amp;quot;, &amp;quot;Rad51&amp;quot;, &amp;quot;Prim1&amp;quot;, &amp;quot;Dscc1&amp;quot;, &amp;quot;Cdca7&amp;quot;, &amp;quot;Slbp&amp;quot;, &amp;quot;Mcm7&amp;quot;, &amp;quot;Cenpu&amp;quot;, &amp;quot;Pold3&amp;quot;, 
+               &amp;quot;Ccne2&amp;quot;, &amp;quot;Mcm4&amp;quot;, &amp;quot;Polr1b&amp;quot;, &amp;quot;Fen1&amp;quot;, &amp;quot;Rad51ap1&amp;quot;, &amp;quot;Tyms&amp;quot;, &amp;quot;Usp1&amp;quot;, &amp;quot;Rrm2&amp;quot;, &amp;quot;Wdr76&amp;quot;, 
+               &amp;quot;Dtl&amp;quot;, &amp;quot;Rrm1&amp;quot;, &amp;quot;Gins2&amp;quot;, &amp;quot;Tipin&amp;quot;, &amp;quot;Hells&amp;quot;, &amp;quot;Ubr7&amp;quot;, &amp;quot;Chaf1b&amp;quot;, &amp;quot;Clspn&amp;quot;, &amp;quot;E2f8&amp;quot;, &amp;quot;Mcm5&amp;quot;, 
+               &amp;quot;Nasp&amp;quot;, &amp;quot;Pcna&amp;quot;, &amp;quot;Mrpl36&amp;quot;, &amp;quot;Rfc2&amp;quot;, &amp;quot;Cdc45&amp;quot;, &amp;quot;Casp8ap2&amp;quot;, &amp;quot;Mcm6&amp;quot;, &amp;quot;Exo1&amp;quot;, &amp;quot;Pola1&amp;quot;, &amp;quot;Cdc6&amp;quot;, 
+               &amp;quot;Ung&amp;quot;, &amp;quot;Uhrf1&amp;quot;, &amp;quot;Blm&amp;quot;, &amp;quot;Msh2&amp;quot;)
+m.g2m.genes &amp;lt;- c(&amp;quot;Cdk1&amp;quot;, &amp;quot;Tmpo&amp;quot;, &amp;quot;Smc4&amp;quot;, &amp;quot;Tacc3&amp;quot;, &amp;quot;Mki67&amp;quot;, &amp;quot;Ckap2l&amp;quot;, &amp;quot;Cks2&amp;quot;, &amp;quot;Cdc25c&amp;quot;, &amp;quot;Nusap1&amp;quot;, &amp;quot;Kif11&amp;quot;, 
+                 &amp;quot;Top2a&amp;quot;, &amp;quot;Cdca3&amp;quot;, &amp;quot;Cks1b&amp;quot;, &amp;quot;Ect2&amp;quot;, &amp;quot;Ckap5&amp;quot;, &amp;quot;Ckap2&amp;quot;, &amp;quot;Cenpa&amp;quot;, &amp;quot;Cdca2&amp;quot;, &amp;quot;Ncapd2&amp;quot;, &amp;quot;Aurkb&amp;quot;, 
+                 &amp;quot;Cenpf&amp;quot;, &amp;quot;Gtse1&amp;quot;, &amp;quot;Birc5&amp;quot;, &amp;quot;Bub1&amp;quot;, &amp;quot;Cdca8&amp;quot;, &amp;quot;Anp32e&amp;quot;, &amp;quot;Rangap1&amp;quot;, &amp;quot;Tpx2&amp;quot;, &amp;quot;Hjurp&amp;quot;, &amp;quot;Lbr&amp;quot;, 
+                 &amp;quot;Dlgap5&amp;quot;, &amp;quot;Psrc1&amp;quot;, &amp;quot;Ndc80&amp;quot;, &amp;quot;Nek2&amp;quot;, &amp;quot;Cbx5&amp;quot;, &amp;quot;Ube2c&amp;quot;, &amp;quot;Gas2l3&amp;quot;, &amp;quot;G2e3&amp;quot;, &amp;quot;Cdc20&amp;quot;, &amp;quot;Hmgb2&amp;quot;, 
+                 &amp;quot;Cenpe&amp;quot;, &amp;quot;Nuf2&amp;quot;, &amp;quot;Anln&amp;quot;, &amp;quot;Ttk&amp;quot;, &amp;quot;Kif2c&amp;quot;, &amp;quot;Kif20b&amp;quot;, &amp;quot;Aurka&amp;quot;, &amp;quot;Hmmr&amp;quot;, &amp;quot;Pimreg&amp;quot;, &amp;quot;Cks1brt&amp;quot;, 
+                 &amp;quot;Tubb4b&amp;quot;, &amp;quot;Kif23&amp;quot;, &amp;quot;Ccnb2&amp;quot;, &amp;quot;Ctcf&amp;quot;)
+
+## nFeature_RNA based cell thresholding
+data &amp;lt;- subset(data, subset = nFeature_RNA &amp;gt; 200 &amp;amp; nFeature_RNA &amp;lt; 3000)
+
+## Scoring cell cycle phases
+data &amp;lt;- CellCycleScoring(data, s.features = m.s.genes, g2m.features = m.g2m.genes, set.ident = TRUE)
+
+## Using regularized negative binomial regression to normalize UMI count data regressing out nCount_RNA, S.Score and G2M.Score variables
+data &amp;lt;- SCTransform(data, vars.to.regress = c(&amp;quot;nCount_RNA&amp;quot;, &amp;quot;S.Score&amp;quot;, &amp;quot;G2M.Score&amp;quot;), verbose = TRUE)
+
+## Running PCA
+data &amp;lt;- RunPCA(data)
+
+## Defining the best number of PC that has a explained variance greater than 80%
+dp &amp;lt;- data@reductions$pca@stdev
+dp &amp;lt;- dp^2
+for (z in 1:length(dp)) {
+  soma &amp;lt;- sum(dp[1:z])/sum(dp)
+  if (soma &amp;gt;= 0.8) {
+    best_pc &amp;lt;- z
+    break()
+  }
+}
+
+## Clustering
+data &amp;lt;- FindNeighbors(data, dims = 1:best_pc)
+data &amp;lt;- FindClusters(data)
+
+## RunUMAP
+data &amp;lt;- RunUMAP(data, dims = 1:best_pc)
+
+## RunTSNE
+data &amp;lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = T)
+
+## Saving RDS file
+saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&amp;quot;)
+
+## Running Adaptively-thresholded Low Rank Approximation (ALRA)
+data &amp;lt;- SeuratWrappers::RunALRA(data)
+saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>6 - SCCAF SCT</title>
+      <link>https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/</link>
+      <pubDate>Tue, 13 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/</guid>
+      <description>&lt;p&gt;Creating&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(Seurat)
+
 source(&amp;quot;/projects/cangen/coliveir/SeuratToH5ad.R&amp;quot;)
+
 data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&amp;quot;)
 SeuratToH5ad(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&amp;quot;, &amp;quot;SCT&amp;quot;, 1)
-
-
-# python to define the optimal accuracy number
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;## Defining the optimal accuracy number
 import warnings
 warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
 from SCCAF import *
@@ -544,38 +644,33 @@ ad = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&amp
 y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_Round0&#39;],n=100)
 aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
 plt.show()
-
-
-##### Optimisation and general purpose usage
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;## Optimisation and general purpose usage
 cd /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/
   sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.796 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.pdf
-
-
-##### Parallel run of assessments
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;## Parallel run of assessments
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round3.txt --slot-for-existing-clustering L1_Round3 --iterations 20 --cores 16
-
-
-##### Merging parallel runs to produce plot
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;## Merging parallel runs to produce plot
 sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes -r /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds-acc-comparison-plot.png
-
-
-# python
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;## Exporting
 import scanpy as sc
 adata = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad&amp;quot;)
 adata.write_csvs(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results&amp;quot;, sep=&#39;\t&#39;, skip_data=True)
-
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     
     <item>
-      <title>6 - Metacell SCT</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/6_metacell_sct/</link>
-      <pubDate>Tue, 13 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/6_metacell_sct/</guid>
+      <title>7 - Metacell SCT</title>
+      <link>https://cbiagii.github.io/AdipoSNAP/post/7_metacell_sct/</link>
+      <pubDate>Mon, 12 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>https://cbiagii.github.io/AdipoSNAP/post/7_metacell_sct/</guid>
       <description>&lt;pre&gt;&lt;code&gt;## Loading R packages
 library(Seurat)
 library(future)
@@ -761,145 +856,10 @@ mcell_mc2d_plot(mc2d_id=&amp;quot;test_2dproj&amp;quot;)
     </item>
     
     <item>
-      <title>7 - SCT Preprocessing</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/7_sct_preprocess/</link>
-      <pubDate>Mon, 12 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/7_sct_preprocess/</guid>
-      <description>&lt;pre&gt;&lt;code&gt;## Loading R packages
-library(Seurat)
-library(SeuratWrappers)
-library(future)
-
-## Setting up the threads for 12 workers
-options(future.globals.maxSize = +Inf)
-plan(&amp;quot;multiprocess&amp;quot;, workers = 12)
-
-## Loading data Cellranger output format
-data &amp;lt;- Read10X(&amp;quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&amp;quot;)
-
-## Reading metadata annotation
-anno &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv&amp;quot;)
-
-## Creating Seurat object
-data &amp;lt;- CreateSeuratObject(counts = data,
-                           project = &amp;quot;10x&amp;quot;, 
-                           meta.data = anno, 
-                           min.cells = 3,
-                           min.features = 200)
-
-## Subset remaining only N condition
-data &amp;lt;- subset(data, cells = rownames(data@meta.data)[which(data@meta.data$condition == &amp;quot;N&amp;quot;)])
-
-## Cell cycle genes
-m.s.genes &amp;lt;- c(&amp;quot;Gmnn&amp;quot;, &amp;quot;Rad51&amp;quot;, &amp;quot;Prim1&amp;quot;, &amp;quot;Dscc1&amp;quot;, &amp;quot;Cdca7&amp;quot;, &amp;quot;Slbp&amp;quot;, &amp;quot;Mcm7&amp;quot;, &amp;quot;Cenpu&amp;quot;, &amp;quot;Pold3&amp;quot;, 
-               &amp;quot;Ccne2&amp;quot;, &amp;quot;Mcm4&amp;quot;, &amp;quot;Polr1b&amp;quot;, &amp;quot;Fen1&amp;quot;, &amp;quot;Rad51ap1&amp;quot;, &amp;quot;Tyms&amp;quot;, &amp;quot;Usp1&amp;quot;, &amp;quot;Rrm2&amp;quot;, &amp;quot;Wdr76&amp;quot;, 
-               &amp;quot;Dtl&amp;quot;, &amp;quot;Rrm1&amp;quot;, &amp;quot;Gins2&amp;quot;, &amp;quot;Tipin&amp;quot;, &amp;quot;Hells&amp;quot;, &amp;quot;Ubr7&amp;quot;, &amp;quot;Chaf1b&amp;quot;, &amp;quot;Clspn&amp;quot;, &amp;quot;E2f8&amp;quot;, &amp;quot;Mcm5&amp;quot;, 
-               &amp;quot;Nasp&amp;quot;, &amp;quot;Pcna&amp;quot;, &amp;quot;Mrpl36&amp;quot;, &amp;quot;Rfc2&amp;quot;, &amp;quot;Cdc45&amp;quot;, &amp;quot;Casp8ap2&amp;quot;, &amp;quot;Mcm6&amp;quot;, &amp;quot;Exo1&amp;quot;, &amp;quot;Pola1&amp;quot;, &amp;quot;Cdc6&amp;quot;, 
-               &amp;quot;Ung&amp;quot;, &amp;quot;Uhrf1&amp;quot;, &amp;quot;Blm&amp;quot;, &amp;quot;Msh2&amp;quot;)
-m.g2m.genes &amp;lt;- c(&amp;quot;Cdk1&amp;quot;, &amp;quot;Tmpo&amp;quot;, &amp;quot;Smc4&amp;quot;, &amp;quot;Tacc3&amp;quot;, &amp;quot;Mki67&amp;quot;, &amp;quot;Ckap2l&amp;quot;, &amp;quot;Cks2&amp;quot;, &amp;quot;Cdc25c&amp;quot;, &amp;quot;Nusap1&amp;quot;, &amp;quot;Kif11&amp;quot;, 
-                 &amp;quot;Top2a&amp;quot;, &amp;quot;Cdca3&amp;quot;, &amp;quot;Cks1b&amp;quot;, &amp;quot;Ect2&amp;quot;, &amp;quot;Ckap5&amp;quot;, &amp;quot;Ckap2&amp;quot;, &amp;quot;Cenpa&amp;quot;, &amp;quot;Cdca2&amp;quot;, &amp;quot;Ncapd2&amp;quot;, &amp;quot;Aurkb&amp;quot;, 
-                 &amp;quot;Cenpf&amp;quot;, &amp;quot;Gtse1&amp;quot;, &amp;quot;Birc5&amp;quot;, &amp;quot;Bub1&amp;quot;, &amp;quot;Cdca8&amp;quot;, &amp;quot;Anp32e&amp;quot;, &amp;quot;Rangap1&amp;quot;, &amp;quot;Tpx2&amp;quot;, &amp;quot;Hjurp&amp;quot;, &amp;quot;Lbr&amp;quot;, 
-                 &amp;quot;Dlgap5&amp;quot;, &amp;quot;Psrc1&amp;quot;, &amp;quot;Ndc80&amp;quot;, &amp;quot;Nek2&amp;quot;, &amp;quot;Cbx5&amp;quot;, &amp;quot;Ube2c&amp;quot;, &amp;quot;Gas2l3&amp;quot;, &amp;quot;G2e3&amp;quot;, &amp;quot;Cdc20&amp;quot;, &amp;quot;Hmgb2&amp;quot;, 
-                 &amp;quot;Cenpe&amp;quot;, &amp;quot;Nuf2&amp;quot;, &amp;quot;Anln&amp;quot;, &amp;quot;Ttk&amp;quot;, &amp;quot;Kif2c&amp;quot;, &amp;quot;Kif20b&amp;quot;, &amp;quot;Aurka&amp;quot;, &amp;quot;Hmmr&amp;quot;, &amp;quot;Pimreg&amp;quot;, &amp;quot;Cks1brt&amp;quot;, 
-                 &amp;quot;Tubb4b&amp;quot;, &amp;quot;Kif23&amp;quot;, &amp;quot;Ccnb2&amp;quot;, &amp;quot;Ctcf&amp;quot;)
-
-## nFeature_RNA based cell thresholding
-data &amp;lt;- subset(data, subset = nFeature_RNA &amp;gt; 200 &amp;amp; nFeature_RNA &amp;lt; 3000)
-
-## Scoring cell cycle phases
-data &amp;lt;- CellCycleScoring(data, s.features = m.s.genes, g2m.features = m.g2m.genes, set.ident = TRUE)
-
-## Using regularized negative binomial regression to normalize UMI count data regressing out nCount_RNA, S.Score and G2M.Score variables
-data &amp;lt;- SCTransform(data, vars.to.regress = c(&amp;quot;nCount_RNA&amp;quot;, &amp;quot;S.Score&amp;quot;, &amp;quot;G2M.Score&amp;quot;), verbose = TRUE)
-
-## Running PCA
-data &amp;lt;- RunPCA(data)
-
-## Defining the best number of PC that has a explained variance greater than 80%
-dp &amp;lt;- data@reductions$pca@stdev
-dp &amp;lt;- dp^2
-for (z in 1:length(dp)) {
-  soma &amp;lt;- sum(dp[1:z])/sum(dp)
-  if (soma &amp;gt;= 0.8) {
-    best_pc &amp;lt;- z
-    break()
-  }
-}
-
-## Clustering
-data &amp;lt;- FindNeighbors(data, dims = 1:best_pc)
-data &amp;lt;- FindClusters(data)
-
-## RunUMAP
-data &amp;lt;- RunUMAP(data, dims = 1:best_pc)
-
-## RunTSNE
-data &amp;lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = T)
-
-## Saving RDS file
-saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&amp;quot;)
-
-## Running Adaptively-thresholded Low Rank Approximation (ALRA)
-data &amp;lt;- SeuratWrappers::RunALRA(data)
-saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>8 - SCCAF Adipocytes</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/8_sccaf_adipocytes/</link>
+      <title>8 - Adipocytes Preprocessing</title>
+      <link>https://cbiagii.github.io/AdipoSNAP/post/8_adipocytes_preprocess/</link>
       <pubDate>Sun, 11 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/8_sccaf_adipocytes/</guid>
-      <description>&lt;pre&gt;&lt;code&gt;library(Seurat)
-source(&amp;quot;/projects/cangen/coliveir/SeuratToH5ad.R&amp;quot;)
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-SeuratToH5ad(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&amp;quot;, &amp;quot;RNA&amp;quot;, 1)
-
-
-# python to define the optimal accuracy number
-import warnings
-warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
-from SCCAF import *
-
-ad = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&amp;quot;)
-
-y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_Round0&#39;],n=100)
-aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
-plt.show()
-
-
-
-
-##### Optimisation and general purpose usage
-cd /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/
-sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.669 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.pdf
-
-
-##### Parallel run of assessments
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
-
-
-##### Merging parallel runs to produce plot
-sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly -r /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds-acc-comparison-plot.png
-
-
-
-# python
-import scanpy as sc
-adata = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad&amp;quot;)
-adata.write_csvs(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results&amp;quot;, sep=&#39;\t&#39;, skip_data=True)
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>9 - Adipocytes Preprocessing</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/9_adipocytes_preprocess/</link>
-      <pubDate>Sat, 10 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/9_adipocytes_preprocess/</guid>
+      <guid>https://cbiagii.github.io/AdipoSNAP/post/8_adipocytes_preprocess/</guid>
       <description>&lt;pre&gt;&lt;code&gt;## Loading R packages
 library(Seurat)
 
@@ -1017,6 +977,55 @@ data &amp;lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30,
 
 ## Saving RDS file
 saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>9 - SCCAF Adipocytes</title>
+      <link>https://cbiagii.github.io/AdipoSNAP/post/9_sccaf_adipocytes/</link>
+      <pubDate>Sat, 10 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>https://cbiagii.github.io/AdipoSNAP/post/9_sccaf_adipocytes/</guid>
+      <description>&lt;pre&gt;&lt;code&gt;library(Seurat)
+source(&amp;quot;/projects/cangen/coliveir/SeuratToH5ad.R&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
+SeuratToH5ad(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&amp;quot;, &amp;quot;RNA&amp;quot;, 1)
+
+
+# python to define the optimal accuracy number
+import warnings
+warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
+from SCCAF import *
+
+ad = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&amp;quot;)
+
+y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_Round0&#39;],n=100)
+aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
+plt.show()
+
+
+
+
+##### Optimisation and general purpose usage
+cd /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/
+sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.669 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.pdf
+
+
+##### Parallel run of assessments
+sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
+
+
+##### Merging parallel runs to produce plot
+sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly -r /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds-acc-comparison-plot.png
+
+
+
+# python
+import scanpy as sc
+adata = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad&amp;quot;)
+adata.write_csvs(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results&amp;quot;, sep=&#39;\t&#39;, skip_data=True)
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>

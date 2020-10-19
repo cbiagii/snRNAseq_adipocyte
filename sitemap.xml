@@ -33,27 +33,27 @@
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/post/5_sccaf_sct/</loc>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/5_sct_preprocess/</loc>
     <lastmod>2020-10-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/post/6_metacell_sct/</loc>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/</loc>
     <lastmod>2020-10-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/post/7_sct_preprocess/</loc>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/7_metacell_sct/</loc>
     <lastmod>2020-10-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/post/8_sccaf_adipocytes/</loc>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/8_adipocytes_preprocess/</loc>
     <lastmod>2020-10-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://cbiagii.github.io/AdipoSNAP/post/9_adipocytes_preprocess/</loc>
+    <loc>https://cbiagii.github.io/AdipoSNAP/post/9_sccaf_adipocytes/</loc>
     <lastmod>2020-10-10T00:00:00+00:00</lastmod>
   </url>
   
@@ -80,11 +80,39 @@
   </url>
   
   <url>
+    <loc>https://cbiagii.github.io/AdipoSNAP/author/cleidson-alves/</loc>
+  </url>
+  
+  <url>
+    <loc>https://cbiagii.github.io/AdipoSNAP/author/miguel-luiz-batista-junior/</loc>
+  </url>
+  
+  <url>
+    <loc>https://cbiagii.github.io/AdipoSNAP/author/nabil/</loc>
+  </url>
+  
+  <url>
     <loc>https://cbiagii.github.io/AdipoSNAP/publication_types/</loc>
   </url>
   
   <url>
+    <loc>https://cbiagii.github.io/AdipoSNAP/author/robson-carvalho/</loc>
+  </url>
+  
+  <url>
+    <loc>https://cbiagii.github.io/AdipoSNAP/author/sarah-santiloni-cury/</loc>
+  </url>
+  
+  <url>
+    <loc>https://cbiagii.github.io/AdipoSNAP/author/steve/</loc>
+  </url>
+  
+  <url>
     <loc>https://cbiagii.github.io/AdipoSNAP/tags/</loc>
+  </url>
+  
+  <url>
+    <loc>https://cbiagii.github.io/AdipoSNAP/author/wilson-araujo-da-silva-junior/</loc>
   </url>
   
 </urlset>
