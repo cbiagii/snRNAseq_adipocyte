@@ -1,8 +1,8 @@
 ---
-date: "2020-10-11"
+date: "2020-10-10"
 diagram: true
 math: true
-title: 8 - SCCAF Adipocytes
+title: 9 - SCCAF Adipocytes
 ---
 
 ```

@@ -1,8 +1,8 @@
 ---
-date: "2020-10-10"
+date: "2020-10-11"
 diagram: true
 math: true
-title: 9 - Adipocytes Preprocessing
+title: 8 - Adipocytes Preprocessing
 ---
 
 ```

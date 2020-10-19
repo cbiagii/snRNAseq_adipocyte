@@ -30,10 +30,10 @@
   
     
   
-  <meta name="description" content="## Loading R packages library(Seurat) ## Loading metacell results marks_colors &lt;- NULL marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_1&quot;, &quot;Acsl1&quot;, &quot;#0000b3&quot;, 1, 2.5)) marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_2&quot;, &quot;Plin4&quot;, &quot;#0000cc&quot;, 1, 2.5)) marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_3&quot;, &quot;Mlxipl&quot;, &quot;#0000e6&quot;, 1, 2.">
+  <meta name="description" content="library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;) SeuratToH5ad(data, &quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;, &quot;RNA&quot;, 1) # python to define the optimal accuracy number import warnings warnings.filterwarnings(&quot;ignore&quot;) from SCCAF import * ad = sc.read(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;) y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.">
 
   
-  <link rel="alternate" hreflang="en-us" href="https://cbiagii.github.io/AdipoSNAP/post/9_adipocytes_preprocess/">
+  <link rel="alternate" hreflang="en-us" href="https://cbiagii.github.io/AdipoSNAP/post/9_sccaf_adipocytes/">
 
   
 
@@ -236,7 +236,7 @@
   <link rel="icon" type="image/png" href="/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_32x32_fill_lanczos_center_2.png">
   <link rel="apple-touch-icon" type="image/png" href="/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png">
 
-  <link rel="canonical" href="https://cbiagii.github.io/AdipoSNAP/post/9_adipocytes_preprocess/">
+  <link rel="canonical" href="https://cbiagii.github.io/AdipoSNAP/post/9_sccaf_adipocytes/">
 
   
   
@@ -252,9 +252,9 @@
   <meta property="twitter:card" content="summary">
   
   <meta property="og:site_name" content="AdipoSNAP">
-  <meta property="og:url" content="https://cbiagii.github.io/AdipoSNAP/post/9_adipocytes_preprocess/">
-  <meta property="og:title" content="9 - Adipocytes Preprocessing | AdipoSNAP">
-  <meta property="og:description" content="## Loading R packages library(Seurat) ## Loading metacell results marks_colors &lt;- NULL marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_1&quot;, &quot;Acsl1&quot;, &quot;#0000b3&quot;, 1, 2.5)) marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_2&quot;, &quot;Plin4&quot;, &quot;#0000cc&quot;, 1, 2.5)) marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_3&quot;, &quot;Mlxipl&quot;, &quot;#0000e6&quot;, 1, 2."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
+  <meta property="og:url" content="https://cbiagii.github.io/AdipoSNAP/post/9_sccaf_adipocytes/">
+  <meta property="og:title" content="9 - SCCAF Adipocytes | AdipoSNAP">
+  <meta property="og:description" content="library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;) SeuratToH5ad(data, &quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;, &quot;RNA&quot;, 1) # python to define the optimal accuracy number import warnings warnings.filterwarnings(&quot;ignore&quot;) from SCCAF import * ad = sc.read(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;) y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
@@ -284,9 +284,9 @@
   "@type": "BlogPosting",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://cbiagii.github.io/AdipoSNAP/post/9_adipocytes_preprocess/"
+    "@id": "https://cbiagii.github.io/AdipoSNAP/post/9_sccaf_adipocytes/"
   },
-  "headline": "9 - Adipocytes Preprocessing",
+  "headline": "9 - SCCAF Adipocytes",
   
   "datePublished": "2020-10-10T00:00:00Z",
   "dateModified": "2020-10-10T00:00:00Z",
@@ -304,7 +304,7 @@
       "url": "https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "## Loading R packages library(Seurat) ## Loading metacell results marks_colors \u0026lt;- NULL marks_colors \u0026lt;- rbind(marks_colors, c(\u0026quot;Adipocyte_1\u0026quot;, \u0026quot;Acsl1\u0026quot;, \u0026quot;#0000b3\u0026quot;, 1, 2.5)) marks_colors \u0026lt;- rbind(marks_colors, c(\u0026quot;Adipocyte_2\u0026quot;, \u0026quot;Plin4\u0026quot;, \u0026quot;#0000cc\u0026quot;, 1, 2.5)) marks_colors \u0026lt;- rbind(marks_colors, c(\u0026quot;Adipocyte_3\u0026quot;, \u0026quot;Mlxipl\u0026quot;, \u0026quot;#0000e6\u0026quot;, 1, 2."
+  "description": "library(Seurat) source(\u0026quot;/projects/cangen/coliveir/SeuratToH5ad.R\u0026quot;) data \u0026lt;- readRDS(\u0026quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds\u0026quot;) SeuratToH5ad(data, \u0026quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad\u0026quot;, \u0026quot;RNA\u0026quot;, 1) # python to define the optimal accuracy number import warnings warnings.filterwarnings(\u0026quot;ignore\u0026quot;) from SCCAF import * ad = sc.read(\u0026quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad\u0026quot;) y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad."
 }
 </script>
 
@@ -322,7 +322,7 @@
 
 
 
-  <title>9 - Adipocytes Preprocessing | AdipoSNAP</title>
+  <title>9 - SCCAF Adipocytes | AdipoSNAP</title>
 
 </head>
 <body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="dark">
@@ -482,7 +482,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>9 - Adipocytes Preprocessing</h1>
+  <h1>9 - SCCAF Adipocytes</h1>
 
   
 
@@ -541,123 +541,46 @@
   <div class="article-container">
 
     <div class="article-style">
-      <pre><code>## Loading R packages
-library(Seurat)
+      <pre><code>library(Seurat)
+source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;)
+data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+SeuratToH5ad(data, &quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;, &quot;RNA&quot;, 1)
 
-## Loading metacell results
-marks_colors &lt;- NULL
-marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_1&quot;, &quot;Acsl1&quot;, &quot;#0000b3&quot;, 1, 2.5))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_2&quot;, &quot;Plin4&quot;, &quot;#0000cc&quot;, 1, 2.5))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_3&quot;, &quot;Mlxipl&quot;, &quot;#0000e6&quot;, 1, 2.5))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_4&quot;, &quot;Pck1&quot;, &quot;#0000ff&quot;, 1, 2.5))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Adipocyte_5&quot;, &quot;Adrb3&quot;, &quot;#1a1aff&quot;, 1, 2.5))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_1&quot;, &quot;Btnl9&quot;, &quot;#00cd00&quot;, 1, 1.8))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_2&quot;, &quot;Ushbp1&quot;, &quot;#00b300&quot;, 1, 1.8))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_3&quot;, &quot;Egfl7&quot;, &quot;#009a00&quot;, 1, 1.8))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_4&quot;, &quot;Mcf2l&quot;, &quot;#008000&quot;, 1, 1.8))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Endothelial_5&quot;, &quot;Ptprb&quot;, &quot;#006700&quot;, 1, 1.8))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_1&quot;, &quot;Zeb2&quot;, &quot;#ff7f7f&quot;, 1, 0.9))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_2&quot;, &quot;Trps1&quot;, &quot;#ff6666&quot;, 1, 0.9))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_3&quot;, &quot;Runx1&quot;, &quot;#ff4c4c&quot;, 1, 0.9))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_4&quot;, &quot;Ptprc&quot;, &quot;#ff3232&quot;, 1, 0.9))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Immune_5&quot;, &quot;Adap2&quot;, &quot;#ff1919&quot;, 1, 0.9))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_1&quot;, &quot;Dcn&quot;, &quot;#ffff4d&quot;, 1, 2.4))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_2&quot;, &quot;Celf2&quot;, &quot;#ffff33&quot;, 1, 2.4))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_3&quot;, &quot;Meg3&quot;, &quot;#ffff1a&quot;, 1, 2.4))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_4&quot;, &quot;Col1a2&quot;, &quot;#ffff00&quot;, 1, 2.4))
-marks_colors &lt;- rbind(marks_colors, c(&quot;Progenitor_5&quot;, &quot;Col3a1&quot;, &quot;#e6e600&quot;, 1, 2.4))
-marks_colors &lt;- as.data.frame(marks_colors)
-colnames(marks_colors) &lt;- c(&quot;group&quot;, &quot;gene&quot;, &quot;color&quot;, &quot;priority&quot;, &quot;T_fold&quot;)
-marks_colors$priority &lt;- as.integer(marks_colors$priority)
-marks_colors$T_fold &lt;- as.numeric(marks_colors$T_fold)
 
-load(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda&quot;)
-dims &lt;- data.frame(x = object@sc_x, 
-                   y = object@sc_y)
+# python to define the optimal accuracy number
+import warnings
+warnings.filterwarnings(&quot;ignore&quot;)
+from SCCAF import *
 
-load(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&quot;)
-tmp1 &lt;- data.frame(cells = names(object@mc), cols = object@mc)
-tmp2 &lt;- data.frame(cols = object@colors)
-teste &lt;- merge(tmp1, tmp2, by.x = &quot;cols&quot;, by.y = &quot;row.names&quot;)
-teste$cols &lt;- NULL
+ad = sc.read(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;)
 
-teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Adipocyte&quot;, marks_colors$group)], &quot;Adipocytes&quot;, &quot;Unknown&quot;)
-teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Progenitor&quot;, marks_colors$group)], &quot;Progenitors&quot;, teste$cellType)
-teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Immune&quot;, marks_colors$group)], &quot;Immunes&quot;, teste$cellType)
-teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Endothelial&quot;, marks_colors$group)], &quot;Endothelials&quot;, teste$cellType)
-tab &lt;- merge(dims, teste, by.x = &quot;row.names&quot;, by.y = &quot;cells&quot;)
+y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_Round0'],n=100)
+aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
+plt.show()
 
-## Assign sccaf clusters to metacell results
-data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;)
-infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv&quot;)
 
-new_cluster &lt;- infos$L1_result
-names(new_cluster) &lt;- rownames(infos)
-new_cluster &lt;- as.factor(new_cluster)
-data$clusters_sccaf &lt;- new_cluster
 
-infos &lt;- data@meta.data
-infos &lt;- infos[tab$Row.names, ]
 
-final &lt;- merge(infos, tab, by.x = &quot;row.names&quot;, by.y = &quot;Row.names&quot;)
+##### Optimisation and general purpose usage
+cd /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/
+sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.669 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.pdf
 
-Idents(data) &lt;- data$clusters_sccaf
-new.cluster.ids &lt;- c(&quot;E1&quot;, &quot;P1&quot;, &quot;P2&quot;, &quot;A1&quot;, &quot;A2&quot;, &quot;P3&quot;, &quot;P4&quot;, &quot;I1&quot;, &quot;A3&quot;, &quot;A4&quot;, &quot;E2&quot;, &quot;I2&quot;, &quot;I3&quot;, &quot;P5&quot;)
-names(new.cluster.ids) &lt;- levels(data)
-data &lt;- RenameIdents(data, new.cluster.ids)
-Idents(data) &lt;- factor(Idents(data), levels = c('A1', 'A2', 'A3', 'A4', 'E1', 'E2', 'I1', 'I2', 'I3', 'P1', 'P2', 'P3', 'P4', 'P5'))
 
-## Selecting only the 4 adipocytes clusters
-cells &lt;- names(Idents(data))[which(Idents(data) == &quot;A1&quot; | Idents(data) == &quot;A2&quot; | Idents(data) == &quot;A3&quot; | Idents(data) == &quot;A4&quot;)]
+##### Parallel run of assessments
+sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
 
-## Subsetting adipocyte clusters from all
-data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds&quot;)
-data &lt;- subset(data, cells = cells)
 
-## Cell cycle genes
-m.s.genes &lt;- c(&quot;Gmnn&quot;, &quot;Rad51&quot;, &quot;Prim1&quot;, &quot;Dscc1&quot;, &quot;Cdca7&quot;, &quot;Slbp&quot;, &quot;Mcm7&quot;, &quot;Cenpu&quot;, &quot;Pold3&quot;, 
-               &quot;Ccne2&quot;, &quot;Mcm4&quot;, &quot;Polr1b&quot;, &quot;Fen1&quot;, &quot;Rad51ap1&quot;, &quot;Tyms&quot;, &quot;Usp1&quot;, &quot;Rrm2&quot;, &quot;Wdr76&quot;, 
-               &quot;Dtl&quot;, &quot;Rrm1&quot;, &quot;Gins2&quot;, &quot;Tipin&quot;, &quot;Hells&quot;, &quot;Ubr7&quot;, &quot;Chaf1b&quot;, &quot;Clspn&quot;, &quot;E2f8&quot;, &quot;Mcm5&quot;, 
-               &quot;Nasp&quot;, &quot;Pcna&quot;, &quot;Mrpl36&quot;, &quot;Rfc2&quot;, &quot;Cdc45&quot;, &quot;Casp8ap2&quot;, &quot;Mcm6&quot;, &quot;Exo1&quot;, &quot;Pola1&quot;, &quot;Cdc6&quot;, 
-               &quot;Ung&quot;, &quot;Uhrf1&quot;, &quot;Blm&quot;, &quot;Msh2&quot;)
-m.g2m.genes &lt;- c(&quot;Cdk1&quot;, &quot;Tmpo&quot;, &quot;Smc4&quot;, &quot;Tacc3&quot;, &quot;Mki67&quot;, &quot;Ckap2l&quot;, &quot;Cks2&quot;, &quot;Cdc25c&quot;, &quot;Nusap1&quot;, &quot;Kif11&quot;, 
-                 &quot;Top2a&quot;, &quot;Cdca3&quot;, &quot;Cks1b&quot;, &quot;Ect2&quot;, &quot;Ckap5&quot;, &quot;Ckap2&quot;, &quot;Cenpa&quot;, &quot;Cdca2&quot;, &quot;Ncapd2&quot;, &quot;Aurkb&quot;, 
-                 &quot;Cenpf&quot;, &quot;Gtse1&quot;, &quot;Birc5&quot;, &quot;Bub1&quot;, &quot;Cdca8&quot;, &quot;Anp32e&quot;, &quot;Rangap1&quot;, &quot;Tpx2&quot;, &quot;Hjurp&quot;, &quot;Lbr&quot;, 
-                 &quot;Dlgap5&quot;, &quot;Psrc1&quot;, &quot;Ndc80&quot;, &quot;Nek2&quot;, &quot;Cbx5&quot;, &quot;Ube2c&quot;, &quot;Gas2l3&quot;, &quot;G2e3&quot;, &quot;Cdc20&quot;, &quot;Hmgb2&quot;, 
-                 &quot;Cenpe&quot;, &quot;Nuf2&quot;, &quot;Anln&quot;, &quot;Ttk&quot;, &quot;Kif2c&quot;, &quot;Kif20b&quot;, &quot;Aurka&quot;, &quot;Hmmr&quot;, &quot;Pimreg&quot;, &quot;Cks1brt&quot;, 
-                 &quot;Tubb4b&quot;, &quot;Kif23&quot;, &quot;Ccnb2&quot;, &quot;Ctcf&quot;)
+##### Merging parallel runs to produce plot
+sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly -r /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds-acc-comparison-plot.png
 
-## nFeature_RNA based cell thresholding
-data &lt;- subset(data, subset = nFeature_RNA &lt; 2000)
 
-## Scoring cell cycle phases
-data &lt;- CellCycleScoring(data, s.features = m.s.genes, g2m.features = m.g2m.genes, set.ident = TRUE)
 
-## Using regularized negative binomial regression to normalize UMI count data regressing out nCount_RNA, S.Score and G2M.Score variables
-data &lt;- SCTransform(data, vars.to.regress = c(&quot;nCount_RNA&quot;, &quot;S.Score&quot;, &quot;G2M.Score&quot;), verbose = TRUE)
-
-## Running PCA
-data &lt;- RunPCA(data)
-
-## Defining the best number of PC that has a explained variance greater than 80%
-dp &lt;- data@reductions$pca@stdev
-dp &lt;- dp^2
-for (z in 1:length(dp)) {
-  soma &lt;- sum(dp[1:z])/sum(dp)
-  if (soma &gt;= 0.8) {
-    best_pc &lt;- z
-    break()
-  }
-}
-
-## RunUMAP
-data &lt;- RunUMAP(data, dims = 1:best_pc)
-
-## RunTSNE
-data &lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = T)
-
-## Saving RDS file
-saveRDS(data, &quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+# python
+import scanpy as sc
+adata = sc.read(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad&quot;)
+adata.write_csvs(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results&quot;, sep='\t', skip_data=True)
 </code></pre>
 
     </div>

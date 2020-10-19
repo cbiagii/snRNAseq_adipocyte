@@ -30,7 +30,8 @@
   
     
   
-  <meta name="description" content="## plotMonocle plotMonocle &lt;- function(cds, gene) { if (sum(gene %in% rownames(cds)) == 0) { stop(&#39;None gene found in dataset&#39;) } if (sum(gene %in% rownames(cds)) != length(gene)) { gene &lt;- gene[gene %in% rownames(cds)] } suppressPackageStartupMessages(library(dplyr)) suppressPackageStartupMessages(library(monocle)) suppressPackageStartupMessages(library(scales)) suppressPackageStartupMessages(library(ggpubr)) suppressPackageStartupMessages(library(viridis)) return_rotation_mat &lt;- function(theta) { theta &lt;- theta/180 * pi matrix(c(cos(theta), sin(theta), -sin(theta), cos(theta)), nrow = 2) } monocle_theme_opts &lt;- function() { theme(strip.">
+  <meta name="description" content="It is necessary to load some functions that were written directly to plot some results in the following codes.
+SeuratToH5ad This function converts a Seurat Object to h5ad file to perform SCCAF analysis:">
 
   
   <link rel="alternate" hreflang="en-us" href="https://cbiagii.github.io/AdipoSNAP/post/2_functions/">
@@ -253,8 +254,9 @@
   
   <meta property="og:site_name" content="AdipoSNAP">
   <meta property="og:url" content="https://cbiagii.github.io/AdipoSNAP/post/2_functions/">
-  <meta property="og:title" content="2 - Functions | AdipoSNAP">
-  <meta property="og:description" content="## plotMonocle plotMonocle &lt;- function(cds, gene) { if (sum(gene %in% rownames(cds)) == 0) { stop(&#39;None gene found in dataset&#39;) } if (sum(gene %in% rownames(cds)) != length(gene)) { gene &lt;- gene[gene %in% rownames(cds)] } suppressPackageStartupMessages(library(dplyr)) suppressPackageStartupMessages(library(monocle)) suppressPackageStartupMessages(library(scales)) suppressPackageStartupMessages(library(ggpubr)) suppressPackageStartupMessages(library(viridis)) return_rotation_mat &lt;- function(theta) { theta &lt;- theta/180 * pi matrix(c(cos(theta), sin(theta), -sin(theta), cos(theta)), nrow = 2) } monocle_theme_opts &lt;- function() { theme(strip."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
+  <meta property="og:title" content="2 - Loading functions | AdipoSNAP">
+  <meta property="og:description" content="It is necessary to load some functions that were written directly to plot some results in the following codes.
+SeuratToH5ad This function converts a Seurat Object to h5ad file to perform SCCAF analysis:"><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
@@ -286,7 +288,7 @@
     "@type": "WebPage",
     "@id": "https://cbiagii.github.io/AdipoSNAP/post/2_functions/"
   },
-  "headline": "2 - Functions",
+  "headline": "2 - Loading functions",
   
   "datePublished": "2020-10-17T00:00:00Z",
   "dateModified": "2020-10-17T00:00:00Z",
@@ -304,7 +306,7 @@
       "url": "https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "## plotMonocle plotMonocle \u0026lt;- function(cds, gene) { if (sum(gene %in% rownames(cds)) == 0) { stop('None gene found in dataset') } if (sum(gene %in% rownames(cds)) != length(gene)) { gene \u0026lt;- gene[gene %in% rownames(cds)] } suppressPackageStartupMessages(library(dplyr)) suppressPackageStartupMessages(library(monocle)) suppressPackageStartupMessages(library(scales)) suppressPackageStartupMessages(library(ggpubr)) suppressPackageStartupMessages(library(viridis)) return_rotation_mat \u0026lt;- function(theta) { theta \u0026lt;- theta/180 * pi matrix(c(cos(theta), sin(theta), -sin(theta), cos(theta)), nrow = 2) } monocle_theme_opts \u0026lt;- function() { theme(strip."
+  "description": "It is necessary to load some functions that were written directly to plot some results in the following codes.\nSeuratToH5ad This function converts a Seurat Object to h5ad file to perform SCCAF analysis:"
 }
 </script>
 
@@ -322,7 +324,7 @@
 
 
 
-  <title>2 - Functions | AdipoSNAP</title>
+  <title>2 - Loading functions | AdipoSNAP</title>
 
 </head>
 <body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="dark">
@@ -482,7 +484,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>2 - Functions</h1>
+  <h1>2 - Loading functions</h1>
 
   
 
@@ -541,8 +543,122 @@
   <div class="article-container">
 
     <div class="article-style">
-      <pre><code>## plotMonocle
-plotMonocle &lt;- function(cds, gene) {
+      <p>It is necessary to load some functions that were written directly to plot some results in the following codes.</p>
+<h3 id="seurattoh5ad">SeuratToH5ad</h3>
+<p>This function converts a <code>Seurat Object</code> to <code>h5ad</code> file to perform SCCAF analysis:</p>
+<pre><code class="language-r">SeuratToH5ad &lt;- function(seurat_object, filename, assay = NULL, res = 1) {
+  library(reticulate)
+  
+  if (!py_module_available(&quot;anndata&quot;) | !py_module_available(&quot;scanpy&quot;) | !py_module_available(&quot;igraph&quot;) | !py_module_available(&quot;louvain&quot;)) {
+    stop(&quot;Please install the anndata python module&quot;)
+  }
+  ad &lt;- import(&quot;anndata&quot;)
+  sc &lt;- import(&quot;scanpy&quot;)
+  
+  message(paste(&quot;Starting to fix the mess...&quot;))
+  
+  raw &lt;- seurat_object@assays$RNA@data
+  if (assay == &quot;RNA&quot;) {
+    X &lt;- as.matrix(seurat_object@assays$RNA@data)
+  } else if (assay == &quot;SCT&quot;) {
+    X &lt;- as.matrix(seurat_object@assays$SCT@data)
+  } else {
+    stop(&quot;Please select an existent assay&quot;)
+  }
+  
+  cell_names &lt;- colnames(x = X)
+  gene_names &lt;- rownames(x = X)
+  raw &lt;- as(object = raw, Class = &quot;dgCMatrix&quot;)
+  
+  scipy &lt;- import(module = 'scipy.sparse', convert = FALSE)
+  sp_sparse_csc &lt;- scipy$csc_matrix
+  raw.rownames &lt;- rownames(x = raw)
+  raw &lt;- sp_sparse_csc(
+    tuple(np_array(raw@x), np_array(raw@i), np_array(raw@p)),
+    shape = tuple(raw@Dim[1], raw@Dim[2])
+  )
+  
+  raw &lt;- raw$T
+  raw &lt;- dict(X = raw, var = dict(var_names = raw.rownames))
+  
+  X &lt;- np_array(t(x = X))
+  
+  obsm &lt;- list()
+  for (dr in names(seurat_object@reductions)) {
+    obsm[[paste0(&quot;X_&quot;,dr)]] &lt;- np_array(Embeddings(
+      object = seurat_object,
+      reduction = dr
+    ))
+  }
+  obsm &lt;- dict(obsm)
+  meta_data &lt;- seurat_object@meta.data
+  if (&quot;nCount_RNA&quot; %in% colnames(x = meta_data)) {
+    colnames(x = meta_data) &lt;- gsub(
+      pattern = &quot;nCount_RNA&quot;,
+      replacement = &quot;n_counts&quot;,
+      x = colnames(x = meta_data)
+    )
+  }
+  if (&quot;nFeature_RNA&quot; %in% colnames(x = meta_data)) {
+    colnames(x = meta_data) &lt;- gsub(
+      pattern = &quot;nFeature_RNA&quot;,
+      replacement = &quot;n_genes&quot;,
+      x = colnames(x = meta_data)
+    )
+  }
+  colnames(x = meta_data) &lt;- gsub(
+    pattern = &quot;\\.&quot;,
+    replacement = &quot;_&quot;,
+    x = colnames(x = meta_data)
+  )
+  
+  anndata.object &lt;- ad$AnnData(
+    raw = raw,
+    X = X,
+    obs = meta_data,
+    obsm = obsm
+  )
+  anndata.object$var_names &lt;- gene_names
+  anndata.object$obs_names &lt;- cell_names
+  
+  message(paste(&quot;Clustering for resolution:&quot;, res))
+  sc$pp$neighbors(anndata.object)
+  sc$tl$louvain(anndata.object, resolution=res, key_added = &quot;L1_Round0&quot;)
+  
+  message(paste(&quot;Writing to h5ad file...&quot;))
+  anndata.object$write(filename)
+  message(paste(&quot;Finished!!&quot;))
+}
+</code></pre>
+<h3 id="volcanoplot">volcano.plot</h3>
+<p>This function plot a <code>volcano plot</code> with results of function <code>FindAllMarkers</code> from Seurat package:</p>
+<pre><code class="language-r">volcano.plot &lt;- function(res, upGenes = NULL, downGenes = NULL){
+  mut &lt;- as.data.frame(res)
+  mut &lt;- na.omit(mut)
+  mutateddf &lt;- mutate(mut, sig=ifelse(mut$gene %in% upGenes,&quot;Up_regulated&quot;, ifelse(mut$gene %in% downGenes , &quot;Down_regulated&quot;, &quot;Not_different&quot;)))
+  rownames(mutateddf) &lt;- rownames(mut)
+  input &lt;- cbind(gene=rownames(mutateddf), mutateddf)
+  colnames(input)[which(colnames(input)==&quot;sig&quot;)] &lt;- &quot;Significance&quot;
+  input[,1] &lt;- NULL
+  input[which(input[[&quot;p_val_adj&quot;]] == 0), &quot;p_val_adj&quot;] &lt;- min(input[which(input[[&quot;p_val_adj&quot;]] != 0), &quot;p_val_adj&quot;], na.rm = TRUE) * 10^-1
+  
+  p &lt;- ggplot(input, aes(avg_logFC, -log10(p_val_adj))) +
+    geom_point(colour=&quot;white&quot;) +
+    ggtitle(&quot;&quot;) +
+    theme_bw() +
+    scale_y_continuous(limits = c(0, -log10(input$p_val_adj)))
+  p &lt;- p + geom_point(data=subset(input, input$Significance == 'Not_different'), aes(avg_logFC, -log10(p_val_adj)), colour=&quot;gray70&quot;) +
+    geom_point(data=subset(input, input$Significance == 'Up_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour=&quot;firebrick4&quot;) +
+    geom_point(data=subset(input, input$Significance == 'Down_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour=&quot;dodgerblue&quot;) +
+    xlab(&quot;logFC&quot;) + ylab(&quot;-log10(padj)&quot;)
+  p &lt;- p + geom_text_repel(data=input[c(head(upGenes, 5), head(downGenes, 5)), ], aes(label=gene))
+  
+  return(p)
+}
+</code></pre>
+<h3 id="plotmonocle">plotMonocle</h3>
+<p>This function plot the monocle trajectory for one or more genes:</p>
+<pre><code class="language-r">plotMonocle &lt;- function(cds, gene) {
   if (sum(gene %in% rownames(cds)) == 0) {
     stop('None gene found in dataset')
   }
@@ -629,120 +745,6 @@ plotMonocle &lt;- function(cds, gene) {
   pt2 &lt;- ggarrange(plotlist = plotlist, common.legend = T)
   
   return(pt2)
-}
-
-
-
-## SeuratToH5ad
-SeuratToH5ad &lt;- function(seurat_object, filename, assay = NULL, res = 1) {
-  library(reticulate)
-  
-  if (!py_module_available(&quot;anndata&quot;) | !py_module_available(&quot;scanpy&quot;) | !py_module_available(&quot;igraph&quot;) | !py_module_available(&quot;louvain&quot;)) {
-    stop(&quot;Please install the anndata python module&quot;)
-  }
-  ad &lt;- import(&quot;anndata&quot;)
-  sc &lt;- import(&quot;scanpy&quot;)
-  
-  message(paste(&quot;Starting to fix the mess...&quot;))
-  
-  raw &lt;- seurat_object@assays$RNA@data
-  if (assay == &quot;RNA&quot;) {
-    X &lt;- as.matrix(seurat_object@assays$RNA@data)
-  } else if (assay == &quot;SCT&quot;) {
-    X &lt;- as.matrix(seurat_object@assays$SCT@data)
-  } else {
-    stop(&quot;Please select an existent assay&quot;)
-  }
-  
-  cell_names &lt;- colnames(x = X)
-  gene_names &lt;- rownames(x = X)
-  raw &lt;- as(object = raw, Class = &quot;dgCMatrix&quot;)
-  
-  scipy &lt;- import(module = 'scipy.sparse', convert = FALSE)
-  sp_sparse_csc &lt;- scipy$csc_matrix
-  raw.rownames &lt;- rownames(x = raw)
-  raw &lt;- sp_sparse_csc(
-    tuple(np_array(raw@x), np_array(raw@i), np_array(raw@p)),
-    shape = tuple(raw@Dim[1], raw@Dim[2])
-  )
-  
-  raw &lt;- raw$T
-  raw &lt;- dict(X = raw, var = dict(var_names = raw.rownames))
-  
-  X &lt;- np_array(t(x = X))
-  
-  obsm &lt;- list()
-  for (dr in names(seurat_object@reductions)) {
-    obsm[[paste0(&quot;X_&quot;,dr)]] &lt;- np_array(Embeddings(
-      object = seurat_object,
-      reduction = dr
-    ))
-  }
-  obsm &lt;- dict(obsm)
-  meta_data &lt;- seurat_object@meta.data
-  if (&quot;nCount_RNA&quot; %in% colnames(x = meta_data)) {
-    colnames(x = meta_data) &lt;- gsub(
-      pattern = &quot;nCount_RNA&quot;,
-      replacement = &quot;n_counts&quot;,
-      x = colnames(x = meta_data)
-    )
-  }
-  if (&quot;nFeature_RNA&quot; %in% colnames(x = meta_data)) {
-    colnames(x = meta_data) &lt;- gsub(
-      pattern = &quot;nFeature_RNA&quot;,
-      replacement = &quot;n_genes&quot;,
-      x = colnames(x = meta_data)
-    )
-  }
-  colnames(x = meta_data) &lt;- gsub(
-    pattern = &quot;\\.&quot;,
-    replacement = &quot;_&quot;,
-    x = colnames(x = meta_data)
-  )
-  
-  anndata.object &lt;- ad$AnnData(
-    raw = raw,
-    X = X,
-    obs = meta_data,
-    obsm = obsm
-  )
-  anndata.object$var_names &lt;- gene_names
-  anndata.object$obs_names &lt;- cell_names
-  
-  message(paste(&quot;Clustering for resolution:&quot;, res))
-  sc$pp$neighbors(anndata.object)
-  sc$tl$louvain(anndata.object, resolution=res, key_added = &quot;L1_Round0&quot;)
-  
-  message(paste(&quot;Writing to h5ad file...&quot;))
-  anndata.object$write(filename)
-  message(paste(&quot;Finished!!&quot;))
-}
-
-
-
-## volcano.plot
-volcano.plot &lt;- function(res, upGenes = NULL, downGenes = NULL){
-  mut &lt;- as.data.frame(res)
-  mut &lt;- na.omit(mut)
-  mutateddf &lt;- mutate(mut, sig=ifelse(mut$gene %in% upGenes,&quot;Up_regulated&quot;, ifelse(mut$gene %in% downGenes , &quot;Down_regulated&quot;, &quot;Not_different&quot;)))
-  rownames(mutateddf) &lt;- rownames(mut)
-  input &lt;- cbind(gene=rownames(mutateddf), mutateddf)
-  colnames(input)[which(colnames(input)==&quot;sig&quot;)] &lt;- &quot;Significance&quot;
-  input[,1] &lt;- NULL
-  input[which(input[[&quot;p_val_adj&quot;]] == 0), &quot;p_val_adj&quot;] &lt;- min(input[which(input[[&quot;p_val_adj&quot;]] != 0), &quot;p_val_adj&quot;], na.rm = TRUE) * 10^-1
-  
-  p &lt;- ggplot(input, aes(avg_logFC, -log10(p_val_adj))) +
-    geom_point(colour=&quot;white&quot;) +
-    ggtitle(&quot;&quot;) +
-    theme_bw() +
-    scale_y_continuous(limits = c(0, -log10(input$p_val_adj)))
-  p &lt;- p + geom_point(data=subset(input, input$Significance == 'Not_different'), aes(avg_logFC, -log10(p_val_adj)), colour=&quot;gray70&quot;) +
-    geom_point(data=subset(input, input$Significance == 'Up_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour=&quot;firebrick4&quot;) +
-    geom_point(data=subset(input, input$Significance == 'Down_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour=&quot;dodgerblue&quot;) +
-    xlab(&quot;logFC&quot;) + ylab(&quot;-log10(padj)&quot;)
-  p &lt;- p + geom_text_repel(data=input[c(head(upGenes, 5), head(downGenes, 5)), ], aes(label=gene))
-  
-  return(p)
 }
 </code></pre>
 

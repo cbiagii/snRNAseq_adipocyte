@@ -30,10 +30,11 @@
   
     
   
-  <meta name="description" content="library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;) SeuratToH5ad(data, &quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;, &quot;RNA&quot;, 1) # python to define the optimal accuracy number import warnings warnings.filterwarnings(&quot;ignore&quot;) from SCCAF import * ad = sc.read(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;) y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.">
+  <meta name="description" content="Performing preprocessing using regularized negative binomial regression to normalize UMI count data.
+## Loading R packages library(Seurat) library(SeuratWrappers) library(future) ## Setting up the threads for 12 workers options(future.globals.maxSize = &#43;Inf) plan(&quot;multiprocess&quot;, workers = 12) ## Loading data Cellranger output format data &lt;- Read10X(&quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&quot;) ## Reading metadata annotation anno &lt;- read.">
 
   
-  <link rel="alternate" hreflang="en-us" href="https://cbiagii.github.io/AdipoSNAP/post/8_sccaf_adipocytes/">
+  <link rel="alternate" hreflang="en-us" href="https://cbiagii.github.io/AdipoSNAP/post/5_sct_preprocess/">
 
   
 
@@ -236,7 +237,7 @@
   <link rel="icon" type="image/png" href="/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_32x32_fill_lanczos_center_2.png">
   <link rel="apple-touch-icon" type="image/png" href="/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png">
 
-  <link rel="canonical" href="https://cbiagii.github.io/AdipoSNAP/post/8_sccaf_adipocytes/">
+  <link rel="canonical" href="https://cbiagii.github.io/AdipoSNAP/post/5_sct_preprocess/">
 
   
   
@@ -252,15 +253,16 @@
   <meta property="twitter:card" content="summary">
   
   <meta property="og:site_name" content="AdipoSNAP">
-  <meta property="og:url" content="https://cbiagii.github.io/AdipoSNAP/post/8_sccaf_adipocytes/">
-  <meta property="og:title" content="8 - SCCAF Adipocytes | AdipoSNAP">
-  <meta property="og:description" content="library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;) SeuratToH5ad(data, &quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;, &quot;RNA&quot;, 1) # python to define the optimal accuracy number import warnings warnings.filterwarnings(&quot;ignore&quot;) from SCCAF import * ad = sc.read(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;) y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
+  <meta property="og:url" content="https://cbiagii.github.io/AdipoSNAP/post/5_sct_preprocess/">
+  <meta property="og:title" content="5 - SCT Preprocessing | AdipoSNAP">
+  <meta property="og:description" content="Performing preprocessing using regularized negative binomial regression to normalize UMI count data.
+## Loading R packages library(Seurat) library(SeuratWrappers) library(future) ## Setting up the threads for 12 workers options(future.globals.maxSize = &#43;Inf) plan(&quot;multiprocess&quot;, workers = 12) ## Loading data Cellranger output format data &lt;- Read10X(&quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&quot;) ## Reading metadata annotation anno &lt;- read."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
-      <meta property="article:published_time" content="2020-10-11T00:00:00&#43;00:00">
+      <meta property="article:published_time" content="2020-10-14T00:00:00&#43;00:00">
     
-    <meta property="article:modified_time" content="2020-10-11T00:00:00&#43;00:00">
+    <meta property="article:modified_time" content="2020-10-14T00:00:00&#43;00:00">
   
 
   
@@ -284,12 +286,12 @@
   "@type": "BlogPosting",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://cbiagii.github.io/AdipoSNAP/post/8_sccaf_adipocytes/"
+    "@id": "https://cbiagii.github.io/AdipoSNAP/post/5_sct_preprocess/"
   },
-  "headline": "8 - SCCAF Adipocytes",
+  "headline": "5 - SCT Preprocessing",
   
-  "datePublished": "2020-10-11T00:00:00Z",
-  "dateModified": "2020-10-11T00:00:00Z",
+  "datePublished": "2020-10-14T00:00:00Z",
+  "dateModified": "2020-10-14T00:00:00Z",
   
   "author": {
     "@type": "Person",
@@ -304,7 +306,7 @@
       "url": "https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "library(Seurat) source(\u0026quot;/projects/cangen/coliveir/SeuratToH5ad.R\u0026quot;) data \u0026lt;- readRDS(\u0026quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds\u0026quot;) SeuratToH5ad(data, \u0026quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad\u0026quot;, \u0026quot;RNA\u0026quot;, 1) # python to define the optimal accuracy number import warnings warnings.filterwarnings(\u0026quot;ignore\u0026quot;) from SCCAF import * ad = sc.read(\u0026quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad\u0026quot;) y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad."
+  "description": "Performing preprocessing using regularized negative binomial regression to normalize UMI count data.\n## Loading R packages library(Seurat) library(SeuratWrappers) library(future) ## Setting up the threads for 12 workers options(future.globals.maxSize = +Inf) plan(\u0026quot;multiprocess\u0026quot;, workers = 12) ## Loading data Cellranger output format data \u0026lt;- Read10X(\u0026quot;/Users/biagi/PhD/AdipoSNAP/data/10x/\u0026quot;) ## Reading metadata annotation anno \u0026lt;- read."
 }
 </script>
 
@@ -322,7 +324,7 @@
 
 
 
-  <title>8 - SCCAF Adipocytes | AdipoSNAP</title>
+  <title>5 - SCT Preprocessing | AdipoSNAP</title>
 
 </head>
 <body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="dark">
@@ -482,7 +484,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>8 - SCCAF Adipocytes</h1>
+  <h1>5 - SCT Preprocessing</h1>
 
   
 
@@ -501,7 +503,7 @@
     
       
     
-    Oct 11, 2020
+    Oct 14, 2020
   </span>
   
 
@@ -541,46 +543,84 @@
   <div class="article-container">
 
     <div class="article-style">
-      <pre><code>library(Seurat)
-source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;)
-data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
-SeuratToH5ad(data, &quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;, &quot;RNA&quot;, 1)
+      <p>Performing preprocessing using regularized negative binomial regression to normalize UMI count data.</p>
+<pre><code class="language-r">## Loading R packages
+library(Seurat)
+library(SeuratWrappers)
+library(future)
 
+## Setting up the threads for 12 workers
+options(future.globals.maxSize = +Inf)
+plan(&quot;multiprocess&quot;, workers = 12)
 
-# python to define the optimal accuracy number
-import warnings
-warnings.filterwarnings(&quot;ignore&quot;)
-from SCCAF import *
+## Loading data Cellranger output format
+data &lt;- Read10X(&quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&quot;)
 
-ad = sc.read(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&quot;)
+## Reading metadata annotation
+anno &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv&quot;)
 
-y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_Round0'],n=100)
-aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
-plt.show()
+## Creating Seurat object
+data &lt;- CreateSeuratObject(counts = data,
+                           project = &quot;10x&quot;, 
+                           meta.data = anno, 
+                           min.cells = 3,
+                           min.features = 200)
 
+## Subset remaining only N condition
+data &lt;- subset(data, cells = rownames(data@meta.data)[which(data@meta.data$condition == &quot;N&quot;)])
 
+## Cell cycle genes
+m.s.genes &lt;- c(&quot;Gmnn&quot;, &quot;Rad51&quot;, &quot;Prim1&quot;, &quot;Dscc1&quot;, &quot;Cdca7&quot;, &quot;Slbp&quot;, &quot;Mcm7&quot;, &quot;Cenpu&quot;, &quot;Pold3&quot;, 
+               &quot;Ccne2&quot;, &quot;Mcm4&quot;, &quot;Polr1b&quot;, &quot;Fen1&quot;, &quot;Rad51ap1&quot;, &quot;Tyms&quot;, &quot;Usp1&quot;, &quot;Rrm2&quot;, &quot;Wdr76&quot;, 
+               &quot;Dtl&quot;, &quot;Rrm1&quot;, &quot;Gins2&quot;, &quot;Tipin&quot;, &quot;Hells&quot;, &quot;Ubr7&quot;, &quot;Chaf1b&quot;, &quot;Clspn&quot;, &quot;E2f8&quot;, &quot;Mcm5&quot;, 
+               &quot;Nasp&quot;, &quot;Pcna&quot;, &quot;Mrpl36&quot;, &quot;Rfc2&quot;, &quot;Cdc45&quot;, &quot;Casp8ap2&quot;, &quot;Mcm6&quot;, &quot;Exo1&quot;, &quot;Pola1&quot;, &quot;Cdc6&quot;, 
+               &quot;Ung&quot;, &quot;Uhrf1&quot;, &quot;Blm&quot;, &quot;Msh2&quot;)
+m.g2m.genes &lt;- c(&quot;Cdk1&quot;, &quot;Tmpo&quot;, &quot;Smc4&quot;, &quot;Tacc3&quot;, &quot;Mki67&quot;, &quot;Ckap2l&quot;, &quot;Cks2&quot;, &quot;Cdc25c&quot;, &quot;Nusap1&quot;, &quot;Kif11&quot;, 
+                 &quot;Top2a&quot;, &quot;Cdca3&quot;, &quot;Cks1b&quot;, &quot;Ect2&quot;, &quot;Ckap5&quot;, &quot;Ckap2&quot;, &quot;Cenpa&quot;, &quot;Cdca2&quot;, &quot;Ncapd2&quot;, &quot;Aurkb&quot;, 
+                 &quot;Cenpf&quot;, &quot;Gtse1&quot;, &quot;Birc5&quot;, &quot;Bub1&quot;, &quot;Cdca8&quot;, &quot;Anp32e&quot;, &quot;Rangap1&quot;, &quot;Tpx2&quot;, &quot;Hjurp&quot;, &quot;Lbr&quot;, 
+                 &quot;Dlgap5&quot;, &quot;Psrc1&quot;, &quot;Ndc80&quot;, &quot;Nek2&quot;, &quot;Cbx5&quot;, &quot;Ube2c&quot;, &quot;Gas2l3&quot;, &quot;G2e3&quot;, &quot;Cdc20&quot;, &quot;Hmgb2&quot;, 
+                 &quot;Cenpe&quot;, &quot;Nuf2&quot;, &quot;Anln&quot;, &quot;Ttk&quot;, &quot;Kif2c&quot;, &quot;Kif20b&quot;, &quot;Aurka&quot;, &quot;Hmmr&quot;, &quot;Pimreg&quot;, &quot;Cks1brt&quot;, 
+                 &quot;Tubb4b&quot;, &quot;Kif23&quot;, &quot;Ccnb2&quot;, &quot;Ctcf&quot;)
 
+## nFeature_RNA based cell thresholding
+data &lt;- subset(data, subset = nFeature_RNA &gt; 200 &amp; nFeature_RNA &lt; 3000)
 
-##### Optimisation and general purpose usage
-cd /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/
-sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.669 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.pdf
+## Scoring cell cycle phases
+data &lt;- CellCycleScoring(data, s.features = m.s.genes, g2m.features = m.g2m.genes, set.ident = TRUE)
 
+## Using regularized negative binomial regression to normalize UMI count data regressing out nCount_RNA, S.Score and G2M.Score variables
+data &lt;- SCTransform(data, vars.to.regress = c(&quot;nCount_RNA&quot;, &quot;S.Score&quot;, &quot;G2M.Score&quot;), verbose = TRUE)
 
-##### Parallel run of assessments
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
+## Running PCA
+data &lt;- RunPCA(data)
 
+## Defining the best number of PC that has a explained variance greater than 80%
+dp &lt;- data@reductions$pca@stdev
+dp &lt;- dp^2
+for (z in 1:length(dp)) {
+  soma &lt;- sum(dp[1:z])/sum(dp)
+  if (soma &gt;= 0.8) {
+    best_pc &lt;- z
+    break()
+  }
+}
 
-##### Merging parallel runs to produce plot
-sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly -r /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds-acc-comparison-plot.png
+## Clustering
+data &lt;- FindNeighbors(data, dims = 1:best_pc)
+data &lt;- FindClusters(data)
 
+## RunUMAP
+data &lt;- RunUMAP(data, dims = 1:best_pc)
 
+## RunTSNE
+data &lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = T)
 
-# python
-import scanpy as sc
-adata = sc.read(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad&quot;)
-adata.write_csvs(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results&quot;, sep='\t', skip_data=True)
+## Saving RDS file
+saveRDS(data, &quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;)
+
+## Running Adaptively-thresholded Low Rank Approximation (ALRA)
+data &lt;- SeuratWrappers::RunALRA(data)
+saveRDS(data, &quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&quot;)
 </code></pre>
 
     </div>

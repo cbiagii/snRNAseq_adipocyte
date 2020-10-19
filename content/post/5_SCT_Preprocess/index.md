@@ -1,11 +1,13 @@
 ---
-date: "2020-10-12"
+date: "2020-10-14"
 diagram: true
 math: true
-title: 7 - SCT Preprocessing
+title: 5 - SCT Preprocessing
 ---
 
-```
+Performing preprocessing using regularized negative binomial regression to normalize UMI count data.
+
+```r
 ## Loading R packages
 library(Seurat)
 library(SeuratWrappers)

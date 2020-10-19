@@ -1,8 +1,8 @@
 ---
-date: "2020-10-13"
+date: "2020-10-12"
 diagram: true
 math: true
-title: 6 - Metacell SCT
+title: 7 - Metacell SCT
 ---
 
 ```

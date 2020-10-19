@@ -5,6 +5,8 @@ math: true
 title: 4 - Classifying cell types from original data using metacell
 ---
 
+In this section we will perform the cell type classification using `metacell` package:
+
 ```
 ## Loading R packages
 library(Seurat)

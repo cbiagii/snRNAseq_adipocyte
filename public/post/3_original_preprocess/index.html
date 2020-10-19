@@ -30,7 +30,8 @@
   
     
   
-  <meta name="description" content="## Loading R packages library(Seurat) ## Loading data Cellranger output format data &lt;- Read10X(&quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&quot;) ## Reading metadata annotation anno &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv&quot;) ## Creating Seurat object data &lt;- CreateSeuratObject(counts = data, project = &quot;Adipocyte&quot;, meta.">
+  <meta name="description" content="Performing preprocessing using the original clustering information
+## Loading R packages library(Seurat) ## Loading data Cellranger output format data &lt;- Read10X(&quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&quot;) ## Reading metadata annotation anno &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv&quot;) ## Creating Seurat object data &lt;- CreateSeuratObject(counts = data, project = &quot;Adipocyte&quot;, meta.">
 
   
   <link rel="alternate" hreflang="en-us" href="https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/">
@@ -253,8 +254,9 @@
   
   <meta property="og:site_name" content="AdipoSNAP">
   <meta property="og:url" content="https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/">
-  <meta property="og:title" content="3 - Original Preprocessing | AdipoSNAP">
-  <meta property="og:description" content="## Loading R packages library(Seurat) ## Loading data Cellranger output format data &lt;- Read10X(&quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&quot;) ## Reading metadata annotation anno &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv&quot;) ## Creating Seurat object data &lt;- CreateSeuratObject(counts = data, project = &quot;Adipocyte&quot;, meta."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
+  <meta property="og:title" content="3 - Original preprocessing | AdipoSNAP">
+  <meta property="og:description" content="Performing preprocessing using the original clustering information
+## Loading R packages library(Seurat) ## Loading data Cellranger output format data &lt;- Read10X(&quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&quot;) ## Reading metadata annotation anno &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv&quot;) ## Creating Seurat object data &lt;- CreateSeuratObject(counts = data, project = &quot;Adipocyte&quot;, meta."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
@@ -286,7 +288,7 @@
     "@type": "WebPage",
     "@id": "https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/"
   },
-  "headline": "3 - Original Preprocessing",
+  "headline": "3 - Original preprocessing",
   
   "datePublished": "2020-10-16T00:00:00Z",
   "dateModified": "2020-10-16T00:00:00Z",
@@ -304,7 +306,7 @@
       "url": "https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "## Loading R packages library(Seurat) ## Loading data Cellranger output format data \u0026lt;- Read10X(\u0026quot;/Users/biagi/PhD/AdipoSNAP/data/10x/\u0026quot;) ## Reading metadata annotation anno \u0026lt;- read.table(\u0026quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv\u0026quot;) ## Creating Seurat object data \u0026lt;- CreateSeuratObject(counts = data, project = \u0026quot;Adipocyte\u0026quot;, meta."
+  "description": "Performing preprocessing using the original clustering information\n## Loading R packages library(Seurat) ## Loading data Cellranger output format data \u0026lt;- Read10X(\u0026quot;/Users/biagi/PhD/AdipoSNAP/data/10x/\u0026quot;) ## Reading metadata annotation anno \u0026lt;- read.table(\u0026quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv\u0026quot;) ## Creating Seurat object data \u0026lt;- CreateSeuratObject(counts = data, project = \u0026quot;Adipocyte\u0026quot;, meta."
 }
 </script>
 
@@ -322,7 +324,7 @@
 
 
 
-  <title>3 - Original Preprocessing | AdipoSNAP</title>
+  <title>3 - Original preprocessing | AdipoSNAP</title>
 
 </head>
 <body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="dark">
@@ -482,7 +484,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>3 - Original Preprocessing</h1>
+  <h1>3 - Original preprocessing</h1>
 
   
 
@@ -541,7 +543,8 @@
   <div class="article-container">
 
     <div class="article-style">
-      <pre><code>## Loading R packages
+      <p>Performing preprocessing using the original clustering information</p>
+<pre><code class="language-r">## Loading R packages
 library(Seurat)
 
 ## Loading data Cellranger output format
