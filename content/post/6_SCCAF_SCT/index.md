@@ -2,10 +2,10 @@
 date: "2020-10-13"
 diagram: true
 math: true
-title: 6 - SCCAF SCT
+title: 6 - Finding optimal number of clusters in SCT data using SCCAF
 ---
 
-Creating
+Creating `h5ad` file to use as input in SCCAF:
 ```r
 library(Seurat)
 
@@ -16,8 +16,8 @@ SeuratToH5ad(data, "/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad", "SCT
 ```
 
 
+Defining the optimal accuracy number:
 ```python
-## Defining the optimal accuracy number
 import warnings
 warnings.filterwarnings("ignore")
 from SCCAF import *
@@ -30,15 +30,15 @@ plt.show()
 ```
 
 
+Optimisation and general purpose usage:
 ```python
-## Optimisation and general purpose usage
 cd /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/
   sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.796 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.pdf
 ```
 
 
+Parallel run of assessments:
 ```python
-## Parallel run of assessments
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
@@ -46,14 +46,14 @@ sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Use
 ```
 
 
+Merging parallel runs to produce plot
 ```python
-## Merging parallel runs to produce plot
 sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes -r /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds-acc-comparison-plot.png
 ```
 
 
+Exporting SCCAF results
 ```python
-## Exporting
 import scanpy as sc
 adata = sc.read("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad")
 adata.write_csvs("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results", sep='\t', skip_data=True)

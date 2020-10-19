@@ -626,7 +626,7 @@ saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_
       <link>https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/</link>
       <pubDate>Tue, 13 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/</guid>
-      <description>&lt;p&gt;Creating&lt;/p&gt;
+      <description>&lt;p&gt;Creating &lt;code&gt;h5ad&lt;/code&gt; file to use as input in SCCAF:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(Seurat)
 
 source(&amp;quot;/projects/cangen/coliveir/SeuratToH5ad.R&amp;quot;)
@@ -634,8 +634,8 @@ source(&amp;quot;/projects/cangen/coliveir/SeuratToH5ad.R&amp;quot;)
 data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&amp;quot;)
 SeuratToH5ad(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&amp;quot;, &amp;quot;SCT&amp;quot;, 1)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;## Defining the optimal accuracy number
-import warnings
+&lt;p&gt;Defining the optimal accuracy number&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import warnings
 warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
 from SCCAF import *
   

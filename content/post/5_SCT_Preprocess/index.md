@@ -5,8 +5,7 @@ math: true
 title: 5 - SCT Preprocessing
 ---
 
-Performing preprocessing using regularized negative binomial regression to normalize UMI count data.
-
+Performing preprocessing using regularized negative binomial regression (SCT) to normalize UMI count data.
 ```r
 ## Loading R packages
 library(Seurat)

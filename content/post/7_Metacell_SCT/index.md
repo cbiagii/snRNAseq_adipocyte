@@ -2,10 +2,11 @@
 date: "2020-10-12"
 diagram: true
 math: true
-title: 7 - Metacell SCT
+title: 7 - Classifying cell types from SCT data using metacell
 ---
 
-```
+In this section we will perform the cell type classification using `metacell` package:
+```r
 ## Loading R packages
 library(Seurat)
 library(future)

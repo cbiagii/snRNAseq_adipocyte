@@ -5,7 +5,8 @@ math: true
 title: 8 - Adipocytes Preprocessing
 ---
 
-```
+Performing preprocessing of adipocyte cell type.
+```r
 ## Loading R packages
 library(Seurat)
 
