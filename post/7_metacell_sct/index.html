@@ -30,7 +30,8 @@
   
     
   
-  <meta name="description" content="## Loading R packages library(Seurat) library(future) library(metacell) library(ggpubr) library(DropletUtils) library(pheatmap) ## Convert an Seurat object to 10x format to input in metacell data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;) write10xCounts(x = data@assays$RNA@counts, path = &quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/data&quot;) ## Initializing a database if(!">
+  <meta name="description" content="In this section we will perform the cell type classification using metacell package:
+## Loading R packages library(Seurat) library(future) library(metacell) library(ggpubr) library(DropletUtils) library(pheatmap) ## Convert an Seurat object to 10x format to input in metacell data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.">
 
   
   <link rel="alternate" hreflang="en-us" href="https://cbiagii.github.io/AdipoSNAP/post/7_metacell_sct/">
@@ -253,8 +254,9 @@
   
   <meta property="og:site_name" content="AdipoSNAP">
   <meta property="og:url" content="https://cbiagii.github.io/AdipoSNAP/post/7_metacell_sct/">
-  <meta property="og:title" content="7 - Metacell SCT | AdipoSNAP">
-  <meta property="og:description" content="## Loading R packages library(Seurat) library(future) library(metacell) library(ggpubr) library(DropletUtils) library(pheatmap) ## Convert an Seurat object to 10x format to input in metacell data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;) write10xCounts(x = data@assays$RNA@counts, path = &quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/data&quot;) ## Initializing a database if(!"><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
+  <meta property="og:title" content="7 - Classifying cell types from SCT data using metacell | AdipoSNAP">
+  <meta property="og:description" content="In this section we will perform the cell type classification using metacell package:
+## Loading R packages library(Seurat) library(future) library(metacell) library(ggpubr) library(DropletUtils) library(pheatmap) ## Convert an Seurat object to 10x format to input in metacell data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
@@ -286,7 +288,7 @@
     "@type": "WebPage",
     "@id": "https://cbiagii.github.io/AdipoSNAP/post/7_metacell_sct/"
   },
-  "headline": "7 - Metacell SCT",
+  "headline": "7 - Classifying cell types from SCT data using metacell",
   
   "datePublished": "2020-10-12T00:00:00Z",
   "dateModified": "2020-10-12T00:00:00Z",
@@ -304,7 +306,7 @@
       "url": "https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "## Loading R packages library(Seurat) library(future) library(metacell) library(ggpubr) library(DropletUtils) library(pheatmap) ## Convert an Seurat object to 10x format to input in metacell data \u0026lt;- readRDS(\u0026quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds\u0026quot;) write10xCounts(x = data@assays$RNA@counts, path = \u0026quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/data\u0026quot;) ## Initializing a database if(!"
+  "description": "In this section we will perform the cell type classification using metacell package:\n## Loading R packages library(Seurat) library(future) library(metacell) library(ggpubr) library(DropletUtils) library(pheatmap) ## Convert an Seurat object to 10x format to input in metacell data \u0026lt;- readRDS(\u0026quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed."
 }
 </script>
 
@@ -322,7 +324,7 @@
 
 
 
-  <title>7 - Metacell SCT | AdipoSNAP</title>
+  <title>7 - Classifying cell types from SCT data using metacell | AdipoSNAP</title>
 
 </head>
 <body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="dark">
@@ -482,7 +484,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>7 - Metacell SCT</h1>
+  <h1>7 - Classifying cell types from SCT data using metacell</h1>
 
   
 
@@ -541,7 +543,8 @@
   <div class="article-container">
 
     <div class="article-style">
-      <pre><code>## Loading R packages
+      <p>In this section we will perform the cell type classification using <code>metacell</code> package:</p>
+<pre><code class="language-r">## Loading R packages
 library(Seurat)
 library(future)
 library(metacell)

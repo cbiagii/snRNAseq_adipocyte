@@ -30,8 +30,9 @@
   
     
   
-  <meta name="description" content="Creating
-library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;) SeuratToH5ad(data, &quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&quot;, &quot;SCT&quot;, 1)  ## Defining the optimal accuracy number import warnings warnings.filterwarnings(&quot;ignore&quot;) from SCCAF import * ad = sc.read(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&quot;) y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.">
+  <meta name="description" content="Creating h5ad file to use as input in SCCAF:
+library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;) SeuratToH5ad(data, &quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&quot;, &quot;SCT&quot;, 1)  Defining the optimal accuracy number:
+import warnings warnings.filterwarnings(&quot;ignore&quot;) from SCCAF import * ad = sc.">
 
   
   <link rel="alternate" hreflang="en-us" href="https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/">
@@ -254,9 +255,10 @@ library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) dat
   
   <meta property="og:site_name" content="AdipoSNAP">
   <meta property="og:url" content="https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/">
-  <meta property="og:title" content="6 - SCCAF SCT | AdipoSNAP">
-  <meta property="og:description" content="Creating
-library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;) SeuratToH5ad(data, &quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&quot;, &quot;SCT&quot;, 1)  ## Defining the optimal accuracy number import warnings warnings.filterwarnings(&quot;ignore&quot;) from SCCAF import * ad = sc.read(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&quot;) y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
+  <meta property="og:title" content="6 - Finding optimal number of clusters in SCT data using SCCAF | AdipoSNAP">
+  <meta property="og:description" content="Creating h5ad file to use as input in SCCAF:
+library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;) SeuratToH5ad(data, &quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&quot;, &quot;SCT&quot;, 1)  Defining the optimal accuracy number:
+import warnings warnings.filterwarnings(&quot;ignore&quot;) from SCCAF import * ad = sc."><meta property="og:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
@@ -288,7 +290,7 @@ library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) dat
     "@type": "WebPage",
     "@id": "https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/"
   },
-  "headline": "6 - SCCAF SCT",
+  "headline": "6 - Finding optimal number of clusters in SCT data using SCCAF",
   
   "datePublished": "2020-10-13T00:00:00Z",
   "dateModified": "2020-10-13T00:00:00Z",
@@ -306,7 +308,7 @@ library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) dat
       "url": "https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "Creating\nlibrary(Seurat) source(\u0026quot;/projects/cangen/coliveir/SeuratToH5ad.R\u0026quot;) data \u0026lt;- readRDS(\u0026quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds\u0026quot;) SeuratToH5ad(data, \u0026quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad\u0026quot;, \u0026quot;SCT\u0026quot;, 1)  ## Defining the optimal accuracy number import warnings warnings.filterwarnings(\u0026quot;ignore\u0026quot;) from SCCAF import * ad = sc.read(\u0026quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad\u0026quot;) y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad."
+  "description": "Creating h5ad file to use as input in SCCAF:\nlibrary(Seurat) source(\u0026quot;/projects/cangen/coliveir/SeuratToH5ad.R\u0026quot;) data \u0026lt;- readRDS(\u0026quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds\u0026quot;) SeuratToH5ad(data, \u0026quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad\u0026quot;, \u0026quot;SCT\u0026quot;, 1)  Defining the optimal accuracy number:\nimport warnings warnings.filterwarnings(\u0026quot;ignore\u0026quot;) from SCCAF import * ad = sc."
 }
 </script>
 
@@ -324,7 +326,7 @@ library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) dat
 
 
 
-  <title>6 - SCCAF SCT | AdipoSNAP</title>
+  <title>6 - Finding optimal number of clusters in SCT data using SCCAF | AdipoSNAP</title>
 
 </head>
 <body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="dark">
@@ -484,7 +486,7 @@ library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) dat
   
   
 <div class="article-container pt-3">
-  <h1>6 - SCCAF SCT</h1>
+  <h1>6 - Finding optimal number of clusters in SCT data using SCCAF</h1>
 
   
 
@@ -543,7 +545,7 @@ library(Seurat) source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;) dat
   <div class="article-container">
 
     <div class="article-style">
-      <p>Creating</p>
+      <p>Creating <code>h5ad</code> file to use as input in SCCAF:</p>
 <pre><code class="language-r">library(Seurat)
 
 source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;)
@@ -551,8 +553,8 @@ source(&quot;/projects/cangen/coliveir/SeuratToH5ad.R&quot;)
 data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;)
 SeuratToH5ad(data, &quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&quot;, &quot;SCT&quot;, 1)
 </code></pre>
-<pre><code class="language-python">## Defining the optimal accuracy number
-import warnings
+<p>Defining the optimal accuracy number:</p>
+<pre><code class="language-python">import warnings
 warnings.filterwarnings(&quot;ignore&quot;)
 from SCCAF import *
   
@@ -562,21 +564,21 @@ y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_Round
 aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
 plt.show()
 </code></pre>
-<pre><code class="language-python">## Optimisation and general purpose usage
-cd /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/
+<p>Optimisation and general purpose usage:</p>
+<pre><code class="language-python">cd /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/
   sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.796 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.pdf
 </code></pre>
-<pre><code class="language-python">## Parallel run of assessments
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
+<p>Parallel run of assessments:</p>
+<pre><code class="language-python">sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round3.txt --slot-for-existing-clustering L1_Round3 --iterations 20 --cores 16
 </code></pre>
-<pre><code class="language-python">## Merging parallel runs to produce plot
-sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes -r /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds-acc-comparison-plot.png
+<p>Merging parallel runs to produce plot</p>
+<pre><code class="language-python">sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes -r /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds-acc-comparison-plot.png
 </code></pre>
-<pre><code class="language-python">## Exporting
-import scanpy as sc
+<p>Exporting SCCAF results</p>
+<pre><code class="language-python">import scanpy as sc
 adata = sc.read(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad&quot;)
 adata.write_csvs(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results&quot;, sep='\t', skip_data=True)
 </code></pre>

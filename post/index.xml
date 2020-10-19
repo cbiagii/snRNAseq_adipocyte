@@ -539,7 +539,7 @@ mcell_mc2d_plot(mc2d_id=&amp;quot;test_2dproj&amp;quot;)
       <link>https://cbiagii.github.io/AdipoSNAP/post/5_sct_preprocess/</link>
       <pubDate>Wed, 14 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/5_sct_preprocess/</guid>
-      <description>&lt;p&gt;Performing preprocessing using regularized negative binomial regression to normalize UMI count data.&lt;/p&gt;
+      <description>&lt;p&gt;Performing preprocessing using regularized negative binomial regression (SCT) to normalize UMI count data.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;## Loading R packages
 library(Seurat)
 library(SeuratWrappers)
@@ -622,11 +622,11 @@ saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_
     </item>
     
     <item>
-      <title>6 - SCCAF SCT</title>
+      <title>6 - Finding optimal number of clusters in SCT data using SCCAF</title>
       <link>https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/</link>
       <pubDate>Tue, 13 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/</guid>
-      <description>&lt;p&gt;Creating&lt;/p&gt;
+      <description>&lt;p&gt;Creating &lt;code&gt;h5ad&lt;/code&gt; file to use as input in SCCAF:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(Seurat)
 
 source(&amp;quot;/projects/cangen/coliveir/SeuratToH5ad.R&amp;quot;)
@@ -634,8 +634,8 @@ source(&amp;quot;/projects/cangen/coliveir/SeuratToH5ad.R&amp;quot;)
 data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&amp;quot;)
 SeuratToH5ad(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&amp;quot;, &amp;quot;SCT&amp;quot;, 1)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;## Defining the optimal accuracy number
-import warnings
+&lt;p&gt;Defining the optimal accuracy number:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import warnings
 warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
 from SCCAF import *
   
@@ -645,21 +645,21 @@ y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_R
 aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
 plt.show()
 &lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;## Optimisation and general purpose usage
-cd /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/
+&lt;p&gt;Optimisation and general purpose usage:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cd /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/
   sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.796 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.pdf
 &lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;## Parallel run of assessments
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
+&lt;p&gt;Parallel run of assessments:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round3.txt --slot-for-existing-clustering L1_Round3 --iterations 20 --cores 16
 &lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;## Merging parallel runs to produce plot
-sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes -r /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds-acc-comparison-plot.png
+&lt;p&gt;Merging parallel runs to produce plot&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes -r /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds-acc-comparison-plot.png
 &lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;## Exporting
-import scanpy as sc
+&lt;p&gt;Exporting SCCAF results&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import scanpy as sc
 adata = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad&amp;quot;)
 adata.write_csvs(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results&amp;quot;, sep=&#39;\t&#39;, skip_data=True)
 &lt;/code&gt;&lt;/pre&gt;
@@ -667,11 +667,12 @@ adata.write_csvs(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results&a
     </item>
     
     <item>
-      <title>7 - Metacell SCT</title>
+      <title>7 - Classifying cell types from SCT data using metacell</title>
       <link>https://cbiagii.github.io/AdipoSNAP/post/7_metacell_sct/</link>
       <pubDate>Mon, 12 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/7_metacell_sct/</guid>
-      <description>&lt;pre&gt;&lt;code&gt;## Loading R packages
+      <description>&lt;p&gt;In this section we will perform the cell type classification using &lt;code&gt;metacell&lt;/code&gt; package:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;## Loading R packages
 library(Seurat)
 library(future)
 library(metacell)
@@ -860,7 +861,8 @@ mcell_mc2d_plot(mc2d_id=&amp;quot;test_2dproj&amp;quot;)
       <link>https://cbiagii.github.io/AdipoSNAP/post/8_adipocytes_preprocess/</link>
       <pubDate>Sun, 11 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/8_adipocytes_preprocess/</guid>
-      <description>&lt;pre&gt;&lt;code&gt;## Loading R packages
+      <description>&lt;p&gt;Performing preprocessing of adipocyte cell type.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;## Loading R packages
 library(Seurat)
 
 ## Loading metacell results
@@ -982,17 +984,20 @@ saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp
     </item>
     
     <item>
-      <title>9 - SCCAF Adipocytes</title>
+      <title>9 - Finding optimal number of clusters in adipocytes cells using SCCAF</title>
       <link>https://cbiagii.github.io/AdipoSNAP/post/9_sccaf_adipocytes/</link>
       <pubDate>Sat, 10 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/9_sccaf_adipocytes/</guid>
-      <description>&lt;pre&gt;&lt;code&gt;library(Seurat)
+      <description>&lt;p&gt;Creating &lt;code&gt;h5ad&lt;/code&gt; file to use as input in SCCAF:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(Seurat)
+
 source(&amp;quot;/projects/cangen/coliveir/SeuratToH5ad.R&amp;quot;)
+
 data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
 SeuratToH5ad(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&amp;quot;, &amp;quot;RNA&amp;quot;, 1)
-
-
-# python to define the optimal accuracy number
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Defining the optimal accuracy number:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# python to define the optimal accuracy number
 import warnings
 warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
 from SCCAF import *
@@ -1002,28 +1007,22 @@ ad = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad
 y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_Round0&#39;],n=100)
 aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
 plt.show()
-
-
-
-
-##### Optimisation and general purpose usage
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Optimisation and general purpose usage:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;##### Optimisation and general purpose usage
 cd /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/
 sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.669 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.pdf
-
-
-##### Parallel run of assessments
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Parallel run of assessments:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
 sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
-
-
-##### Merging parallel runs to produce plot
-sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly -r /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds-acc-comparison-plot.png
-
-
-
-# python
-import scanpy as sc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Merging parallel runs to produce plot:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly -r /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds-acc-comparison-plot.png
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Exporting SCCAF results&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import scanpy as sc
 adata = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad&amp;quot;)
 adata.write_csvs(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results&amp;quot;, sep=&#39;\t&#39;, skip_data=True)
 &lt;/code&gt;&lt;/pre&gt;
