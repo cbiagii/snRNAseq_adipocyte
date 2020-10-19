@@ -2,10 +2,12 @@
 date: "2020-10-16"
 diagram: true
 math: true
-title: 3 - Original Preprocessing
+title: 3 - Original preprocessing
 ---
 
-```
+Performing preprocessing using the original clustering information
+
+```r
 ## Loading R packages
 library(Seurat)
 

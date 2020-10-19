@@ -17,7 +17,12 @@
       <link>https://cbiagii.github.io/AdipoSNAP/post/1_setup/</link>
       <pubDate>Sun, 18 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://cbiagii.github.io/AdipoSNAP/post/1_setup/</guid>
-      <description>&lt;pre&gt;&lt;code&gt;# Install additional CRAN packages
+      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    If you&amp;rsquo;re using an R markdown document, site, bookdown book, Distill site, or blogdown &lt;code&gt;.Rmd&lt;/code&gt; post, check out &lt;a href=&#34;http://desiree.rbind.io/post/2019/making-tip-boxes-with-bookdown-and-rmarkdown/&#34;&gt;this awesome post&lt;/a&gt; by &lt;a href=&#34;https://twitter.com/dcossyle&#34;&gt;Desirée De Leon&lt;/a&gt; who presents an easy way to do this with Pandoc style custom divs. My instructions are for those using &lt;code&gt;.md&lt;/code&gt; for their posts.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;pre&gt;&lt;code&gt;# Install additional CRAN packages
 CRAN_packages &amp;lt;- c(&#39;BiocManager&#39;, &#39;circlize&#39;, &#39;dplyr&#39;, &#39;enrichR&#39;, &#39;future&#39;, &#39;ggplot2&#39;, &#39;ggpubr&#39;, &#39;ggrepel&#39;, &#39;ggtext&#39;, &#39;glue&#39;, &#39;pheatmap&#39;, &#39;RColorBrewer&#39;, &#39;scales&#39;, &#39;tibble&#39;, &#39;tidyr&#39;, &#39;UpSetR&#39;, &#39;viridis&#39;)
 new.packages &amp;lt;- CRAN_packages[!(CRAN_packages %in% installed.packages()[,&amp;quot;Package&amp;quot;])]
 if(length(new.packages)) install.packages(new.packages)

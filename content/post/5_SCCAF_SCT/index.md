@@ -5,13 +5,16 @@ math: true
 title: 5 - SCCAF SCT
 ---
 
-```
+```r
 library(Seurat)
+
 source("/projects/cangen/coliveir/SeuratToH5ad.R")
+
 data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds")
 SeuratToH5ad(data, "/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad", "SCT", 1)
+```
 
-
+```
 # python to define the optimal accuracy number
 import warnings
 warnings.filterwarnings("ignore")

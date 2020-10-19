@@ -2,7 +2,7 @@
 date: "2020-10-15"
 diagram: true
 math: true
-title: 4 - Metacell Original
+title: 4 - Classifying cell types from original data using metacell
 ---
 
 ```
