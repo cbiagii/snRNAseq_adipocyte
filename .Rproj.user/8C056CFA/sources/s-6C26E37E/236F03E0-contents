@@ -1,0 +1,6 @@
+library(ssh)
+
+session <- ssh_connect(host = "root@172.92.0.10", passwd = "Dellsvcs1")
+
+scp_download(session, '/mnt/dados00/output/210209_A01161_0013_AHV2JVDMXX/Data/Intensities/BaseCalls/200512162768_S2_*' , to = '/Users/biagi/Desktop/Neoprospecta')
+

@@ -552,7 +552,7 @@ if(length(new.packages)) {
 }
   
 # Install additional Bioconductor packages
-Bioconductor_packages &lt;- c('ComplexHeatmap', 'DropletUtils', 'fgsea', 'monocle')
+Bioconductor_packages &lt;- c('ComplexHeatmap', 'DropletUtils', 'fgsea', 'monocle', 'Nebulosa')
 new.packages &lt;- Bioconductor_packages[!(Bioconductor_packages %in% installed.packages()[,&quot;Package&quot;])]
 if(length(new.packages)) {
   BiocManager::install(new.packages)
