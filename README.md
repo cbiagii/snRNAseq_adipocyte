@@ -101,6 +101,4 @@ Qadir, M.M.F., Alvarez-Cubela, S., Klein, D., Van Dijk, J., Anquela, R.M., Lanzo
 This work was supported by grants from the NIH DK117161, DK117163 to SRF and P30-DK-046200 to Adipose Biology and Nutrient Metabolism Core of Boston Nutrition and Obesity Research Center, by Sao Paulo Research Foundation (FAPESP) Grants: 2018/20905-1 and 2013/08135-1562, the National Council for Scientific and Technological Development, CNPq (282 311319/2018-1 to MLBJr and scholarship #870415/1997-2 to SSC) and by the Coordination  for  the  Improvement  of  Higher  Education  Personnel, CAPES (scholarship #88882.378695/2019-01 to CAOBJr)
 
 
-{{% alert note %}}
-***If this was useful to you please don't forget to cite, star and fork this repository!***
-{{% /alert %}}
+## If this was useful to you please dont forget to cite, star and fork this repository.
