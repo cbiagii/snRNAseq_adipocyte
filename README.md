@@ -1,5 +1,4 @@
-# AdipoSNAP: Adipose Single-Nuclei Analysis Pipeline <img src="Logo.png" align="right" width="300" />
-
+# Multidimensional Single-Nuclei RNA-Seq Reconstruction of Adipose Tissue Reveals Mature Adipocyte Plasticity Underlying Thermogenic Response <img src="Logo.png" align="right" width="300" />
 
 # Table of Contents
 - [What is this?](#what-is-this)
@@ -8,16 +7,14 @@
 	- [Downloading Data files](#downloading-data-files)
 - [Analysis and visualization programs](#analysis-and-visualization-programs)
 	- [R and R's integrated developmental environment RStudio](#r-and-rs-integrated-developmental-environment-rstudio)
-	- [scRNAseq analysis pipeline SEURAT developed by the Satija lab](#scrnaseq-analysis-pipeline-seurat-developed-by-the-satija-lab)
-	- [Pseudotemporal gene expression analysis using Monocle developed by the Trapnell Lab](#pseudotemporal-gene-expression-analysis-using-monocle-developed-by-the-trapnell-lab)
+	- [scRNAseq analysis pipeline Seurat](#scrnaseq-analysis-pipeline-seurat)
+	- [Pseudotemporal gene expression analysis using Monocle](#pseudotemporal-gene-expression-analysis-using-monocle)
 	- [Cell type classification using Metacell](#cell-type-classification-using-metacell)
-	- [Cellular component prediction using cellphonedb](#cellular-component-prediction-using-cellphonedb)
+	- [Cellular component prediction](#cellular-component-prediction)
 	- [Finding the optimal number of clusters using SCCAF](#finding-the-optimal-number-of-clusters-using-sccaf)
-- [Setting up the right environment](#setting-up-the-right-environment)
+- [Setting up the environment](#setting-up-the-environment)
 - [Citation](#citation)
-- [Contributors](#contributors)
 - [Acknowledgements](#acknowledgements)
-
 
 
 ## What is this?
@@ -25,7 +22,6 @@ This repository contains coding scripts utilized for the analysis performed in t
 
 
 ## Workflow
-AdipoSNAP contains three main steps:
 1. **Dataset:**
 2. **Clustering:**
     1. Overclustering
@@ -37,6 +33,7 @@ AdipoSNAP contains three main steps:
     2. Functional Enrichment
     3. Transdifferentiation
     4. Cellular component prediction
+    
 <img src="Workflow.png" align="center">
 
 
@@ -51,24 +48,30 @@ Public data files utilized in this analysis have been downloaded from [Gene Expr
 2. [RStudio v1.3.1073 (x64 bit)](https://www.rstudio.com/products/rstudio/download/)
 4. [Tutorial for R](https://cran.r-project.org/doc/manuals/r-release/R-intro.html)
 5. [Tutorial for RStudio](https://resources.rstudio.com/)
-#### scRNAseq analysis pipeline SEURAT developed by the Satija lab:
+#### scRNAseq analysis pipeline Seurat:
 1. [Source code for Seurat v3.2.2](https://cran.r-project.org/web/packages/Seurat/index.html)
 2. [Tutorials for Seurat](https://satijalab.org/seurat/)
-#### Pseudotemporal gene expression analysis using Monocle developed by the Trapnell Lab:
+#### Pseudotemporal gene expression analysis using Monocle:
 1. [Source code for Monocle v2.16.0](https://bioconductor.org/packages/release/bioc/html/monocle.html)
 2. [Tutorial for Monocle](http://cole-trapnell-lab.github.io/monocle-release/docs/#constructing-single-cell-trajectories)
 #### Cell type classification using Metacell:
 1. [Source code for metacell v0.3.41](https://github.com/tanaylab/metacell/releases/tag/v0.3.41)
 2. [Tutorial for metacell](https://tanaylab.github.io/metacell/)
-#### Cellular component prediction using cellphonedb:
-1. [Source code for cellphonedb v2.1.4](https://github.com/Teichlab/cellphonedb/releases/tag/v2.1.4)
-2. [Tutorial for cellphonedb](https://github.com/Teichlab/cellphonedb)
+#### Cellular component prediction:
+1. cellphonedb
+    1. [Source code for cellphonedb v2.1.4](https://github.com/Teichlab/cellphonedb/releases/tag/v2.1.4)
+    2. [Tutorial for cellphonedb](https://github.com/Teichlab/cellphonedb)
+2. [UniProtKB](https://www.uniprot.org/uniprot/)
+3. [Gene Ontology](http://geneontology.org/)
+4. [SignalP v5.0](http://www.cbs.dtu.dk/services/SignalP/)
+5. [SecretomeP v2.0](http://www.cbs.dtu.dk/services/SecretomeP/)
+6. [TMHMM v2.0](http://www.cbs.dtu.dk/services/TMHMM/)
 #### Finding the optimal number of clusters using SCCAF:
 1. [Source code for SCCAF v0.09](https://github.com/SCCAF/sccaf/releases/tag/0.09)
 2. [Tutorial for SCCAF](https://github.com/SCCAF/sccaf)
 
 
-## Setting up the right environment
+## Setting up the environment
 1. Install R and Rstudio
 2. Once you have installed R and RStudio, run the [**1_environmetn_setup.R**](https://github.com/cbiagii/AdipoSNAP/blob/master/1_environment_setup.R) script.
 3. Together with *Seurat*, a conda environment called ***r-reticulate*** will be installed. We will install the *SCCAF* and *cellphonedb* modules within this environment so that we can run the Python code inside R using the ***reticulate*** package previously installed. So, to check the installed environment full name just type the following commands in a new terminal:
@@ -88,24 +91,16 @@ pip install cellphonedb
 
 
 # Citation
+`xxxxx`
+<!---
 Qadir, M.M.F., Alvarez-Cubela, S., Klein, D., Van Dijk, J., Anquela, R.M., Lanzoni, G., Sadiq, S., Moreno-Hernandez, Y.B., Navarro-Rubio, B., Garcia, M.T., Diaz, A., Johnson, K., Sant, D., Ricordi, C., Griswold, T., Pastori, R.L., Dominguez-bendala, J. (2020) Proceedings of the National Academy of Sciences. Single cell resolution analysis of the human pancreatic ductal progenitor cell niche. Apr 2020, 201918314; DOI: 10.1073/pnas.1918314117
-
-
-# Contributors
-1. Carlos Alberto Oliveira de Biagi Junior - [Github](https://github.com/cbiagii) - [University of Sao Paulo](https://www.fmrp.usp.br/en/) - to contact please [Email](mailto:biagi@usp.br)
-2. Sarah Santiloni Cury - [Sao Paulo State University](https://www.international.unesp.br/) - to contact please [Email](mailto:santiloni.cury@unesp.br)
-3. Miguel Luiz Batista Junior - [Boston University School of Medicine](https://www.bumc.bu.edu/busm/) - to contact please [Email](mailto:migueljr4@me.com)
+--->
 
 
 # Acknowledgements
-1. Diabetes Research Institute Foundation (DRIF)
-2. The Inserra family
-3. The Fred and Mabel R. Parks Foundation
-4. The Tonkinson Foundation
-5. ADA Grant #1-19-ICTS-078
-6. NIH Grant #1R43DK105655-01
-7. NIH Grant #2R44DK105655-02
-8. NIH/NIDDK HIRN Grant #U01DK120393 (These studies are part of this grant)
-9. IIE Fulbright
+This work was supported by grants from the NIH DK117161, DK117163 to SRF and P30-DK-046200 to Adipose Biology and Nutrient Metabolism Core of Boston Nutrition and Obesity Research Center, by Sao Paulo Research Foundation (FAPESP) Grants: 2018/20905-1 and 2013/08135-1562, the National Council for Scientific and Technological Development, CNPq (282 311319/2018-1 to MLBJr and scholarship #870415/1997-2 to SSC) and by the Coordination  for  the  Improvement  of  Higher  Education  Personnel, CAPES (scholarship #88882.378695/2019-01 to CAOBJr)
 
-## If this was useful to you please dont forget to cite, star and fork this repository.
+
+{{% alert note %}}
+***If this was useful to you please don't forget to cite, star and fork this repository!***
+{{% /alert %}}
