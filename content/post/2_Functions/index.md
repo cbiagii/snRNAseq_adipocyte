@@ -114,9 +114,9 @@ volcano.plot <- function(res, upGenes = NULL, downGenes = NULL){
     ggtitle("") +
     theme_bw() +
     scale_y_continuous(limits = c(0, -log10(input$p_val_adj)))
-  p <- p + geom_point(data=subset(input, input$Significance == 'Not_different'), aes(avg_logFC, -log10(p_val_adj)), colour="gray70") +
-    geom_point(data=subset(input, input$Significance == 'Up_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour="firebrick4") +
-    geom_point(data=subset(input, input$Significance == 'Down_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour="dodgerblue") +
+  p <- p + geom_point(data=subset(input, input$Significance == 'Not_different'), aes(avg_logFC, -log10(p_val_adj)), colour = "gray70") +
+    geom_point(data=subset(input, input$Significance == 'Up_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour = "firebrick4") +
+    geom_point(data=subset(input, input$Significance == 'Down_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour = "dodgerblue") +
     xlab("logFC") + ylab("-log10(padj)")
   p <- p + geom_text_repel(data=input[c(head(upGenes, 5), head(downGenes, 5)), ], aes(label=gene))
   
@@ -155,10 +155,9 @@ plotMonocle <- function(cds, gene) {
       theme(axis.line.y = element_line(size=0.25, color="black")) +
       theme(panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank()) +
       theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank()) + 
-      theme(panel.background = element_rect(fill='white')) +
-      theme(legend.key=element_blank())
+      theme(panel.background = element_rect(fill = 'white')) +
+      theme(legend.key = element_blank())
   }
-  
   
   tmp <- cds@assayData$exprs[gene, ]
   if (length(gene) == 1) {
@@ -187,7 +186,6 @@ plotMonocle <- function(cds, gene) {
   edge_df[, cn2] <- as.matrix(edge_df[, cn2]) %*% t(rot_mat)
   edge_df[, cn3] <- as.matrix(edge_df[, cn3]) %*% t(rot_mat)
   
-  
   data_df <- pt$data
   
   g <- ggplot(data = data_df, aes(x = data_dim_1, y = data_dim_2))
@@ -198,7 +196,9 @@ plotMonocle <- function(cds, gene) {
                         linetype = "solid", na.rm = TRUE, data = edge_df)
   
   mst_branch_nodes <- cds@auxOrderingData[[cds@dim_reduce_type]]$branch_points
-  branch_point_df <- ica_space_df %>% dplyr::slice(match(mst_branch_nodes, sample_name)) %>% mutate(branch_point_idx = seq_len(n()))
+  branch_point_df <- ica_space_df %>% slice(match(mst_branch_nodes, sample_name)) %>% mutate(branch_point_idx = seq_len(n()))
+  g <- g + geom_point(aes_string(x = "prin_graph_dim_1", y = "prin_graph_dim_2"), size = 5, na.rm = TRUE, branch_point_df) + 
+    geom_text(aes_string(x = "prin_graph_dim_1", y = "prin_graph_dim_2", label = "branch_point_idx"), size = 4, color = "white", na.rm = TRUE, branch_point_df)
   
   g <- g + monocle_theme_opts() + xlab("Component 1") + ylab("Component 2") + 
     theme(legend.position = "top", legend.key.height = grid::unit(0.35, "in")) + theme(legend.key = element_blank()) + 
@@ -206,15 +206,13 @@ plotMonocle <- function(cds, gene) {
   
   plotlist <- list()
   for (i in 1:length(gene)) {
-    plotlist[[i]] <- g + geom_point(data = data_df[which(data_df[[gene[i]]] < 0), ], aes_string(color = paste0('`', gene[i], '`')), size = I(0.5), na.rm = TRUE) + 
-      geom_point(data = data_df[which(data_df[[gene[i]]] > 0), ], aes_string(color = paste0('`', gene[i], '`')), size = I(0.8), na.rm = TRUE) + 
-      scale_color_viridis(option = 'C', discrete = F, end = 0.9) + ggtitle(gene[i]) + 
-      theme(plot.title = element_text(hjust = 0.5)) + labs(color = "") + 
-      geom_point(aes_string(x = "prin_graph_dim_1", y = "prin_graph_dim_2"), size = 4, na.rm = TRUE, branch_point_df) + 
-      geom_text(aes_string(x = "prin_graph_dim_1", y = "prin_graph_dim_2", label = "branch_point_idx"), size = 3, color = "white", na.rm = TRUE, branch_point_df)
+    plotlist[[i]] <- g + geom_point(data = data_df[which(data_df[[gene[i]]] < 0), ], aes_string(color = paste0('`', gene[i], '`')), size = I(1), na.rm = TRUE) + 
+      geom_point(data = data_df[which(data_df[[gene[i]]] > 0), ], aes_string(color = paste0('`', gene[i], '`')), size = I(1.5), na.rm = TRUE) + 
+      scale_color_viridis(option = 'C', discrete = FALSE, end = 0.9) + ggtitle(gene[i]) + 
+      theme(plot.title = element_text(hjust = 0.5)) + labs(color = "")
   }
   
-  pt2 <- ggarrange(plotlist = plotlist, common.legend = T)
+  pt2 <- ggarrange(plotlist = plotlist, common.legend = TRUE)
   
   return(pt2)
 }

@@ -17,10 +17,10 @@ options(future.globals.maxSize = +Inf)
 plan("multiprocess", workers = 12)
 
 ## Loading data Cellranger output format
-data <- Read10X("/Users/biagi/PhD/AdipoSNAP/data/10x/")
+data <- Read10X("/Users/biagi/PhD/Adipocyte/data/10x/")
 
 ## Reading metadata annotation
-anno <- read.table("/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv")
+anno <- read.table("/Users/biagi/PhD/Adipocyte/data/GSE133486_10XAdiposeNuclei.metaData.tsv")
 
 ## Creating Seurat object
 data <- CreateSeuratObject(counts = data,
@@ -76,12 +76,12 @@ data <- FindClusters(data)
 data <- RunUMAP(data, dims = 1:best_pc)
 
 ## RunTSNE
-data <- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = T)
+data <- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = TRUE)
 
 ## Saving RDS file
-saveRDS(data, "/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds")
+saveRDS(data, "/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds")
 
 ## Running Adaptively-thresholded Low Rank Approximation (ALRA)
 data <- SeuratWrappers::RunALRA(data)
-saveRDS(data, "/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
+saveRDS(data, "/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds")
 ```

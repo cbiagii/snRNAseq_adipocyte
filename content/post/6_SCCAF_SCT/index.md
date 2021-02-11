@@ -11,8 +11,8 @@ library(Seurat)
 
 source("/projects/cangen/coliveir/SeuratToH5ad.R")
 
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds")
-SeuratToH5ad(data, "/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad", "SCT", 1)
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds")
+SeuratToH5ad(data, "/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/data.h5ad", "SCT", 1)
 ```
 
 
@@ -22,39 +22,40 @@ import warnings
 warnings.filterwarnings("ignore")
 from SCCAF import *
   
-ad = sc.read("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad")
+ad = sc.read("/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/data.h5ad")
 
-y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_Round0'],n=100)
-aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
+y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_Round0'], n = 100)
+aucs = plot_roc(y_prob, y_test, clf, cvsm = cvsm, acc = acc)
 plt.show()
 ```
 
 
 Optimisation and general purpose usage:
 ```python
-cd /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/
-  sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.796 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.pdf
+cd /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/
+sccaf -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.796 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad --optimisation-plots-output /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.pdf
 ```
 
 
 Parallel run of assessments:
 ```python
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round3.txt --slot-for-existing-clustering L1_Round3 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/sccaf_assess_L1_Round3.txt --slot-for-existing-clustering L1_Round3 --iterations 20 --cores 16
 ```
 
 
 Merging parallel runs to produce plot
 ```python
-sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes -r /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds-acc-comparison-plot.png
+sccaf-assess-merger -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes -r /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/rounds.txt -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/rounds-acc-comparison-plot.png
 ```
 
 
 Exporting SCCAF results
 ```python
 import scanpy as sc
-adata = sc.read("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad")
-adata.write_csvs("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results", sep='\t', skip_data=True)
+
+adata = sc.read("/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad")
+adata.write_csvs("/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results", sep = '\t', skip_data = True)
 ```

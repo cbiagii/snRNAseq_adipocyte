@@ -12,10 +12,10 @@ Performing preprocessing using the original clustering information
 library(Seurat)
 
 ## Loading data Cellranger output format
-data <- Read10X("/Users/biagi/PhD/AdipoSNAP/data/10x/")
+data <- Read10X("/Users/biagi/PhD/Adipocyte/data/10x/")
 
 ## Reading metadata annotation
-anno <- read.table("/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv")
+anno <- read.table("/Users/biagi/PhD/Adipocyte/data/GSE133486_10XAdiposeNuclei.metaData.tsv")
 
 ## Creating Seurat object
 data <- CreateSeuratObject(counts = data,
@@ -77,8 +77,8 @@ data <- FindClusters(data)
 data <- RunUMAP(data, dims = 1:best_pc)
 
 ## RunUMAP
-data <- RunTSNE(data, dims = 1:best_pc, max_iter = 5000, perplexity = 50, verbose = T)
+data <- RunTSNE(data, dims = 1:best_pc, max_iter = 5000, perplexity = 50, verbose = TRUE)
 
 ## Saving RDS file
-saveRDS(data, "/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds")
+saveRDS(data, "/Users/biagi/PhD/Adipocyte/output/10x/10x_Processed.rds")
 ```
