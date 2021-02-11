@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>AdipoSNAP</title>
-    <link>https://cbiagii.github.io/AdipoSNAP/</link>
-      <atom:link href="https://cbiagii.github.io/AdipoSNAP/index.xml" rel="self" type="application/rss+xml" />
-    <description>AdipoSNAP</description>
+    <title>snRNA-seq Adipocyte</title>
+    <link>https://cbiagii.github.io/snRNAseq_adipocyte/</link>
+      <atom:link href="https://cbiagii.github.io/snRNAseq_adipocyte/index.xml" rel="self" type="application/rss+xml" />
+    <description>snRNA-seq Adipocyte</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 18 Oct 2020 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>https://cbiagii.github.io/AdipoSNAP/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png</url>
-      <title>AdipoSNAP</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/</link>
+      <url>https://cbiagii.github.io/snRNAseq_adipocyte/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png</url>
+      <title>snRNA-seq Adipocyte</title>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/</link>
     </image>
     
     <item>
       <title>1 - Setting up R environment</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/1_setup/</link>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/post/1_setup/</link>
       <pubDate>Sun, 18 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/1_setup/</guid>
+      <guid>https://cbiagii.github.io/snRNAseq_adipocyte/post/1_setup/</guid>
       <description>&lt;p&gt;In this section we will show you how to configure your R environment by installing all the necessary dependencies to run the following codes. The dependencies. The dependencies include packages from the CRAN and Bioconductor repositories. To install, just use the following commands:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;# Install additional CRAN packages
 CRAN_packages &amp;lt;- c(&#39;BiocManager&#39;, &#39;circlize&#39;, &#39;dplyr&#39;, &#39;enrichR&#39;, &#39;future&#39;, &#39;ggplot2&#39;, 
@@ -51,9 +51,9 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
     
     <item>
       <title>2 - Loading functions</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/2_functions/</link>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/post/2_functions/</link>
       <pubDate>Sat, 17 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/2_functions/</guid>
+      <guid>https://cbiagii.github.io/snRNAseq_adipocyte/post/2_functions/</guid>
       <description>&lt;p&gt;It is necessary to load some functions that were written directly to plot some results in the following codes.&lt;/p&gt;
 &lt;h3 id=&#34;seurattoh5ad&#34;&gt;SeuratToH5ad&lt;/h3&gt;
 &lt;p&gt;This function converts a &lt;code&gt;Seurat Object&lt;/code&gt; to &lt;code&gt;h5ad&lt;/code&gt; file to perform SCCAF analysis:&lt;/p&gt;
@@ -265,9 +265,9 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
     
     <item>
       <title>3 - Original preprocessing</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/</link>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/post/3_original_preprocess/</link>
       <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/3_original_preprocess/</guid>
+      <guid>https://cbiagii.github.io/snRNAseq_adipocyte/post/3_original_preprocess/</guid>
       <description>&lt;p&gt;Performing preprocessing using the original clustering information&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;## Loading R packages
 library(Seurat)
@@ -348,9 +348,9 @@ saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds&
     
     <item>
       <title>4 - Classifying cell types from original data using metacell</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/4_metacell_original/</link>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/post/4_metacell_original/</link>
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/4_metacell_original/</guid>
+      <guid>https://cbiagii.github.io/snRNAseq_adipocyte/post/4_metacell_original/</guid>
       <description>&lt;p&gt;In this section we will perform the cell type classification using &lt;code&gt;metacell&lt;/code&gt; package:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;## Loading R packages
 library(Seurat)
@@ -538,9 +538,9 @@ mcell_mc2d_plot(mc2d_id=&amp;quot;test_2dproj&amp;quot;)
     
     <item>
       <title>5 - SCT Preprocessing</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/5_sct_preprocess/</link>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/post/5_sct_preprocess/</link>
       <pubDate>Wed, 14 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/5_sct_preprocess/</guid>
+      <guid>https://cbiagii.github.io/snRNAseq_adipocyte/post/5_sct_preprocess/</guid>
       <description>&lt;p&gt;Performing preprocessing using regularized negative binomial regression (SCT) to normalize UMI count data.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;## Loading R packages
 library(Seurat)
@@ -625,9 +625,9 @@ saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_
     
     <item>
       <title>6 - Finding optimal number of clusters in SCT data using SCCAF</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/</link>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/post/6_sccaf_sct/</link>
       <pubDate>Tue, 13 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/6_sccaf_sct/</guid>
+      <guid>https://cbiagii.github.io/snRNAseq_adipocyte/post/6_sccaf_sct/</guid>
       <description>&lt;p&gt;Creating &lt;code&gt;h5ad&lt;/code&gt; file to use as input in SCCAF:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(Seurat)
 
@@ -670,9 +670,9 @@ adata.write_csvs(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results&a
     
     <item>
       <title>7 - Classifying cell types from SCT data using metacell</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/7_metacell_sct/</link>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/post/7_metacell_sct/</link>
       <pubDate>Mon, 12 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/7_metacell_sct/</guid>
+      <guid>https://cbiagii.github.io/snRNAseq_adipocyte/post/7_metacell_sct/</guid>
       <description>&lt;p&gt;In this section we will perform the cell type classification using &lt;code&gt;metacell&lt;/code&gt; package:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;## Loading R packages
 library(Seurat)
@@ -860,9 +860,9 @@ mcell_mc2d_plot(mc2d_id=&amp;quot;test_2dproj&amp;quot;)
     
     <item>
       <title>8 - Adipocytes Preprocessing</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/8_adipocytes_preprocess/</link>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/post/8_adipocytes_preprocess/</link>
       <pubDate>Sun, 11 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/8_adipocytes_preprocess/</guid>
+      <guid>https://cbiagii.github.io/snRNAseq_adipocyte/post/8_adipocytes_preprocess/</guid>
       <description>&lt;p&gt;Performing preprocessing of adipocyte cell type.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;## Loading R packages
 library(Seurat)
@@ -987,9 +987,9 @@ saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp
     
     <item>
       <title>9 - Finding optimal number of clusters in adipocytes cells using SCCAF</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/9_sccaf_adipocytes/</link>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/post/9_sccaf_adipocytes/</link>
       <pubDate>Sat, 10 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/9_sccaf_adipocytes/</guid>
+      <guid>https://cbiagii.github.io/snRNAseq_adipocyte/post/9_sccaf_adipocytes/</guid>
       <description>&lt;p&gt;Creating &lt;code&gt;h5ad&lt;/code&gt; file to use as input in SCCAF:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(Seurat)
 
@@ -1033,9 +1033,9 @@ adata.write_csvs(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/resul
     
     <item>
       <title>10 - Main Figures</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/10_main_figures/</link>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/post/10_main_figures/</link>
       <pubDate>Fri, 09 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/10_main_figures/</guid>
+      <guid>https://cbiagii.github.io/snRNAseq_adipocyte/post/10_main_figures/</guid>
       <description>&lt;h2 id=&#34;figure-1&#34;&gt;Figure 1&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;## Loading R packages
 library(dplyr)
@@ -2484,9 +2484,9 @@ ggarrange(plotlist = pt)
     
     <item>
       <title>11 - Supplementary Figures</title>
-      <link>https://cbiagii.github.io/AdipoSNAP/post/11_supplementary_figures/</link>
+      <link>https://cbiagii.github.io/snRNAseq_adipocyte/post/11_supplementary_figures/</link>
       <pubDate>Thu, 08 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://cbiagii.github.io/AdipoSNAP/post/11_supplementary_figures/</guid>
+      <guid>https://cbiagii.github.io/snRNAseq_adipocyte/post/11_supplementary_figures/</guid>
       <description>&lt;h2 id=&#34;figure-s1&#34;&gt;Figure S1&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;## Loading R packages
 library(dplyr)
