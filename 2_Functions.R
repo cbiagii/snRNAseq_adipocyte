@@ -26,8 +26,8 @@ plotMonocle <- function(cds, gene) {
       theme(axis.line.y = element_line(size=0.25, color="black")) +
       theme(panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank()) +
       theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank()) + 
-      theme(panel.background = element_rect(fill='white')) +
-      theme(legend.key=element_blank())
+      theme(panel.background = element_rect(fill = 'white')) +
+      theme(legend.key = element_blank())
   }
   
   tmp <- cds@assayData$exprs[gene, ]
@@ -79,11 +79,11 @@ plotMonocle <- function(cds, gene) {
   for (i in 1:length(gene)) {
     plotlist[[i]] <- g + geom_point(data = data_df[which(data_df[[gene[i]]] < 0), ], aes_string(color = paste0('`', gene[i], '`')), size = I(1), na.rm = TRUE) + 
       geom_point(data = data_df[which(data_df[[gene[i]]] > 0), ], aes_string(color = paste0('`', gene[i], '`')), size = I(1.5), na.rm = TRUE) + 
-      scale_color_viridis(option = 'C', discrete = F, end = 0.9) + ggtitle(gene[i]) + 
+      scale_color_viridis(option = 'C', discrete = FALSE, end = 0.9) + ggtitle(gene[i]) + 
       theme(plot.title = element_text(hjust = 0.5)) + labs(color = "")
   }
   
-  pt2 <- ggarrange(plotlist = plotlist, common.legend = T)
+  pt2 <- ggarrange(plotlist = plotlist, common.legend = TRUE)
   
   return(pt2)
 }
@@ -193,9 +193,9 @@ volcano.plot <- function(res, upGenes = NULL, downGenes = NULL){
     ggtitle("") +
     theme_bw() +
     scale_y_continuous(limits = c(0, -log10(input$p_val_adj)))
-  p <- p + geom_point(data=subset(input, input$Significance == 'Not_different'), aes(avg_logFC, -log10(p_val_adj)), colour="gray70") +
-    geom_point(data=subset(input, input$Significance == 'Up_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour="firebrick4") +
-    geom_point(data=subset(input, input$Significance == 'Down_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour="dodgerblue") +
+  p <- p + geom_point(data=subset(input, input$Significance == 'Not_different'), aes(avg_logFC, -log10(p_val_adj)), colour = "gray70") +
+    geom_point(data=subset(input, input$Significance == 'Up_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour = "firebrick4") +
+    geom_point(data=subset(input, input$Significance == 'Down_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour = "dodgerblue") +
     xlab("logFC") + ylab("-log10(padj)")
   p <- p + geom_text_repel(data=input[c(head(upGenes, 5), head(downGenes, 5)), ], aes(label=gene))
   

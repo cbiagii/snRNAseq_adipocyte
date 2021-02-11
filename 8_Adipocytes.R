@@ -28,11 +28,11 @@ colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
 marks_colors$priority <- as.integer(marks_colors$priority)
 marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
 dims <- data.frame(x = object@sc_x, 
                    y = object@sc_y)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
 tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 <- data.frame(cols = object@colors)
 teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
@@ -45,8 +45,8 @@ teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial"
 tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
 
 ## Assign sccaf clusters to metacell results
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -68,7 +68,7 @@ Idents(data) <- factor(Idents(data), levels = c('A1', 'A2', 'A3', 'A4', 'E1', 'E
 cells <- names(Idents(data))[which(Idents(data) == "A1" | Idents(data) == "A2" | Idents(data) == "A3" | Idents(data) == "A4")]
 
 ## Subsetting adipocyte clusters from all
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_Processed.rds")
 data <- subset(data, cells = cells)
 
 ## Cell cycle genes
@@ -111,7 +111,7 @@ for (z in 1:length(dp)) {
 data <- RunUMAP(data, dims = 1:best_pc)
 
 ## RunTSNE
-data <- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = T)
+data <- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = TRUE)
 
 ## Saving RDS file
-saveRDS(data, "/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+saveRDS(data, "/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
