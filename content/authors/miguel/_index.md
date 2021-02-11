@@ -6,7 +6,7 @@ organizations:
 - name: Visiting Research Fellow at Boston University School of Medicine
   url: "https://www.bumc.bu.edu/busm/"
   
-role: Visiting Research Fellow
+role: Assistant Professor
 social:
 - icon: envelope
   icon_pack: fas
