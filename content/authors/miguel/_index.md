@@ -18,7 +18,7 @@ social:
   icon_pack: fab
   link: https://www.linkedin.com/in/miguel-luiz-batista-júnior-42933553/
 superuser: false
-title: Miguel Luiz Batista Junior
+title: Miguel L. B. Junior
 user_groups:
 - Meet the Authors
 ---

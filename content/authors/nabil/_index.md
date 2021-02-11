@@ -1,23 +1,23 @@
 ---
 authors:
 - admin
-email: "migueljr4@me.com"
+email: "rabhi@bu.edu"
 organizations:
-- name: Visiting Research Fellow at Boston University School of Medicine
+- name: Instructor
 
-role: Visiting Research Fellow
+role: Instructor
 social:
 - icon: envelope
   icon_pack: fas
-  link: mailto:migueljr4@me.com
+  link: mailto:rabhi@bu.edu
 - icon: orcid
   icon_pack: ai
-  link: https://orcid.org/0000-0001-7022-5131
+  link: https://orcid.org/0000-0002-7365-5951
 - icon: linkedin
   icon_pack: fab
-  link: https://www.linkedin.com/in/miguel-luiz-batista-júnior-42933553/
+  link: https://www.linkedin.com/in/nabil-rabhi-831879119/
 superuser: false
-title: Nabil
+title: Nabil Rabhi
 user_groups:
 - Meet the Authors
 ---

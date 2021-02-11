@@ -62,11 +62,10 @@ subtitle = ""
 	- [scRNAseq analysis pipeline Seurat](#scrnaseq-analysis-pipeline-seurat)
 	- [Pseudotemporal gene expression analysis using Monocle](#pseudotemporal-gene-expression-analysis-using-monocle)
 	- [Cell type classification using Metacell](#cell-type-classification-using-metacell)
-	- [Cellular component prediction using cellphonedb](#cellular-component-prediction-using-cellphonedb)
+	- [Cellular component prediction](#cellular-component-prediction)
 	- [Finding the optimal number of clusters using SCCAF](#finding-the-optimal-number-of-clusters-using-sccaf)
-- [Setting up the right environment](#setting-up-the-right-environment)
+- [Setting up the environment](#setting-up-the-environment)
 - [Citation](#citation)
-- [Contributors](#contributors)
 - [Acknowledgements](#acknowledgements)
 
 
@@ -111,15 +110,21 @@ Public data files utilized in this analysis have been downloaded from [Gene Expr
 #### Cell type classification using Metacell:
 1. [Source code for metacell v0.3.41](https://github.com/tanaylab/metacell/releases/tag/v0.3.41)
 2. [Tutorial for metacell](https://tanaylab.github.io/metacell/)
-#### Cellular component prediction using cellphonedb:
-1. [Source code for cellphonedb v2.1.4](https://github.com/Teichlab/cellphonedb/releases/tag/v2.1.4)
-2. [Tutorial for cellphonedb](https://github.com/Teichlab/cellphonedb)
+#### Cellular component prediction:
+1. cellphonedb
+    1. [Source code for cellphonedb v2.1.4](https://github.com/Teichlab/cellphonedb/releases/tag/v2.1.4)
+    2. [Tutorial for cellphonedb](https://github.com/Teichlab/cellphonedb)
+2. [UniProtKB](https://www.uniprot.org/uniprot/)
+3. [Gene Ontology](http://geneontology.org/)
+4. [SignalP v5.0](http://www.cbs.dtu.dk/services/SignalP/)
+5. [SecretomeP v2.0](http://www.cbs.dtu.dk/services/SecretomeP/)
+6. [TMHMM v2.0](http://www.cbs.dtu.dk/services/TMHMM/)
 #### Finding the optimal number of clusters using SCCAF:
 1. [Source code for SCCAF v0.09](https://github.com/SCCAF/sccaf/releases/tag/0.09)
 2. [Tutorial for SCCAF](https://github.com/SCCAF/sccaf)
 
 
-### Setting up the right environment
+### Setting up the environment
 1. Install R and Rstudio.
 2. Once you have installed R and RStudio, run the [**setup script**](https://cbiagii.github.io/AdipoSNAP/post/1_setup/) to install R packages dependencies.
 3. Together with *Seurat*, a conda environment called ***r-reticulate*** will be installed. We will install the `anndata`, `scanpy`, `igraph` and `louvain` modules within this environment so that we can run the Python code inside R using the ***reticulate*** package previously installed. So, to check the installed environment full name just type the following commands in a new terminal:
@@ -157,28 +162,10 @@ Qadir, M.M.F., Alvarez-Cubela, S., Klein, D., Van Dijk, J., Anquela, R.M., Lanzo
 --->
 
 
-### Contributors
-1. Carlos Alberto Oliveira de Biagi Junior - [Github](https://github.com/cbiagii) - [University of Sao Paulo](https://www.fmrp.usp.br/en/) - to contact please [Email](mailto:biagi@usp.br)
-2. Sarah Santiloni Cury - [Sao Paulo State University](https://www.international.unesp.br/) - to contact please [Email](mailto:santiloni.cury@unesp.br)
-3. Miguel Luiz Batista Junior - [Boston University School of Medicine](https://www.bumc.bu.edu/busm/) - to contact please [Email](mailto:migueljr4@me.com)
-
-
 ### Acknowledgements
-`xxxxx`
-<!---
-1. Diabetes Research Institute Foundation (DRIF)
-2. The Inserra family
-3. The Fred and Mabel R. Parks Foundation
-4. The Tonkinson Foundation
-5. ADA Grant #1-19-ICTS-078
-6. NIH Grant #1R43DK105655-01
-7. NIH Grant #2R44DK105655-02
-8. NIH/NIDDK HIRN Grant #U01DK120393 (These studies are part of this grant)
-9. IIE Fulbright
--->
+This work was supported by grants from the NIH DK117161, DK117163 to SRF and P30-DK-046200 to Adipose Biology and Nutrient Metabolism Core of Boston Nutrition and Obesity Research Center, by Sao Paulo Research Foundation (FAPESP) Grants: 2018/20905-1 and 2013/08135-1562, the National Council for Scientific and Technological Development, CNPq (282 311319/2018-1 to MLBJr and scholarship #870415/1997-2 to SSC) and by the Coordination  for  the  Improvement  of  Higher  Education  Personnel, CAPES (scholarship #88882.378695/2019-01 to CAOBJr)
 
 
 {{% alert note %}}
 ***If this was useful to you please don't forget to cite, star and fork this repository!***
 {{% /alert %}}
-

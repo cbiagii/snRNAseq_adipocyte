@@ -15,7 +15,7 @@ social:
   icon_pack: ai
   link: https://orcid.org/0000-0001-9364-2886
 superuser: false
-title: Wilson Araujo da Silva Junior
+title: Wilson A. da S. Junior
 user_groups:
 - Meet the Authors
 ---

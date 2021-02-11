@@ -8,15 +8,16 @@ title: 10 - Main Figures
 ## Figure 1
 ```
 ## Loading R packages
-library(metacell)
-library(Seurat)
-library(ggplot2)
 library(dplyr)
-library(RColorBrewer)
-library(ggpubr)
 library(enrichR)
-library(glue)
+library(ggplot2)
+library(ggpubr)
 library(ggtext)
+library(glue)
+library(metacell)
+library(Nebulosa)
+library(RColorBrewer)
+library(Seurat)
 
 
 #################################
@@ -48,11 +49,11 @@ colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
 marks_colors$priority <- as.integer(marks_colors$priority)
 marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
 dims <- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
 tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 <- data.frame(cols = object@colors)
 teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
@@ -64,8 +65,8 @@ teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", mar
 teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
 tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
 
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -93,7 +94,7 @@ cls <- c("#FFA500", "#ffae19", "#ffb732", "#ffc04c", "#66b266", "#7fbf7f", "#ffa
 TSNEPlot(data, label = FALSE, pt.size = 0.3, cols = cls) +
   xlab("t-SNE 1") + ylab("t-SNE 2") +
   theme_classic() + labs(color = "Cell Type") +
-  theme(legend.position="bottom")
+  theme(legend.position = "bottom")
 
 
 a <- round((sum(Idents(data) == "AD1" | Idents(data) == "AD2" | Idents(data) == "AD3" | Idents(data) == "AD4")/ncol(data))*100, 2); a1 <- sum(Idents(data) == "AD1" | Idents(data) == "AD2" | Idents(data) == "AD3" | Idents(data) == "AD4")
@@ -125,83 +126,21 @@ ggplot(df, aes(x = "", y = value, fill = class)) +
 #################################
 ########### Figure 1C ###########
 #################################
-marks_colors <- NULL
-marks_colors <- rbind(marks_colors, c("Adipocyte_1", "Acsl1", "#0000b3", 1, 2.5))
-marks_colors <- rbind(marks_colors, c("Adipocyte_2", "Plin4", "#0000cc", 1, 2.5))
-marks_colors <- rbind(marks_colors, c("Adipocyte_3", "Mlxipl", "#0000e6", 1, 2.5))
-marks_colors <- rbind(marks_colors, c("Adipocyte_4", "Pck1", "#0000ff", 1, 2.5))
-marks_colors <- rbind(marks_colors, c("Adipocyte_5", "Adrb3", "#1a1aff", 1, 2.5))
-marks_colors <- rbind(marks_colors, c("Endothelial_1", "Btnl9", "#00cd00", 1, 1.8))
-marks_colors <- rbind(marks_colors, c("Endothelial_2", "Ushbp1", "#00b300", 1, 1.8))
-marks_colors <- rbind(marks_colors, c("Endothelial_3", "Egfl7", "#009a00", 1, 1.8))
-marks_colors <- rbind(marks_colors, c("Endothelial_4", "Mcf2l", "#008000", 1, 1.8))
-marks_colors <- rbind(marks_colors, c("Endothelial_5", "Ptprb", "#006700", 1, 1.8))
-marks_colors <- rbind(marks_colors, c("Immune_1", "Zeb2", "#ff7f7f", 1, 0.9))
-marks_colors <- rbind(marks_colors, c("Immune_2", "Trps1", "#ff6666", 1, 0.9))
-marks_colors <- rbind(marks_colors, c("Immune_3", "Runx1", "#ff4c4c", 1, 0.9))
-marks_colors <- rbind(marks_colors, c("Immune_4", "Ptprc", "#ff3232", 1, 0.9))
-marks_colors <- rbind(marks_colors, c("Immune_5", "Adap2", "#ff1919", 1, 0.9))
-marks_colors <- rbind(marks_colors, c("Progenitor_1", "Dcn", "#ffff4d", 1, 2.4))
-marks_colors <- rbind(marks_colors, c("Progenitor_2", "Celf2", "#ffff33", 1, 2.4))
-marks_colors <- rbind(marks_colors, c("Progenitor_3", "Meg3", "#ffff1a", 1, 2.4))
-marks_colors <- rbind(marks_colors, c("Progenitor_4", "Col1a2", "#ffff00", 1, 2.4))
-marks_colors <- rbind(marks_colors, c("Progenitor_5", "Col3a1", "#e6e600", 1, 2.4))
-marks_colors <- as.data.frame(marks_colors)
-colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
-marks_colors$priority <- as.integer(marks_colors$priority)
-marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds")
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
-dims <- data.frame(x = object@sc_x,
-                   y = object@sc_y)
+pt <- plot_density(data, c("Adrb3", "Pecam1", "Ptprc", "Cd34", "Pdgfra", "Itgb1"), reduction = "tsne", pal = "inferno", combine = FALSE)
+pt <- lapply(pt, function(x) {
+  x + theme_bw() + xlab("t-SNE 1") + ylab("t-SNE 2") +
+    theme(plot.title = element_text(hjust = 0.5, face = "italic"), 
+          panel.background = element_rect(colour = "black", size = 0.1), 
+          axis.ticks.length = unit(.2, "cm"), 
+          axis.text = element_text(size = 11), 
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(), 
+          legend.position = "none")
+})
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
-tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
-tmp2 <- data.frame(cols = object@colors)
-teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
-teste$cols <- NULL
-
-teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Adipocyte", marks_colors$group)], "Adipocytes", "Unknown")
-teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Progenitor", marks_colors$group)], "Progenitors", teste$cellType)
-teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", marks_colors$group)], "Immunes", teste$cellType)
-teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
-tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
-
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv")
-
-new_cluster <- infos$L1_result
-names(new_cluster) <- rownames(infos)
-new_cluster <- as.factor(new_cluster)
-data$clusters_sccaf <- new_cluster
-
-infos <- data@meta.data
-infos <- infos[tab$Row.names, ]
-
-final <- merge(infos, tab, by.x = "row.names", by.y = "Row.names")
-
-Idents(data) <- data$clusters_sccaf
-new.cluster.ids <- c("EN", "PG", "PG", "AD", "AD", "PG", "PG", "IM", "AD", "AD", "EN", "IM", "IM", "PG")
-names(new.cluster.ids) <- levels(data)
-data <- RenameIdents(data, new.cluster.ids)
-Idents(data) <- factor(Idents(data), levels = c('AD', 'EN', 'IM', 'PG'))
-
-markers <- FindAllMarkers(data, only.pos = T)
-
-top20 <- markers %>% group_by(cluster) %>% top_n(n = 20, wt = avg_logFC)
-
-data2 <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
-
-Idents(data2) <- Idents(data)
-rm(data)
-data2 <- ScaleData(data2)
-
-cls <- c("#FFA500", "#329932", "#ff9999", "#6666ff")
-mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
-
-DoHeatmap(data2, features = top20$gene, group.colors = cls, angle = 0, size = 5, label = F) +
-  scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=5))
+ggarrange(plotlist = pt)
 
 
 
@@ -234,11 +173,11 @@ colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
 marks_colors$priority <- as.integer(marks_colors$priority)
 marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc2d.test_2dproj.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
 dims <- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
 tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 <- data.frame(cols = object@colors)
 teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
@@ -250,8 +189,91 @@ teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", mar
 teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
 tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
 
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv")
+
+new_cluster <- infos$L1_result
+names(new_cluster) <- rownames(infos)
+new_cluster <- as.factor(new_cluster)
+data$clusters_sccaf <- new_cluster
+
+infos <- data@meta.data
+infos <- infos[tab$Row.names, ]
+
+final <- merge(infos, tab, by.x = "row.names", by.y = "Row.names")
+
+Idents(data) <- data$clusters_sccaf
+new.cluster.ids <- c("EN", "PG", "PG", "AD", "AD", "PG", "PG", "IM", "AD", "AD", "EN", "IM", "IM", "PG")
+names(new.cluster.ids) <- levels(data)
+data <- RenameIdents(data, new.cluster.ids)
+Idents(data) <- factor(Idents(data), levels = c('AD', 'EN', 'IM', 'PG'))
+
+markers <- FindAllMarkers(data, only.pos = TRUE)
+
+top20 <- markers %>% group_by(cluster) %>% top_n(n = 20, wt = avg_logFC)
+
+data2 <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds")
+
+Idents(data2) <- Idents(data)
+rm(data)
+data2 <- ScaleData(data2)
+
+cls <- c("#FFA500", "#329932", "#ff9999", "#6666ff")
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
+
+DoHeatmap(data2, features = top20$gene, group.colors = cls, angle = 0, size = 5, label = FALSE) +
+  scale_fill_gradientn(colours = rev(mapal)) +
+  theme(axis.text = element_text(size = 5))
+
+
+
+#################################
+########### Figure 1E ###########
+#################################
+marks_colors <- NULL
+marks_colors <- rbind(marks_colors, c("Adipocyte_1", "Acsl1", "#0000b3", 1, 2.5))
+marks_colors <- rbind(marks_colors, c("Adipocyte_2", "Plin4", "#0000cc", 1, 2.5))
+marks_colors <- rbind(marks_colors, c("Adipocyte_3", "Mlxipl", "#0000e6", 1, 2.5))
+marks_colors <- rbind(marks_colors, c("Adipocyte_4", "Pck1", "#0000ff", 1, 2.5))
+marks_colors <- rbind(marks_colors, c("Adipocyte_5", "Adrb3", "#1a1aff", 1, 2.5))
+marks_colors <- rbind(marks_colors, c("Endothelial_1", "Btnl9", "#00cd00", 1, 1.8))
+marks_colors <- rbind(marks_colors, c("Endothelial_2", "Ushbp1", "#00b300", 1, 1.8))
+marks_colors <- rbind(marks_colors, c("Endothelial_3", "Egfl7", "#009a00", 1, 1.8))
+marks_colors <- rbind(marks_colors, c("Endothelial_4", "Mcf2l", "#008000", 1, 1.8))
+marks_colors <- rbind(marks_colors, c("Endothelial_5", "Ptprb", "#006700", 1, 1.8))
+marks_colors <- rbind(marks_colors, c("Immune_1", "Zeb2", "#ff7f7f", 1, 0.9))
+marks_colors <- rbind(marks_colors, c("Immune_2", "Trps1", "#ff6666", 1, 0.9))
+marks_colors <- rbind(marks_colors, c("Immune_3", "Runx1", "#ff4c4c", 1, 0.9))
+marks_colors <- rbind(marks_colors, c("Immune_4", "Ptprc", "#ff3232", 1, 0.9))
+marks_colors <- rbind(marks_colors, c("Immune_5", "Adap2", "#ff1919", 1, 0.9))
+marks_colors <- rbind(marks_colors, c("Progenitor_1", "Dcn", "#ffff4d", 1, 2.4))
+marks_colors <- rbind(marks_colors, c("Progenitor_2", "Celf2", "#ffff33", 1, 2.4))
+marks_colors <- rbind(marks_colors, c("Progenitor_3", "Meg3", "#ffff1a", 1, 2.4))
+marks_colors <- rbind(marks_colors, c("Progenitor_4", "Col1a2", "#ffff00", 1, 2.4))
+marks_colors <- rbind(marks_colors, c("Progenitor_5", "Col3a1", "#e6e600", 1, 2.4))
+marks_colors <- as.data.frame(marks_colors)
+colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
+marks_colors$priority <- as.integer(marks_colors$priority)
+marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
+
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc2d.test_2dproj.Rda")
+dims <- data.frame(x = object@sc_x,
+                   y = object@sc_y)
+
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc.test_mc_f.Rda")
+tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
+tmp2 <- data.frame(cols = object@colors)
+teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
+teste$cols <- NULL
+
+teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Adipocyte", marks_colors$group)], "Adipocytes", "Unknown")
+teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Progenitor", marks_colors$group)], "Progenitors", teste$cellType)
+teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", marks_colors$group)], "Immunes", teste$cellType)
+teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
+tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
+
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -278,13 +300,13 @@ DotPlot(data, features = c("Acsl1", "Plin4", "Mlxipl", "Pck1", "Adrb3",
                            "Btnl9", "Ushbp1", "Egfl7", "Mcf2l", "Ptprb",
                            "Trps1", "Runx1", "Ptprc", "Adap2",
                            "Dcn", "Celf2", "Meg3", "Col1a2", "Col3a1"), cols = c("grey", 'red')) +
-  xlab("") + ylab("") + theme(axis.text.x = element_text(angle = 45, hjust=1))
+  xlab("") + ylab("") + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
+## Nebulosa expression plot
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds")
 
-pt <- FeaturePlot(data, c("Mlxipl", "Egfl7", "Runx1", "Celf2"),
-                  cols = c("grey", 'red'), reduction = 'tsne', pt.size = 0.1, combine = F)
+pt <- plot_density(data, c("Mlxipl", "Egfl7", "Runx1", "Celf2"), reduction = "tsne", pal = "inferno", combine = FALSE)
 pt <- lapply(pt, function(x) {
   x + theme_void() + xlab("") + ylab("") +
     theme(plot.title = element_text(hjust = 0.5, face = "italic"),
@@ -296,14 +318,14 @@ ggarrange(plotlist = pt)
 
 
 #################################
-########### Figure 1E ###########
+########### Figure 1F ###########
 #################################
 dbs <- c("KEGG_2019_Mouse", "WikiPathways_2019_Mouse", "Jensen_TISSUES", "GO_Biological_Process_2018")
 
-genes_A <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_A.txt")
-genes_E <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_E.txt")
-genes_I <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_I.txt")
-genes_P <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_P.txt")
+genes_A <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_A.txt")
+genes_E <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_E.txt")
+genes_I <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_I.txt")
+genes_P <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_P.txt")
 
 genes <- list(Adipocyte = genes_A,
               Endothelial = genes_E,
@@ -318,7 +340,7 @@ tmplist <- NULL
 paths <- NULL
 for (i in 1:length(dbs)) {
   tmp <- lapply(results, `[[`, i)
-  tmp <- mapply(cbind, tmp, "type" = names(tmp), SIMPLIFY=F)
+  tmp <- mapply(cbind, tmp, "type" = names(tmp), SIMPLIFY = FALSE)
   tmp <- do.call("rbind", tmp)
   
   tmp <- subset(tmp, Adjusted.P.value < 0.05)
@@ -339,7 +361,7 @@ for (i in 1:length(dbs)) {
   plotlist[[i]] <- ggplot(tmp, aes(x = type, y = Term)) +
     geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
     theme_bw(base_size = 9) +
-    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = "#2b9348", low = "#eeef20") +
+    scale_colour_gradient(limits = c(0, max(tmp$Combined.Score) + 0.5), high = "#2b9348", low = "#eeef20") +
     xlab(NULL) + ylab(NULL) +
     ggtitle(dbs[i]) + labs(color = "Combined Score", size = "-log10(padj)")
 }
@@ -360,32 +382,32 @@ paths$class_with_color <- factor(paths$class_with_color, levels = rev(unique(pat
 ggplot(paths, aes(x = type, y = class_with_color)) +
   geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
   theme_bw(base_size = 8) +
-  scale_colour_gradient(limits=c(0, max(paths$Combined.Score)+0.5), high = "#2b9348", low = "#eeef20") +
+  scale_colour_gradient(limits = c(0, max(paths$Combined.Score) + 0.5), high = "#2b9348", low = "#eeef20") +
   xlab(NULL) + ylab(NULL) +
   ggtitle(NULL) + labs(color = "Combined Score", size = "-log10(padj)") +
-  theme(axis.text.y = element_markdown(), axis.text=element_text(size=12))
+  theme(axis.text.y = element_markdown(), axis.text = element_text(size = 12))
 ```
 
 
 ## Figure 2
 ```
 ## Loading R packages
+library(dplyr)
+library(enrichR)
+library(ggplot2)
+library(ggpubr)
+library(ggtext)
+library(glue)
+library(RColorBrewer)
 library(Seurat)
 library(SeuratWrappers)
-library(ggplot2)
-library(dplyr)
-library(RColorBrewer)
-library(enrichR)
-library(glue)
-library(ggtext)
-library(ggpubr)
 
 
 #################################
 ########### Figure 2A ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -397,15 +419,15 @@ Idents(data) <- new_cluster
 TSNEPlot(data, pt.size = 1, cols = c("#11c78b", "#800080", "#e57400", "#0000FF", "#dfdf0d")) +
   xlab("t-SNE 1") + ylab("t-SNE 2") +
   theme_classic() + labs(color = "Cluster") +
-  theme(legend.position="bottom")
+  theme(legend.position = "bottom")
 
 
 
 #################################
 ########### Figure 2B ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -414,7 +436,7 @@ new_cluster <- paste0("Ad", new_cluster)
 new_cluster <- as.factor(new_cluster)
 Idents(data) <- new_cluster
 
-markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = FALSE)
 
 top10 <- markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
 
@@ -424,17 +446,17 @@ data <- ScaleData(data)
 cls <- c("#11c78b", "#800080", "#e57400", "#0000FF", "#dfdf0d")
 mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 
-DoHeatmap(data, features = top10$gene, group.colors = cls, angle = 0, size = 5, label = F) +
+DoHeatmap(data, features = top10$gene, group.colors = cls, angle = 0, size = 5, label = FALSE) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6))
+  theme(axis.text = element_text(size = 6))
 
 
 
 #################################
 ########### Figure 2C ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -446,7 +468,7 @@ Idents(data) <- new_cluster
 DotPlot(data, features = c('Adipoq', 'Adrb3', 'Cidec', 'Dgat1', 'Fasn', 'Lipe', 'Pck1', 'Plin1', 'Pnpla2', 'Retn'), cols = c("grey", 'red'), assay = "RNA") +
   xlab(NULL) + ylab(NULL) +
   theme_bw(base_size = 12) +
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
 
@@ -455,11 +477,11 @@ DotPlot(data, features = c('Adipoq', 'Adrb3', 'Cidec', 'Dgat1', 'Fasn', 'Lipe', 
 #################################
 dbs <- c("KEGG_2019_Mouse", "WikiPathways_2019_Mouse", "Jensen_TISSUES", "GO_Biological_Process_2018", "Mouse_Gene_Atlas")
 
-genes_1 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_1.txt")
-genes_2 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_2.txt")
-genes_3 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_3.txt")
-genes_4 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_4.txt")
-genes_5 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_5.txt")
+genes_1 <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_1.txt")
+genes_2 <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_2.txt")
+genes_3 <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_3.txt")
+genes_4 <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_4.txt")
+genes_5 <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_5.txt")
 
 genes <- list(Ad1 = genes_1,
               Ad2 = genes_2,
@@ -475,7 +497,7 @@ tmplist <- NULL
 paths <- NULL
 for (i in 1:length(dbs)) {
   tmp <- lapply(results, `[[`, i)
-  tmp <- mapply(cbind, tmp, "type" = names(tmp), SIMPLIFY=F)
+  tmp <- mapply(cbind, tmp, "type" = names(tmp), SIMPLIFY = FALSE)
   tmp <- do.call("rbind", tmp)
   
   tmp <- subset(tmp, Adjusted.P.value < 0.05)
@@ -496,7 +518,7 @@ for (i in 1:length(dbs)) {
   plotlist[[i]] <- ggplot(tmp, aes(x = type, y = Term)) +
     geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
     theme_bw(base_size = 9) +
-    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = "#2b9348", low = "#eeef20") +
+    scale_colour_gradient(limits = c(0, max(tmp$Combined.Score) + 0.5), high = "#2b9348", low = "#eeef20") +
     xlab(NULL) + ylab(NULL) +
     ggtitle(dbs[i]) + labs(color = "Combined Score", size = "-log10(padj)")
 }
@@ -519,18 +541,18 @@ paths$class_with_color <- factor(paths$class_with_color, levels = rev(unique(pat
 ggplot(paths, aes(x = type, y = class_with_color)) +
   geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
   theme_bw(base_size = 8) +
-  scale_colour_gradient(limits=c(0, max(paths$Combined.Score)+0.5), high = "#2b9348", low = "#eeef20") +
+  scale_colour_gradient(limits = c(0, max(paths$Combined.Score) + 0.5), high = "#2b9348", low = "#eeef20") +
   xlab(NULL) + ylab(NULL) +
   ggtitle(NULL) + labs(color = "Combined Score", size = "-log10(padj)") +
-  theme(axis.text.y = element_markdown(), axis.text=element_text(size=12))
+  theme(axis.text.y = element_markdown(), axis.text = element_text(size = 12))
 
 
 
 #################################
 ########### Figure 2E ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -543,7 +565,7 @@ data$clusters <- Idents(data)
 data <- SeuratWrappers::RunALRA(data)
 data <- ScaleData(data)
 
-genes <- c('Adipoq', 'Pnpla2', 'Fasn', 'Lep', 'Cebpa', 'Pparg', 'Cidec', 'Car3', 'Gpx3', 'Col1a2', 'Serpine1', 'Vegfa')
+genes <- c('Adipoq', 'Pnpla2', 'Fasn', 'Lep', 'Cebpa', 'Pparg', 'Cidec', 'Car3', 'Cd36', 'Gadd45g', 'Serpine1', 'Vegfa')
 genes <- genes[genes %in% rownames(data)]
 
 df <- NULL
@@ -570,25 +592,26 @@ ggboxplot(df, x = "cluster", y = "value",
 ## Figure 3
 ```
 ## Loading R packages
-library(Seurat)
-library(SeuratWrappers)
+library(dplyr)
+library(fgsea)
 library(ggplot2)
 library(ggpubr)
-library(fgsea)
-library(dplyr)
 library(ggrepel)
-library(RColorBrewer)
 library(monocle)
+library(Nebulosa)
+library(RColorBrewer)
 library(scales)
+library(Seurat)
+library(SeuratWrappers)
 library(viridis)
 
-source('/Users/biagi/PhD/AdipoSNAP/2_Functions.R')
+source('/Users/biagi/PhD/Adipocyte/2_Functions.R')
 
 
 #################################
 ########### Figure 3A ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
 Idents(data) <- as.factor(data$timpoint)
 data <- subset(data, cells = names(which(data$timpoint == '4day' | data$timpoint == 'RT' | data$timpoint == 'CL')))
 data$timpoint <- gsub('4day', 'Cold', data$timpoint)
@@ -596,14 +619,14 @@ data$timpoint <- gsub('4day', 'Cold', data$timpoint)
 TSNEPlot(data, pt.size = 1, group.by = 'timpoint') +
   xlab("t-SNE 1") + ylab("t-SNE 2") +
   theme_classic() + labs(color = "Cluster") +
-  theme(legend.position="bottom")
+  theme(legend.position = "bottom")
 
 
 
 #################################
 ########### Figure 3B ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
 Idents(data) <- as.factor(data$timpoint)
 data <- subset(data, cells = names(which(data$timpoint == '4day' | data$timpoint == 'RT' | data$timpoint == 'CL')))
 
@@ -613,42 +636,45 @@ data <- ScaleData(data)
 genes <- c('Lipe', 'Adrb3', 'Pnpla2', 'Plin1', 'Fasn', 'Acadm', 'Gk', 'Adipoq', 'Retn', 'Cidec', 'Ppara', 'Ucp1', 'Dio2', 'Prdm16', 'Elovl3')
 genes <- genes[genes %in% rownames(data)]
 
-pt <- FeaturePlot(data, genes,
-                  cols = c("grey", 'red'), reduction = 'tsne', pt.size = 0.1, combine = F)
-pt <- lapply(pt, function(x) {
-  x + theme_classic() + xlab("t-SNE 1") + ylab("t-SNE 2") +
-    theme(plot.title = element_text(hjust = 0.5, face = "italic", size = 10), legend.position = "none")
-})
+## Nebulosa expression plot
+pt <- plot_density(data, genes, reduction = "tsne", pal = "inferno", size = 0.5, combine = FALSE)
 
-ggarrange(plotlist = pt, ncol = 5, nrow = 3, common.legend = T)
+pt <- lapply(pt, function(x){ x + theme_bw() + 
+    theme(panel.background = element_rect(colour = "black", size = 0.1), 
+          axis.ticks.length = unit(.2, "cm"), axis.text = element_text(size = 11), 
+          panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
+          plot.title = element_text(hjust = 0.5, face = "italic", size = 10), 
+          legend.position = "none")})
+
+ggarrange(plotlist = pt, ncol = 5, nrow = 3, common.legend = TRUE)
 
 
 
 #################################
 ########### Figure 3C ###########
 #################################
-ort <- read.table("/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = T)
-pathways <- gmtPathways('/Users/biagi/PhD/AdipoSNAP/msigdb.v7.1.symbols.gmt')
+ort <- read.table("/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt", sep = ",", header = TRUE)
+pathways <- gmtPathways('/Users/biagi/PhD/Adipocyte/msigdb.v7.1.symbols.gmt')
 
-#ColdxRT
-comp1 <- read.table("/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_ColdxRT_ALL.txt")
+## ColdxRT
+comp1 <- read.table("/Users/biagi/PhD/Adipocyte/Figures/update/Diff_Adipocytes_ColdxRT_ALL.txt")
 comp1 <- subset(comp1, p_val_adj < 0.05)
-comp1 <- comp1[order(comp1$avg_logFC, decreasing = T), ]
+comp1 <- comp1[order(comp1$avg_logFC, decreasing = TRUE), ]
 comp1 <- rbind(head(comp1, 50), tail(comp1, 50))
 comp1 <- merge(ort, comp1, by.x = "Mouse.gene.name", by.y = "row.names")
 comp1$Mouse.gene.name <- comp1$Gene.stable.ID <- comp1$Mouse.gene.stable.ID <- NULL
 colnames(comp1)[1] <- "Gene"
 ranks <- structure(comp1$avg_logFC, names = comp1$Gene)
 ranks <- sort(ranks)
-fgseaRes1 <- fgsea(pathways, ranks, minSize=5)
+fgseaRes1 <- fgsea(pathways, ranks, minSize = 5)
 fgseaRes1 <- subset(fgseaRes1, padj < 0.05)
-fgseaRes1 <- fgseaRes1[order(fgseaRes1$NES, decreasing = T), ]
+fgseaRes1 <- fgseaRes1[order(fgseaRes1$NES, decreasing = TRUE), ]
 genes1 <- fgseaRes1$leadingEdge
 for (i in 1:length(genes1)) {
   fgseaRes1$genes[i] <- paste(genes1[[i]], collapse = ';')
 }
 fgseaRes1$leadingEdge <- NULL
-enrich_ColdxRT <- read.table('/Users/biagi/PhD/AdipoSNAP/Figures/update/fgsea_ColdxRT.txt', header = T)
+enrich_ColdxRT <- read.table('/Users/biagi/PhD/Adipocyte/Figures/update/fgsea_ColdxRT.txt', header = TRUE)
 pathways_ColdxRT <- c('GO_ORGANOPHOSPHATE_BIOSYNTHETIC_PROCESS', 'GO_FATTY_ACID_TRANSPORT', 'GO_LONG_CHAIN_FATTY_ACID_TRANSPORT', 'GO_MONOCARBOXYLIC_ACID_TRANSPORT', 'GO_RESPONSE_TO_FATTY_ACID', 'REACTOME_NGF_STIMULATED_TRANSCRIPTION', 'REACTOME_NUCLEAR_EVENTS_KINASE_AND_TRANSCRIPTION_FACTOR_ACTIVATION', 'OSWALD_HEMATOPOIETIC_STEM_CELL_IN_COLLAGEN_GEL_UP', 'NAGASHIMA_EGF_SIGNALING_UP', 'NAGASHIMA_NRG1_SIGNALING_UP')
 enrich_ColdxRT <- enrich_ColdxRT[which(enrich_ColdxRT$pathway %in% pathways_ColdxRT), ]
 enrich_ColdxRT$class <- ifelse(enrich_ColdxRT$NES > 0, 'Up-regulated', 'Down-regulated')
@@ -665,25 +691,25 @@ ggplot(enrich_ColdxRT, aes(order, NES, fill = class)) +
   scale_x_continuous(breaks = enrich_ColdxRT$order, labels = enrich_ColdxRT$pathway, expand = c(0, 0)) +
   ggtitle('GSEA for Cold x RT')
 
-#CLxRT
-comp2 <- read.table("/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_CLxRT_ALL.txt")
+## CLxRT
+comp2 <- read.table("/Users/biagi/PhD/Adipocyte/Figures/update/Diff_Adipocytes_CLxRT_ALL.txt")
 comp2 <- subset(comp2, p_val_adj < 0.05)
-comp2 <- comp2[order(comp2$avg_logFC, decreasing = T), ]
+comp2 <- comp2[order(comp2$avg_logFC, decreasing = TRUE), ]
 comp2 <- rbind(head(comp2, 50), tail(comp2, 50))
 comp2 <- merge(ort, comp2, by.x = "Mouse.gene.name", by.y = "row.names")
 comp2$Mouse.gene.name <- comp2$Gene.stable.ID <- comp2$Mouse.gene.stable.ID <- NULL
 colnames(comp2)[1] <- "Gene"
 ranks <- structure(comp2$avg_logFC, names = comp2$Gene)
 ranks <- sort(ranks)
-fgseaRes2 <- fgsea(pathways, ranks, minSize=5)
+fgseaRes2 <- fgsea(pathways, ranks, minSize = 5)
 fgseaRes2 <- subset(fgseaRes2, padj < 0.05)
-fgseaRes2 <- fgseaRes2[order(fgseaRes2$NES, decreasing = T), ]
+fgseaRes2 <- fgseaRes2[order(fgseaRes2$NES, decreasing = TRUE), ]
 genes2 <- fgseaRes2$leadingEdge
 for (i in 1:length(genes2)) {
   fgseaRes2$genes[i] <- paste(genes2[[i]], collapse = ';')
 }
 fgseaRes2$leadingEdge <- NULL
-enrich_CLxRT <- read.table('/Users/biagi/PhD/AdipoSNAP/Figures/update/fgsea_CLxRT.txt', header = T)
+enrich_CLxRT <- read.table('/Users/biagi/PhD/Adipocyte/Figures/update/fgsea_CLxRT.txt', header = TRUE)
 pathways_CLxRT <- c('GO_ORGANOPHOSPHATE_METABOLIC_PROCESS', 'GO_MITOCHONDRIAL_ENVELOPE', 'GO_ATP_METABOLIC_PROCESS', 'GO_OXIDOREDUCTASE_ACTIVITY', 'GO_OXIDATIVE_PHOSPHORYLATION', 'GO_NEGATIVE_REGULATION_OF_PROTEIN_METABOLIC_PROCESS', 'GO_RESPONSE_TO_MECHANICAL_STIMULUS', 'GO_NEGATIVE_REGULATION_OF_BIOSYNTHETIC_PROCESS', 'NAGASHIMA_EGF_SIGNALING_UP', 'NAGASHIMA_NRG1_SIGNALING_UP')
 enrich_CLxRT <- enrich_CLxRT[which(enrich_CLxRT$pathway %in% pathways_CLxRT), ]
 enrich_CLxRT$class <- ifelse(enrich_CLxRT$NES > 0, 'Up-regulated', 'Down-regulated')
@@ -705,10 +731,10 @@ ggplot(enrich_CLxRT, aes(order, NES, fill = class)) +
 #################################
 ########### Figure 3D ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
 data$timpoint <- gsub('4day', 'Cold', data$timpoint)
 
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -733,16 +759,16 @@ df <- merge(tsne, meta, by = 'row.names')
 rownames(df) <- df$Row.names
 df$Row.names <- NULL
 
-### CL
+## CL
 ggplot() +
   geom_point(data = df, aes(x = tSNE_1, y = tSNE_2, color = timpoint), size = 0.5) +
   scale_color_manual(values = rep("gray75", 5)) +
-  guides(color = guide_legend(override.aes = list(size=7))) +
+  guides(color = guide_legend(override.aes = list(size = 7))) +
   xlab("t-SNE 1") + ylab("t-SNE 2") +
   labs(color = '') + ggtitle(paste0('CL (', nrow(anno_CL), ' cells)')) +
   theme_classic() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        legend.position="none", plot.title = element_text(hjust = 0.5, size=8)) +
+        legend.position = "none", plot.title = element_text(hjust = 0.5, size = 8)) +
   annotate("point", df[rownames(anno_CL)[anno_CL$clusters == 'Ad1'], 'tSNE_1'],
            df[rownames(anno_CL)[anno_CL$clusters == 'Ad1'], 'tSNE_2'], colour = "#11c78b", size = 1) +
   annotate("point", df[rownames(anno_CL)[anno_CL$clusters == 'Ad2'], 'tSNE_1'],
@@ -774,16 +800,16 @@ ggplot(df2, aes(x = "", y = value, fill = class)) +
   geom_text_repel(aes(x = 1.5, y = pos, label = paste0(value, "%")), nudge_x = .1,
                   segment.size = .7, show.legend = FALSE)
 
-### RT
+## RT
 ggplot() +
   geom_point(data = df, aes(x = tSNE_1, y = tSNE_2, color = timpoint), size = 0.5) +
   scale_color_manual(values = rep("gray75", 5)) +
-  guides(color = guide_legend(override.aes = list(size=7))) +
+  guides(color = guide_legend(override.aes = list(size = 7))) +
   xlab("t-SNE 1") + ylab("t-SNE 2") +
   labs(color = '') + ggtitle(paste0('RT (', nrow(anno_RT), ' cells)')) +
   theme_classic() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        legend.position="none", plot.title = element_text(hjust = 0.5, size=8)) +
+        legend.position = "none", plot.title = element_text(hjust = 0.5, size = 8)) +
   annotate("point", df[rownames(anno_RT)[anno_RT$clusters == 'Ad1'], 'tSNE_1'],
            df[rownames(anno_RT)[anno_RT$clusters == 'Ad1'], 'tSNE_2'], colour = "#11c78b", size = 1) +
   annotate("point", df[rownames(anno_RT)[anno_RT$clusters == 'Ad2'], 'tSNE_1'],
@@ -815,16 +841,16 @@ ggplot(df2, aes(x = "", y = value, fill = class)) +
   geom_text_repel(aes(x = 1.5, y = pos, label = paste0(value, "%")), nudge_x = .1,
                   segment.size = .7, show.legend = FALSE)
 
-### Cold
+## Cold
 ggplot() +
   geom_point(data = df, aes(x = tSNE_1, y = tSNE_2, color = timpoint), size = 0.5) +
   scale_color_manual(values = rep("gray75", 5)) +
   xlab("t-SNE 1") + ylab("t-SNE 2") +
-  guides(color = guide_legend(override.aes = list(size=7))) +
+  guides(color = guide_legend(override.aes = list(size = 7))) +
   labs(color = '') + ggtitle(paste0('Cold (', nrow(anno_Cold), ' cells)')) +
   theme_classic() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        legend.position = "none", plot.title = element_text(hjust = 0.5, size=8)) +
+        legend.position = "none", plot.title = element_text(hjust = 0.5, size = 8)) +
   annotate("point", df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad1'], 'tSNE_1'],
            df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad1'], 'tSNE_2'], colour = "#11c78b", size = 1) +
   annotate("point", df[rownames(anno_Cold)[anno_Cold$clusters == 'Ad2'], 'tSNE_1'],
@@ -861,8 +887,8 @@ ggplot(df2, aes(x = "", y = value, fill = class)) +
 #################################
 ########### Figure 3E ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -879,22 +905,23 @@ genes <- c('Acaa2', 'Ehhadh', 'Slc27a2', 'Acadm', 'Scp2', 'Acadvl', 'Hadha', 'Ha
            'Sdhaf2', 'Pdha1', 'Pdhb', 'Idh3g', 'Mdh1', 'Sdha', 'Ndufs4', 'Sdhc', 'Suclg1', 'Mdh2', 
            'Akt1', 'Kiss1r', 'Mif', 'Cpt1b', 'Fabp3', 'Acsl5', 'Mfsd2a', 'Abcc4', 'Acsl3', 'Pla2g12a', 
            'Aldoa', 'Gpi1', 'Pgk1', 'Gapdh', 'Pfkp', 'Pkm', 'Ogdh', 'Ppara', 'Prkaa1', 'Gale', 'Entpd5', 'Stat3', 'Foxk2', 'Igf1', 
-           "Daglb", "Slc2a4", "Gpd1", "Pcx", "Abhd5", "Adrb3", "Lipe", "Pck1", "Pnpla2")
+           "Daglb", "Slc2a4", "Gpd1", "Pcx", "Abhd5", "Adrb3", "Lipe", "Pck1", "Pnpla2", 
+           'Acaca', 'Acly', 'Fasn', 'Srebf1', 'Dgat2', 'Insig1', 'Hadh', 'Elovl6', 'Lpl')
 genes <- genes[genes %in% rownames(data)]
 
 mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
-DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = 'cluster') +
+DoHeatmap(data, features = genes, angle = 0, size = 5, label = FALSE, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color='UCP1 Expression')
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = 'Ucp1 Expression')
 
 
 
 #################################
 ########### Figure 3G ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -910,7 +937,7 @@ data <- ScaleData(data)
 genes <- c('Acadm', 'Adipoq', 'Adrb3', 'Lep', 'Fasn', 
            'Ucp1', 'Cidea', 'Dio2', 'Elovl3', 'Cox8b', 
            'Cpt1b', 'Gk', 'Plin5', 'Pnpla2', 'Lpl', 
-           'Acaa2', 'Sdhc', 'Fabp3', 'Ppara', 'Slc2a4')
+           'Acaca', 'Gadd45g', 'Fabp3', 'Ppara', 'Slc2a4')
 genes <- genes[genes %in% rownames(data)]
 
 df <- NULL
@@ -941,10 +968,10 @@ ggboxplot(df, x = "cluster", y = "value",
 #################################
 ########### Figure 3H ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
 data$timpoint <- gsub('4day', 'Cold', data$timpoint)
 
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -967,7 +994,7 @@ fd <- new("AnnotatedDataFrame", data = fdata)
 cds <- newCellDataSet(as(mat, "dgCMatrix"),
                       phenoData = pd,
                       featureData = fd, 
-                      expressionFamily=negbinomial.size())
+                      expressionFamily = negbinomial.size())
 
 rm(data, mat, fdata, pdata, fd, pd)
 
@@ -977,7 +1004,7 @@ cds <- estimateDispersions(cds)
 cds <- detectGenes(cds, min_expr = 0.1)
 expressed_genes <- row.names(subset(fData(cds), num_cells_expressed >= 10))
 
-diff_test_res <- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = "~cluster", cores = 6, verbose = T)
+diff_test_res <- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = "~cluster", cores = 6, verbose = TRUE)
 ordering_genes <- row.names(subset(diff_test_res, qval < 0.01))
 cds <- setOrderingFilter(cds, ordering_genes)
 
@@ -990,17 +1017,17 @@ plot_cell_trajectory(cds, color_by = "Pseudotime")
 plot_cell_trajectory(cds, color_by = "cluster") + 
   scale_color_manual(values = c("Ad1" = "#11c78b", "Ad2" = "#800080", "Ad3" = "#e57400", "Ad4" = "#0000FF", "Ad5" = "#dfdf0d"))
 
-plotMonocle(cds, c('Pparg', 'Creb1', 'Atf2', 'Egr2', 'Dbp', 'Xbp1', 'Clock', 'Zbtb43', 'Zbtb7a'))
+plotMonocle(cds, c('Ppara', 'Prdm16', 'Ppargc1a', 'Egr2', 'Dbp', 'Xbp1', 'Clock', 'Zbtb43', 'Zbtb7a'))
 
 
 
 #################################
 ########### Figure 3I ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
 data$timpoint <- gsub('4day', 'Cold', data$timpoint)
 
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -1023,7 +1050,7 @@ fd <- new("AnnotatedDataFrame", data = fdata)
 cds <- newCellDataSet(as(mat, "dgCMatrix"),
                       phenoData = pd,
                       featureData = fd, 
-                      expressionFamily=negbinomial.size())
+                      expressionFamily = negbinomial.size())
 
 rm(data, mat, fdata, pdata, fd, pd)
 
@@ -1033,7 +1060,7 @@ cds <- estimateDispersions(cds)
 cds <- detectGenes(cds, min_expr = 0.1)
 expressed_genes <- row.names(subset(fData(cds), num_cells_expressed >= 10))
 
-diff_test_res <- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = "~cluster", cores = 6, verbose = T)
+diff_test_res <- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = "~cluster", cores = 6, verbose = TRUE)
 ordering_genes <- row.names(subset(diff_test_res, qval < 0.01))
 cds <- setOrderingFilter(cds, ordering_genes)
 
@@ -1046,30 +1073,30 @@ plot_cell_trajectory(cds, color_by = "Pseudotime")
 plot_cell_trajectory(cds, color_by = "cluster") + 
   scale_color_manual(values = c("Ad1" = "#11c78b", "Ad2" = "#800080", "Ad3" = "#e57400", "Ad4" = "#0000FF", "Ad5" = "#dfdf0d"))
 
-plotMonocle(cds, c('Pparg', 'Creb1', 'Atf2', 'Srebf1', 'Cebpa', 'Egr1', 'Foxn3', 'Esrra', 'Gtf2ird1'))
+plotMonocle(cds, c('Ppara', 'Prdm16', 'Ppargc1a', 'Srebf1', 'Cebpa', 'Egr1', 'Foxn3', 'Esrra', 'Gtf2ird1'))
 ```
 
 
 ## Figure 4
 ```
 ## Loading R packages
+library(circlize)
+library(ComplexHeatmap)
+library(dplyr)
+library(fgsea)
+library(ggplot2)
+library(ggrepel)
+library(Nebulosa)
+library(RColorBrewer)
 library(Seurat)
 library(SeuratWrappers)
-library(ggplot2)
-library(dplyr)
-library(ggrepel)
-library(RColorBrewer)
-library(fgsea)
-library(UpSetR)
-library(ComplexHeatmap)
-library(circlize)
 
 
 #################################
 ########### Figure 4A ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -1102,13 +1129,13 @@ ggplot() +
                  color = factor(cluster_id)), 
              size = 1) + 
   scale_color_manual(values = rep("#F5F5F5", length(cols))) + 
-  guides(color = guide_legend(override.aes = list(size=7))) + 
+  guides(color = guide_legend(override.aes = list(size = 7))) + 
   labs(color = '', x = 't-SNE1', y = 't-SNE2') +
   theme_classic() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(), 
         legend.position = "none", 
-        plot.title = element_text(hjust = 0.5, size=8)) + 
+        plot.title = element_text(hjust = 0.5, size = 8)) + 
   annotate("point",
            dims[["x"]][which(dims[["cluster_id"]] == 'Ad1')],
            dims[["y"]][which(dims[["cluster_id"]] == 'Ad1')], 
@@ -1126,9 +1153,9 @@ ggplot() +
            dims[names(data$UCP1[which(data$UCP1 == 'High')]), 4], 
            colour = 'red', size = 1.5)
 
-#pieplot UCP1 High
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+## pieplot UCP1 High
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -1170,8 +1197,8 @@ ggplot(df, aes(x = "", y = value, fill = class)) +
 #################################
 ########### Figure 4B ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -1187,27 +1214,27 @@ data <- ScaleData(data, features = rownames(data))
 data$UCP1 <- factor(ifelse(data@assays$SCT@data["Ucp1", ] > 0, "High", "Low"))
 Idents(data) <- data$UCP1
 
-markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = FALSE)
 
 markers <- subset(markers, p_val_adj < 0.05 & cluster == 'High')
-markers <- markers[order(markers$avg_logFC, decreasing = T), ]
+markers <- markers[order(markers$avg_logFC, decreasing = TRUE), ]
 
 genes1 <- c(head(markers$gene, 10), tail(markers$gene, 10))
 
 mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 
-DoHeatmap(data, features = genes1, angle = 0, size = 5, label = F) +
+DoHeatmap(data, features = genes1, angle = 0, size = 5, label = FALSE) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color='UCP1 Expression')
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = 'UCP1 Expression')
 
 
 
 #################################
 ########### Figure 4C ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -1223,13 +1250,13 @@ data <- ScaleData(data, features = rownames(data))
 data$UCP1 <- factor(ifelse(data@assays$SCT@data["Ucp1", ] > 0, "High", "Low"))
 Idents(data) <- data$UCP1
 
-markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = FALSE)
 
 markers <- subset(markers, p_val_adj < 0.05 & cluster == 'High')
-markers <- markers[order(markers$avg_logFC, decreasing = T), ]
+markers <- markers[order(markers$avg_logFC, decreasing = TRUE), ]
 
-ort <- read.table("/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt", sep = ",", header = T)
-pathways <- gmtPathways('/Users/biagi/PhD/AdipoSNAP/msigdb.v7.1.symbols.gmt')
+ort <- read.table("/Users/biagi/PhD/Adipocyte/Orthologs_human_mouse.txt", sep = ",", header = TRUE)
+pathways <- gmtPathways('/Users/biagi/PhD/Adipocyte/msigdb.v7.1.symbols.gmt')
 
 comp1 <- rbind(head(markers, 50), tail(markers, 35))
 
@@ -1238,9 +1265,9 @@ comp1$Mouse.gene.name <- comp1$Gene.stable.ID <- comp1$Mouse.gene.stable.ID <- N
 colnames(comp1)[1] <- "Gene"
 ranks <- structure(comp1$avg_logFC, names = comp1$Gene)
 ranks <- sort(ranks)
-fgseaRes1 <- fgsea(pathways, ranks, minSize=5)
+fgseaRes1 <- fgsea(pathways, ranks, minSize = 5)
 fgseaRes1 <- subset(fgseaRes1, pval < 0.05)
-fgseaRes1 <- fgseaRes1[order(fgseaRes1$NES, decreasing = T), ]
+fgseaRes1 <- fgseaRes1[order(fgseaRes1$NES, decreasing = TRUE), ]
 genes1 <- fgseaRes1$leadingEdge
 for (i in 1:length(genes1)) {
   fgseaRes1$genes[i] <- paste(genes1[[i]], collapse = ';')
@@ -1268,8 +1295,8 @@ ggplot(fgseaRes1, aes(order, NES, fill = class)) +
 #################################
 ########### Figure 4D ###########
 #################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -1281,8 +1308,8 @@ data <- subset(data, idents = list('Ad1'))
 tmp1 <- factor(ifelse(data@assays$SCT@data["Ucp1", ] > 0, "Ad1_High", "Ad1_Low"))
 
 
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -1308,34 +1335,26 @@ genes <- c('Acaa2', 'Ehhadh', 'Slc27a2', 'Acadm', 'Scp2', 'Acadvl', 'Hadha', 'Ha
            'Sdhaf2', 'Pdha1', 'Pdhb', 'Idh3g', 'Mdh1', 'Sdha', 'Ndufs4', 'Sdhc', 'Suclg1', 'Mdh2', 
            'Akt1', 'Kiss1r', 'Mif', 'Cpt1b', 'Fabp3', 'Acsl5', 'Mfsd2a', 'Abcc4', 'Acsl3', 'Pla2g12a', 
            'Aldoa', 'Gpi1', 'Pgk1', 'Gapdh', 'Pfkp', 'Pkm', 'Ogdh', 'Ppara', 'Prkaa1', 'Gale', 'Entpd5', 'Stat3', 'Foxk2', 'Igf1', 
-           "Daglb", "Slc2a4", "Gpd1", "Pcx", "Abhd5", "Adrb3", "Lipe", "Pck1", "Pnpla2")
+           "Daglb", "Slc2a4", "Gpd1", "Pcx", "Abhd5", "Adrb3", "Lipe", "Pck1", "Pnpla2", 
+           'Acaca', 'Acly', 'Fasn', 'Srebf1', 'Dgat2', 'Insig1', 'Hadh', 'Elovl6', 'Lpl')
 genes <- genes[genes %in% rownames(data)]
 
 mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 
-DoHeatmap(data, features = genes, angle = 0, size = 5, label = F) +
+DoHeatmap(data, features = genes, angle = 0, size = 5, label = FALSE) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color='UCP1 Expression')
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = 'Ucp1 Expression')
 
 
 
 #################################
 ########### Figure 4F ###########
 #################################
-expressionInput <- c(Set1 = 962, Set2 = 244, Set3 = 73, Set4 = 35, `Set1&Set2` = 315, `Set1&Set3` = 16, `Set2&Set3` = 1, `Set1&Set2&Set3` = 46)
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
-upset(fromExpression(expressionInput), set_size.show = T, shade.alpha	= 1)
-
-
-
-#################################
-########### Figure 4G ###########
-#################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
-
-ort <- read.table("/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt", sep = ",", header = T)
+ort <- read.table("/Users/biagi/PhD/Adipocyte/Orthologs_human_mouse.txt", sep = ",", header = TRUE)
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -1361,8 +1380,8 @@ df <- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
 df <- t(df)
 
 x <- as.matrix(df)
-m = apply(x, 1, mean, na.rm = T)
-s = apply(x, 1, sd, na.rm = T)
+m = apply(x, 1, mean, na.rm = TRUE)
+s = apply(x, 1, sd, na.rm = TRUE)
 res <- (x - m)/s
 cn = colnames(res)
 
@@ -1375,8 +1394,8 @@ breaks <- seq(-2,2, by= 0.1)
 Heatmap(as.matrix(res), 
         bottom_annotation = ba, 
         name = "zscore", column_title = "Ad1 UCP1 High", width = 1, 
-        show_row_names = T, show_column_names = F,
-        cluster_rows = F, cluster_columns = T,
+        show_row_names = TRUE, show_column_names = FALSE,
+        cluster_rows = FALSE, cluster_columns = TRUE,
         col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = "RdBu")))(41)), 
         heatmap_height = unit(6, "cm"), row_names_gp = gpar(fontsize = 8))
 
@@ -1391,8 +1410,8 @@ df <- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
 df <- t(df)
 
 x <- as.matrix(df)
-m = apply(x, 1, mean, na.rm = T)
-s = apply(x, 1, sd, na.rm = T)
+m = apply(x, 1, mean, na.rm = TRUE)
+s = apply(x, 1, sd, na.rm = TRUE)
 res <- (x - m)/s
 cn = colnames(res)
 
@@ -1405,8 +1424,37 @@ breaks <- seq(-2,2, by= 0.1)
 Heatmap(as.matrix(res), 
         bottom_annotation = ba, 
         name = "zscore", column_title = "Ad1 UCP1 Low", width = 1, 
-        show_row_names = T, show_column_names = F,
-        cluster_rows = F, cluster_columns = T,
+        show_row_names = TRUE, show_column_names = FALSE,
+        cluster_rows = FALSE, cluster_columns = TRUE,
         col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = "RdBu")))(41)), 
         heatmap_height = unit(6, "cm"), row_names_gp = gpar(fontsize = 8))
+
+        
+        
+#################################
+########### Figure 4G ###########
+#################################
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
+
+new_cluster <- infos$L1_result
+names(new_cluster) <- rownames(infos)
+new_cluster <- new_cluster + 1
+new_cluster <- paste0("Ad", new_cluster)
+new_cluster <- as.factor(new_cluster)
+data$clusters <- new_cluster
+
+Idents(data) <- as.factor(data$timpoint)
+data <- subset(data, cells = names(which(data$timpoint == '4day' | data$timpoint == 'RT' | data$timpoint == 'CL')))
+
+pt <- plot_density(data, c('Slc36a2', 'Acadm', 'Slc27a1', 'Fasn'), reduction = "tsne", pal = "inferno", combine = FALSE)
+
+pt <- lapply(pt, function(x){ x + theme_bw() + 
+               theme(panel.background = element_rect(colour = "black", size = 0.1), 
+                     axis.ticks.length = unit(.2, "cm"), 
+                     axis.text = element_text(size = 11), 
+                     panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank())})
+
+ggarrange(plotlist = pt)
 ```

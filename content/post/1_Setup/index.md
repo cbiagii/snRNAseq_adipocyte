@@ -18,7 +18,7 @@ if(length(new.packages)) {
 }
   
 # Install additional Bioconductor packages
-Bioconductor_packages <- c('ComplexHeatmap', 'DropletUtils', 'fgsea', 'monocle')
+Bioconductor_packages <- c('ComplexHeatmap', 'DropletUtils', 'fgsea', 'monocle', 'Nebulosa')
 new.packages <- Bioconductor_packages[!(Bioconductor_packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) {
   BiocManager::install(new.packages)

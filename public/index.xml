@@ -28,7 +28,7 @@ if(length(new.packages)) {
 }
   
 # Install additional Bioconductor packages
-Bioconductor_packages &amp;lt;- c(&#39;ComplexHeatmap&#39;, &#39;DropletUtils&#39;, &#39;fgsea&#39;, &#39;monocle&#39;)
+Bioconductor_packages &amp;lt;- c(&#39;ComplexHeatmap&#39;, &#39;DropletUtils&#39;, &#39;fgsea&#39;, &#39;monocle&#39;, &#39;Nebulosa&#39;)
 new.packages &amp;lt;- Bioconductor_packages[!(Bioconductor_packages %in% installed.packages()[,&amp;quot;Package&amp;quot;])]
 if(length(new.packages)) {
   BiocManager::install(new.packages)
@@ -200,6 +200,7 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
       theme(legend.key=element_blank())
   }
   
+  
   tmp &amp;lt;- cds@assayData$exprs[gene, ]
   if (length(gene) == 1) {
     tmp &amp;lt;- rescale(tmp, to = c(-2,2))
@@ -227,6 +228,7 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
   edge_df[, cn2] &amp;lt;- as.matrix(edge_df[, cn2]) %*% t(rot_mat)
   edge_df[, cn3] &amp;lt;- as.matrix(edge_df[, cn3]) %*% t(rot_mat)
   
+  
   data_df &amp;lt;- pt$data
   
   g &amp;lt;- ggplot(data = data_df, aes(x = data_dim_1, y = data_dim_2))
@@ -237,9 +239,7 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
                         linetype = &amp;quot;solid&amp;quot;, na.rm = TRUE, data = edge_df)
   
   mst_branch_nodes &amp;lt;- cds@auxOrderingData[[cds@dim_reduce_type]]$branch_points
-  branch_point_df &amp;lt;- ica_space_df %&amp;gt;% slice(match(mst_branch_nodes, sample_name)) %&amp;gt;% mutate(branch_point_idx = seq_len(n()))
-  g &amp;lt;- g + geom_point(aes_string(x = &amp;quot;prin_graph_dim_1&amp;quot;, y = &amp;quot;prin_graph_dim_2&amp;quot;), size = 5, na.rm = TRUE, branch_point_df) + 
-    geom_text(aes_string(x = &amp;quot;prin_graph_dim_1&amp;quot;, y = &amp;quot;prin_graph_dim_2&amp;quot;, label = &amp;quot;branch_point_idx&amp;quot;), size = 4, color = &amp;quot;white&amp;quot;, na.rm = TRUE, branch_point_df)
+  branch_point_df &amp;lt;- ica_space_df %&amp;gt;% dplyr::slice(match(mst_branch_nodes, sample_name)) %&amp;gt;% mutate(branch_point_idx = seq_len(n()))
   
   g &amp;lt;- g + monocle_theme_opts() + xlab(&amp;quot;Component 1&amp;quot;) + ylab(&amp;quot;Component 2&amp;quot;) + 
     theme(legend.position = &amp;quot;top&amp;quot;, legend.key.height = grid::unit(0.35, &amp;quot;in&amp;quot;)) + theme(legend.key = element_blank()) + 
@@ -247,10 +247,12 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
   
   plotlist &amp;lt;- list()
   for (i in 1:length(gene)) {
-    plotlist[[i]] &amp;lt;- g + geom_point(data = data_df[which(data_df[[gene[i]]] &amp;lt; 0), ], aes_string(color = paste0(&#39;`&#39;, gene[i], &#39;`&#39;)), size = I(1), na.rm = TRUE) + 
-      geom_point(data = data_df[which(data_df[[gene[i]]] &amp;gt; 0), ], aes_string(color = paste0(&#39;`&#39;, gene[i], &#39;`&#39;)), size = I(1.5), na.rm = TRUE) + 
+    plotlist[[i]] &amp;lt;- g + geom_point(data = data_df[which(data_df[[gene[i]]] &amp;lt; 0), ], aes_string(color = paste0(&#39;`&#39;, gene[i], &#39;`&#39;)), size = I(0.5), na.rm = TRUE) + 
+      geom_point(data = data_df[which(data_df[[gene[i]]] &amp;gt; 0), ], aes_string(color = paste0(&#39;`&#39;, gene[i], &#39;`&#39;)), size = I(0.8), na.rm = TRUE) + 
       scale_color_viridis(option = &#39;C&#39;, discrete = F, end = 0.9) + ggtitle(gene[i]) + 
-      theme(plot.title = element_text(hjust = 0.5)) + labs(color = &amp;quot;&amp;quot;)
+      theme(plot.title = element_text(hjust = 0.5)) + labs(color = &amp;quot;&amp;quot;) + 
+      geom_point(aes_string(x = &amp;quot;prin_graph_dim_1&amp;quot;, y = &amp;quot;prin_graph_dim_2&amp;quot;), size = 4, na.rm = TRUE, branch_point_df) + 
+      geom_text(aes_string(x = &amp;quot;prin_graph_dim_1&amp;quot;, y = &amp;quot;prin_graph_dim_2&amp;quot;, label = &amp;quot;branch_point_idx&amp;quot;), size = 3, color = &amp;quot;white&amp;quot;, na.rm = TRUE, branch_point_df)
   }
   
   pt2 &amp;lt;- ggarrange(plotlist = plotlist, common.legend = T)
@@ -1036,15 +1038,16 @@ adata.write_csvs(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/resul
       <guid>https://cbiagii.github.io/AdipoSNAP/post/10_main_figures/</guid>
       <description>&lt;h2 id=&#34;figure-1&#34;&gt;Figure 1&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;## Loading R packages
-library(metacell)
-library(Seurat)
-library(ggplot2)
 library(dplyr)
-library(RColorBrewer)
-library(ggpubr)
 library(enrichR)
-library(glue)
+library(ggplot2)
+library(ggpubr)
 library(ggtext)
+library(glue)
+library(metacell)
+library(Nebulosa)
+library(RColorBrewer)
+library(Seurat)
 
 
 #################################
@@ -1076,11 +1079,11 @@ colnames(marks_colors) &amp;lt;- c(&amp;quot;group&amp;quot;, &amp;quot;gene&amp
 marks_colors$priority &amp;lt;- as.integer(marks_colors$priority)
 marks_colors$T_fold &amp;lt;- as.numeric(marks_colors$T_fold)
 
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda&amp;quot;)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda&amp;quot;)
 dims &amp;lt;- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&amp;quot;)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&amp;quot;)
 tmp1 &amp;lt;- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 &amp;lt;- data.frame(cols = object@colors)
 teste &amp;lt;- merge(tmp1, tmp2, by.x = &amp;quot;cols&amp;quot;, by.y = &amp;quot;row.names&amp;quot;)
@@ -1092,8 +1095,8 @@ teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;q
 teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;quot;Endothelial&amp;quot;, marks_colors$group)], &amp;quot;Endothelials&amp;quot;, teste$cellType)
 tab &amp;lt;- merge(dims, teste, by.x = &amp;quot;row.names&amp;quot;, by.y = &amp;quot;cells&amp;quot;)
 
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -1121,7 +1124,7 @@ cls &amp;lt;- c(&amp;quot;#FFA500&amp;quot;, &amp;quot;#ffae19&amp;quot;, &amp;q
 TSNEPlot(data, label = FALSE, pt.size = 0.3, cols = cls) +
   xlab(&amp;quot;t-SNE 1&amp;quot;) + ylab(&amp;quot;t-SNE 2&amp;quot;) +
   theme_classic() + labs(color = &amp;quot;Cell Type&amp;quot;) +
-  theme(legend.position=&amp;quot;bottom&amp;quot;)
+  theme(legend.position = &amp;quot;bottom&amp;quot;)
 
 
 a &amp;lt;- round((sum(Idents(data) == &amp;quot;AD1&amp;quot; | Idents(data) == &amp;quot;AD2&amp;quot; | Idents(data) == &amp;quot;AD3&amp;quot; | Idents(data) == &amp;quot;AD4&amp;quot;)/ncol(data))*100, 2); a1 &amp;lt;- sum(Idents(data) == &amp;quot;AD1&amp;quot; | Idents(data) == &amp;quot;AD2&amp;quot; | Idents(data) == &amp;quot;AD3&amp;quot; | Idents(data) == &amp;quot;AD4&amp;quot;)
@@ -1153,83 +1156,21 @@ ggplot(df, aes(x = &amp;quot;&amp;quot;, y = value, fill = class)) +
 #################################
 ########### Figure 1C ###########
 #################################
-marks_colors &amp;lt;- NULL
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte_1&amp;quot;, &amp;quot;Acsl1&amp;quot;, &amp;quot;#0000b3&amp;quot;, 1, 2.5))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte_2&amp;quot;, &amp;quot;Plin4&amp;quot;, &amp;quot;#0000cc&amp;quot;, 1, 2.5))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte_3&amp;quot;, &amp;quot;Mlxipl&amp;quot;, &amp;quot;#0000e6&amp;quot;, 1, 2.5))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte_4&amp;quot;, &amp;quot;Pck1&amp;quot;, &amp;quot;#0000ff&amp;quot;, 1, 2.5))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte_5&amp;quot;, &amp;quot;Adrb3&amp;quot;, &amp;quot;#1a1aff&amp;quot;, 1, 2.5))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Endothelial_1&amp;quot;, &amp;quot;Btnl9&amp;quot;, &amp;quot;#00cd00&amp;quot;, 1, 1.8))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Endothelial_2&amp;quot;, &amp;quot;Ushbp1&amp;quot;, &amp;quot;#00b300&amp;quot;, 1, 1.8))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Endothelial_3&amp;quot;, &amp;quot;Egfl7&amp;quot;, &amp;quot;#009a00&amp;quot;, 1, 1.8))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Endothelial_4&amp;quot;, &amp;quot;Mcf2l&amp;quot;, &amp;quot;#008000&amp;quot;, 1, 1.8))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Endothelial_5&amp;quot;, &amp;quot;Ptprb&amp;quot;, &amp;quot;#006700&amp;quot;, 1, 1.8))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Immune_1&amp;quot;, &amp;quot;Zeb2&amp;quot;, &amp;quot;#ff7f7f&amp;quot;, 1, 0.9))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Immune_2&amp;quot;, &amp;quot;Trps1&amp;quot;, &amp;quot;#ff6666&amp;quot;, 1, 0.9))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Immune_3&amp;quot;, &amp;quot;Runx1&amp;quot;, &amp;quot;#ff4c4c&amp;quot;, 1, 0.9))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Immune_4&amp;quot;, &amp;quot;Ptprc&amp;quot;, &amp;quot;#ff3232&amp;quot;, 1, 0.9))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Immune_5&amp;quot;, &amp;quot;Adap2&amp;quot;, &amp;quot;#ff1919&amp;quot;, 1, 0.9))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Progenitor_1&amp;quot;, &amp;quot;Dcn&amp;quot;, &amp;quot;#ffff4d&amp;quot;, 1, 2.4))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Progenitor_2&amp;quot;, &amp;quot;Celf2&amp;quot;, &amp;quot;#ffff33&amp;quot;, 1, 2.4))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Progenitor_3&amp;quot;, &amp;quot;Meg3&amp;quot;, &amp;quot;#ffff1a&amp;quot;, 1, 2.4))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Progenitor_4&amp;quot;, &amp;quot;Col1a2&amp;quot;, &amp;quot;#ffff00&amp;quot;, 1, 2.4))
-marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Progenitor_5&amp;quot;, &amp;quot;Col3a1&amp;quot;, &amp;quot;#e6e600&amp;quot;, 1, 2.4))
-marks_colors &amp;lt;- as.data.frame(marks_colors)
-colnames(marks_colors) &amp;lt;- c(&amp;quot;group&amp;quot;, &amp;quot;gene&amp;quot;, &amp;quot;color&amp;quot;, &amp;quot;priority&amp;quot;, &amp;quot;T_fold&amp;quot;)
-marks_colors$priority &amp;lt;- as.integer(marks_colors$priority)
-marks_colors$T_fold &amp;lt;- as.numeric(marks_colors$T_fold)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
 
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda&amp;quot;)
-dims &amp;lt;- data.frame(x = object@sc_x,
-                   y = object@sc_y)
+pt &amp;lt;- plot_density(data, c(&amp;quot;Adrb3&amp;quot;, &amp;quot;Pecam1&amp;quot;, &amp;quot;Ptprc&amp;quot;, &amp;quot;Cd34&amp;quot;, &amp;quot;Pdgfra&amp;quot;, &amp;quot;Itgb1&amp;quot;), reduction = &amp;quot;tsne&amp;quot;, pal = &amp;quot;inferno&amp;quot;, combine = FALSE)
+pt &amp;lt;- lapply(pt, function(x) {
+  x + theme_bw() + xlab(&amp;quot;t-SNE 1&amp;quot;) + ylab(&amp;quot;t-SNE 2&amp;quot;) +
+    theme(plot.title = element_text(hjust = 0.5, face = &amp;quot;italic&amp;quot;), 
+          panel.background = element_rect(colour = &amp;quot;black&amp;quot;, size = 0.1), 
+          axis.ticks.length = unit(.2, &amp;quot;cm&amp;quot;), 
+          axis.text = element_text(size = 11), 
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(), 
+          legend.position = &amp;quot;none&amp;quot;)
+})
 
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&amp;quot;)
-tmp1 &amp;lt;- data.frame(cells = names(object@mc), cols = object@mc)
-tmp2 &amp;lt;- data.frame(cols = object@colors)
-teste &amp;lt;- merge(tmp1, tmp2, by.x = &amp;quot;cols&amp;quot;, by.y = &amp;quot;row.names&amp;quot;)
-teste$cols &amp;lt;- NULL
-
-teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;quot;Adipocyte&amp;quot;, marks_colors$group)], &amp;quot;Adipocytes&amp;quot;, &amp;quot;Unknown&amp;quot;)
-teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;quot;Progenitor&amp;quot;, marks_colors$group)], &amp;quot;Progenitors&amp;quot;, teste$cellType)
-teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;quot;Immune&amp;quot;, marks_colors$group)], &amp;quot;Immunes&amp;quot;, teste$cellType)
-teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;quot;Endothelial&amp;quot;, marks_colors$group)], &amp;quot;Endothelials&amp;quot;, teste$cellType)
-tab &amp;lt;- merge(dims, teste, by.x = &amp;quot;row.names&amp;quot;, by.y = &amp;quot;cells&amp;quot;)
-
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv&amp;quot;)
-
-new_cluster &amp;lt;- infos$L1_result
-names(new_cluster) &amp;lt;- rownames(infos)
-new_cluster &amp;lt;- as.factor(new_cluster)
-data$clusters_sccaf &amp;lt;- new_cluster
-
-infos &amp;lt;- data@meta.data
-infos &amp;lt;- infos[tab$Row.names, ]
-
-final &amp;lt;- merge(infos, tab, by.x = &amp;quot;row.names&amp;quot;, by.y = &amp;quot;Row.names&amp;quot;)
-
-Idents(data) &amp;lt;- data$clusters_sccaf
-new.cluster.ids &amp;lt;- c(&amp;quot;EN&amp;quot;, &amp;quot;PG&amp;quot;, &amp;quot;PG&amp;quot;, &amp;quot;AD&amp;quot;, &amp;quot;AD&amp;quot;, &amp;quot;PG&amp;quot;, &amp;quot;PG&amp;quot;, &amp;quot;IM&amp;quot;, &amp;quot;AD&amp;quot;, &amp;quot;AD&amp;quot;, &amp;quot;EN&amp;quot;, &amp;quot;IM&amp;quot;, &amp;quot;IM&amp;quot;, &amp;quot;PG&amp;quot;)
-names(new.cluster.ids) &amp;lt;- levels(data)
-data &amp;lt;- RenameIdents(data, new.cluster.ids)
-Idents(data) &amp;lt;- factor(Idents(data), levels = c(&#39;AD&#39;, &#39;EN&#39;, &#39;IM&#39;, &#39;PG&#39;))
-
-markers &amp;lt;- FindAllMarkers(data, only.pos = T)
-
-top20 &amp;lt;- markers %&amp;gt;% group_by(cluster) %&amp;gt;% top_n(n = 20, wt = avg_logFC)
-
-data2 &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
-
-Idents(data2) &amp;lt;- Idents(data)
-rm(data)
-data2 &amp;lt;- ScaleData(data2)
-
-cls &amp;lt;- c(&amp;quot;#FFA500&amp;quot;, &amp;quot;#329932&amp;quot;, &amp;quot;#ff9999&amp;quot;, &amp;quot;#6666ff&amp;quot;)
-mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
-
-DoHeatmap(data2, features = top20$gene, group.colors = cls, angle = 0, size = 5, label = F) +
-  scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=5))
+ggarrange(plotlist = pt)
 
 
 
@@ -1262,11 +1203,11 @@ colnames(marks_colors) &amp;lt;- c(&amp;quot;group&amp;quot;, &amp;quot;gene&amp
 marks_colors$priority &amp;lt;- as.integer(marks_colors$priority)
 marks_colors$T_fold &amp;lt;- as.numeric(marks_colors$T_fold)
 
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc2d.test_2dproj.Rda&amp;quot;)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda&amp;quot;)
 dims &amp;lt;- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda&amp;quot;)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&amp;quot;)
 tmp1 &amp;lt;- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 &amp;lt;- data.frame(cols = object@colors)
 teste &amp;lt;- merge(tmp1, tmp2, by.x = &amp;quot;cols&amp;quot;, by.y = &amp;quot;row.names&amp;quot;)
@@ -1278,8 +1219,91 @@ teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;q
 teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;quot;Endothelial&amp;quot;, marks_colors$group)], &amp;quot;Endothelials&amp;quot;, teste$cellType)
 tab &amp;lt;- merge(dims, teste, by.x = &amp;quot;row.names&amp;quot;, by.y = &amp;quot;cells&amp;quot;)
 
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv&amp;quot;)
+
+new_cluster &amp;lt;- infos$L1_result
+names(new_cluster) &amp;lt;- rownames(infos)
+new_cluster &amp;lt;- as.factor(new_cluster)
+data$clusters_sccaf &amp;lt;- new_cluster
+
+infos &amp;lt;- data@meta.data
+infos &amp;lt;- infos[tab$Row.names, ]
+
+final &amp;lt;- merge(infos, tab, by.x = &amp;quot;row.names&amp;quot;, by.y = &amp;quot;Row.names&amp;quot;)
+
+Idents(data) &amp;lt;- data$clusters_sccaf
+new.cluster.ids &amp;lt;- c(&amp;quot;EN&amp;quot;, &amp;quot;PG&amp;quot;, &amp;quot;PG&amp;quot;, &amp;quot;AD&amp;quot;, &amp;quot;AD&amp;quot;, &amp;quot;PG&amp;quot;, &amp;quot;PG&amp;quot;, &amp;quot;IM&amp;quot;, &amp;quot;AD&amp;quot;, &amp;quot;AD&amp;quot;, &amp;quot;EN&amp;quot;, &amp;quot;IM&amp;quot;, &amp;quot;IM&amp;quot;, &amp;quot;PG&amp;quot;)
+names(new.cluster.ids) &amp;lt;- levels(data)
+data &amp;lt;- RenameIdents(data, new.cluster.ids)
+Idents(data) &amp;lt;- factor(Idents(data), levels = c(&#39;AD&#39;, &#39;EN&#39;, &#39;IM&#39;, &#39;PG&#39;))
+
+markers &amp;lt;- FindAllMarkers(data, only.pos = TRUE)
+
+top20 &amp;lt;- markers %&amp;gt;% group_by(cluster) %&amp;gt;% top_n(n = 20, wt = avg_logFC)
+
+data2 &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
+
+Idents(data2) &amp;lt;- Idents(data)
+rm(data)
+data2 &amp;lt;- ScaleData(data2)
+
+cls &amp;lt;- c(&amp;quot;#FFA500&amp;quot;, &amp;quot;#329932&amp;quot;, &amp;quot;#ff9999&amp;quot;, &amp;quot;#6666ff&amp;quot;)
+mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
+
+DoHeatmap(data2, features = top20$gene, group.colors = cls, angle = 0, size = 5, label = FALSE) +
+  scale_fill_gradientn(colours = rev(mapal)) +
+  theme(axis.text = element_text(size = 5))
+
+
+
+#################################
+########### Figure 1E ###########
+#################################
+marks_colors &amp;lt;- NULL
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte_1&amp;quot;, &amp;quot;Acsl1&amp;quot;, &amp;quot;#0000b3&amp;quot;, 1, 2.5))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte_2&amp;quot;, &amp;quot;Plin4&amp;quot;, &amp;quot;#0000cc&amp;quot;, 1, 2.5))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte_3&amp;quot;, &amp;quot;Mlxipl&amp;quot;, &amp;quot;#0000e6&amp;quot;, 1, 2.5))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte_4&amp;quot;, &amp;quot;Pck1&amp;quot;, &amp;quot;#0000ff&amp;quot;, 1, 2.5))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte_5&amp;quot;, &amp;quot;Adrb3&amp;quot;, &amp;quot;#1a1aff&amp;quot;, 1, 2.5))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Endothelial_1&amp;quot;, &amp;quot;Btnl9&amp;quot;, &amp;quot;#00cd00&amp;quot;, 1, 1.8))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Endothelial_2&amp;quot;, &amp;quot;Ushbp1&amp;quot;, &amp;quot;#00b300&amp;quot;, 1, 1.8))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Endothelial_3&amp;quot;, &amp;quot;Egfl7&amp;quot;, &amp;quot;#009a00&amp;quot;, 1, 1.8))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Endothelial_4&amp;quot;, &amp;quot;Mcf2l&amp;quot;, &amp;quot;#008000&amp;quot;, 1, 1.8))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Endothelial_5&amp;quot;, &amp;quot;Ptprb&amp;quot;, &amp;quot;#006700&amp;quot;, 1, 1.8))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Immune_1&amp;quot;, &amp;quot;Zeb2&amp;quot;, &amp;quot;#ff7f7f&amp;quot;, 1, 0.9))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Immune_2&amp;quot;, &amp;quot;Trps1&amp;quot;, &amp;quot;#ff6666&amp;quot;, 1, 0.9))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Immune_3&amp;quot;, &amp;quot;Runx1&amp;quot;, &amp;quot;#ff4c4c&amp;quot;, 1, 0.9))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Immune_4&amp;quot;, &amp;quot;Ptprc&amp;quot;, &amp;quot;#ff3232&amp;quot;, 1, 0.9))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Immune_5&amp;quot;, &amp;quot;Adap2&amp;quot;, &amp;quot;#ff1919&amp;quot;, 1, 0.9))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Progenitor_1&amp;quot;, &amp;quot;Dcn&amp;quot;, &amp;quot;#ffff4d&amp;quot;, 1, 2.4))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Progenitor_2&amp;quot;, &amp;quot;Celf2&amp;quot;, &amp;quot;#ffff33&amp;quot;, 1, 2.4))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Progenitor_3&amp;quot;, &amp;quot;Meg3&amp;quot;, &amp;quot;#ffff1a&amp;quot;, 1, 2.4))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Progenitor_4&amp;quot;, &amp;quot;Col1a2&amp;quot;, &amp;quot;#ffff00&amp;quot;, 1, 2.4))
+marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Progenitor_5&amp;quot;, &amp;quot;Col3a1&amp;quot;, &amp;quot;#e6e600&amp;quot;, 1, 2.4))
+marks_colors &amp;lt;- as.data.frame(marks_colors)
+colnames(marks_colors) &amp;lt;- c(&amp;quot;group&amp;quot;, &amp;quot;gene&amp;quot;, &amp;quot;color&amp;quot;, &amp;quot;priority&amp;quot;, &amp;quot;T_fold&amp;quot;)
+marks_colors$priority &amp;lt;- as.integer(marks_colors$priority)
+marks_colors$T_fold &amp;lt;- as.numeric(marks_colors$T_fold)
+
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc2d.test_2dproj.Rda&amp;quot;)
+dims &amp;lt;- data.frame(x = object@sc_x,
+                   y = object@sc_y)
+
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc.test_mc_f.Rda&amp;quot;)
+tmp1 &amp;lt;- data.frame(cells = names(object@mc), cols = object@mc)
+tmp2 &amp;lt;- data.frame(cols = object@colors)
+teste &amp;lt;- merge(tmp1, tmp2, by.x = &amp;quot;cols&amp;quot;, by.y = &amp;quot;row.names&amp;quot;)
+teste$cols &amp;lt;- NULL
+
+teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;quot;Adipocyte&amp;quot;, marks_colors$group)], &amp;quot;Adipocytes&amp;quot;, &amp;quot;Unknown&amp;quot;)
+teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;quot;Progenitor&amp;quot;, marks_colors$group)], &amp;quot;Progenitors&amp;quot;, teste$cellType)
+teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;quot;Immune&amp;quot;, marks_colors$group)], &amp;quot;Immunes&amp;quot;, teste$cellType)
+teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;quot;Endothelial&amp;quot;, marks_colors$group)], &amp;quot;Endothelials&amp;quot;, teste$cellType)
+tab &amp;lt;- merge(dims, teste, by.x = &amp;quot;row.names&amp;quot;, by.y = &amp;quot;cells&amp;quot;)
+
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -1306,13 +1330,13 @@ DotPlot(data, features = c(&amp;quot;Acsl1&amp;quot;, &amp;quot;Plin4&amp;quot;,
                            &amp;quot;Btnl9&amp;quot;, &amp;quot;Ushbp1&amp;quot;, &amp;quot;Egfl7&amp;quot;, &amp;quot;Mcf2l&amp;quot;, &amp;quot;Ptprb&amp;quot;,
                            &amp;quot;Trps1&amp;quot;, &amp;quot;Runx1&amp;quot;, &amp;quot;Ptprc&amp;quot;, &amp;quot;Adap2&amp;quot;,
                            &amp;quot;Dcn&amp;quot;, &amp;quot;Celf2&amp;quot;, &amp;quot;Meg3&amp;quot;, &amp;quot;Col1a2&amp;quot;, &amp;quot;Col3a1&amp;quot;), cols = c(&amp;quot;grey&amp;quot;, &#39;red&#39;)) +
-  xlab(&amp;quot;&amp;quot;) + ylab(&amp;quot;&amp;quot;) + theme(axis.text.x = element_text(angle = 45, hjust=1))
+  xlab(&amp;quot;&amp;quot;) + ylab(&amp;quot;&amp;quot;) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
+## Nebulosa expression plot
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
 
-pt &amp;lt;- FeaturePlot(data, c(&amp;quot;Mlxipl&amp;quot;, &amp;quot;Egfl7&amp;quot;, &amp;quot;Runx1&amp;quot;, &amp;quot;Celf2&amp;quot;),
-                  cols = c(&amp;quot;grey&amp;quot;, &#39;red&#39;), reduction = &#39;tsne&#39;, pt.size = 0.1, combine = F)
+pt &amp;lt;- plot_density(data, c(&amp;quot;Mlxipl&amp;quot;, &amp;quot;Egfl7&amp;quot;, &amp;quot;Runx1&amp;quot;, &amp;quot;Celf2&amp;quot;), reduction = &amp;quot;tsne&amp;quot;, pal = &amp;quot;inferno&amp;quot;, combine = FALSE)
 pt &amp;lt;- lapply(pt, function(x) {
   x + theme_void() + xlab(&amp;quot;&amp;quot;) + ylab(&amp;quot;&amp;quot;) +
     theme(plot.title = element_text(hjust = 0.5, face = &amp;quot;italic&amp;quot;),
@@ -1324,14 +1348,14 @@ ggarrange(plotlist = pt)
 
 
 #################################
-########### Figure 1E ###########
+########### Figure 1F ###########
 #################################
 dbs &amp;lt;- c(&amp;quot;KEGG_2019_Mouse&amp;quot;, &amp;quot;WikiPathways_2019_Mouse&amp;quot;, &amp;quot;Jensen_TISSUES&amp;quot;, &amp;quot;GO_Biological_Process_2018&amp;quot;)
 
-genes_A &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_A.txt&amp;quot;)
-genes_E &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_E.txt&amp;quot;)
-genes_I &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_I.txt&amp;quot;)
-genes_P &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_P.txt&amp;quot;)
+genes_A &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_A.txt&amp;quot;)
+genes_E &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_E.txt&amp;quot;)
+genes_I &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_I.txt&amp;quot;)
+genes_P &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_P.txt&amp;quot;)
 
 genes &amp;lt;- list(Adipocyte = genes_A,
               Endothelial = genes_E,
@@ -1346,7 +1370,7 @@ tmplist &amp;lt;- NULL
 paths &amp;lt;- NULL
 for (i in 1:length(dbs)) {
   tmp &amp;lt;- lapply(results, `[[`, i)
-  tmp &amp;lt;- mapply(cbind, tmp, &amp;quot;type&amp;quot; = names(tmp), SIMPLIFY=F)
+  tmp &amp;lt;- mapply(cbind, tmp, &amp;quot;type&amp;quot; = names(tmp), SIMPLIFY = FALSE)
   tmp &amp;lt;- do.call(&amp;quot;rbind&amp;quot;, tmp)
   
   tmp &amp;lt;- subset(tmp, Adjusted.P.value &amp;lt; 0.05)
@@ -1367,7 +1391,7 @@ for (i in 1:length(dbs)) {
   plotlist[[i]] &amp;lt;- ggplot(tmp, aes(x = type, y = Term)) +
     geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
     theme_bw(base_size = 9) +
-    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
+    scale_colour_gradient(limits = c(0, max(tmp$Combined.Score) + 0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
     xlab(NULL) + ylab(NULL) +
     ggtitle(dbs[i]) + labs(color = &amp;quot;Combined Score&amp;quot;, size = &amp;quot;-log10(padj)&amp;quot;)
 }
@@ -1388,29 +1412,29 @@ paths$class_with_color &amp;lt;- factor(paths$class_with_color, levels = rev(uni
 ggplot(paths, aes(x = type, y = class_with_color)) +
   geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
   theme_bw(base_size = 8) +
-  scale_colour_gradient(limits=c(0, max(paths$Combined.Score)+0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
+  scale_colour_gradient(limits = c(0, max(paths$Combined.Score) + 0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
   xlab(NULL) + ylab(NULL) +
   ggtitle(NULL) + labs(color = &amp;quot;Combined Score&amp;quot;, size = &amp;quot;-log10(padj)&amp;quot;) +
-  theme(axis.text.y = element_markdown(), axis.text=element_text(size=12))
+  theme(axis.text.y = element_markdown(), axis.text = element_text(size = 12))
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&#34;figure-2&#34;&gt;Figure 2&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;## Loading R packages
+library(dplyr)
+library(enrichR)
+library(ggplot2)
+library(ggpubr)
+library(ggtext)
+library(glue)
+library(RColorBrewer)
 library(Seurat)
 library(SeuratWrappers)
-library(ggplot2)
-library(dplyr)
-library(RColorBrewer)
-library(enrichR)
-library(glue)
-library(ggtext)
-library(ggpubr)
 
 
 #################################
 ########### Figure 2A ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -1422,15 +1446,15 @@ Idents(data) &amp;lt;- new_cluster
 TSNEPlot(data, pt.size = 1, cols = c(&amp;quot;#11c78b&amp;quot;, &amp;quot;#800080&amp;quot;, &amp;quot;#e57400&amp;quot;, &amp;quot;#0000FF&amp;quot;, &amp;quot;#dfdf0d&amp;quot;)) +
   xlab(&amp;quot;t-SNE 1&amp;quot;) + ylab(&amp;quot;t-SNE 2&amp;quot;) +
   theme_classic() + labs(color = &amp;quot;Cluster&amp;quot;) +
-  theme(legend.position=&amp;quot;bottom&amp;quot;)
+  theme(legend.position = &amp;quot;bottom&amp;quot;)
 
 
 
 #################################
 ########### Figure 2B ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -1439,7 +1463,7 @@ new_cluster &amp;lt;- paste0(&amp;quot;Ad&amp;quot;, new_cluster)
 new_cluster &amp;lt;- as.factor(new_cluster)
 Idents(data) &amp;lt;- new_cluster
 
-markers &amp;lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+markers &amp;lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = FALSE)
 
 top10 &amp;lt;- markers %&amp;gt;% group_by(cluster) %&amp;gt;% top_n(n = 10, wt = avg_logFC)
 
@@ -1449,17 +1473,17 @@ data &amp;lt;- ScaleData(data)
 cls &amp;lt;- c(&amp;quot;#11c78b&amp;quot;, &amp;quot;#800080&amp;quot;, &amp;quot;#e57400&amp;quot;, &amp;quot;#0000FF&amp;quot;, &amp;quot;#dfdf0d&amp;quot;)
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
 
-DoHeatmap(data, features = top10$gene, group.colors = cls, angle = 0, size = 5, label = F) +
+DoHeatmap(data, features = top10$gene, group.colors = cls, angle = 0, size = 5, label = FALSE) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6))
+  theme(axis.text = element_text(size = 6))
 
 
 
 #################################
 ########### Figure 2C ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -1471,7 +1495,7 @@ Idents(data) &amp;lt;- new_cluster
 DotPlot(data, features = c(&#39;Adipoq&#39;, &#39;Adrb3&#39;, &#39;Cidec&#39;, &#39;Dgat1&#39;, &#39;Fasn&#39;, &#39;Lipe&#39;, &#39;Pck1&#39;, &#39;Plin1&#39;, &#39;Pnpla2&#39;, &#39;Retn&#39;), cols = c(&amp;quot;grey&amp;quot;, &#39;red&#39;), assay = &amp;quot;RNA&amp;quot;) +
   xlab(NULL) + ylab(NULL) +
   theme_bw(base_size = 12) +
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
 
@@ -1480,11 +1504,11 @@ DotPlot(data, features = c(&#39;Adipoq&#39;, &#39;Adrb3&#39;, &#39;Cidec&#39;, &
 #################################
 dbs &amp;lt;- c(&amp;quot;KEGG_2019_Mouse&amp;quot;, &amp;quot;WikiPathways_2019_Mouse&amp;quot;, &amp;quot;Jensen_TISSUES&amp;quot;, &amp;quot;GO_Biological_Process_2018&amp;quot;, &amp;quot;Mouse_Gene_Atlas&amp;quot;)
 
-genes_1 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_1.txt&amp;quot;)
-genes_2 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_2.txt&amp;quot;)
-genes_3 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_3.txt&amp;quot;)
-genes_4 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_4.txt&amp;quot;)
-genes_5 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_5.txt&amp;quot;)
+genes_1 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_1.txt&amp;quot;)
+genes_2 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_2.txt&amp;quot;)
+genes_3 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_3.txt&amp;quot;)
+genes_4 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_4.txt&amp;quot;)
+genes_5 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_5.txt&amp;quot;)
 
 genes &amp;lt;- list(Ad1 = genes_1,
               Ad2 = genes_2,
@@ -1500,7 +1524,7 @@ tmplist &amp;lt;- NULL
 paths &amp;lt;- NULL
 for (i in 1:length(dbs)) {
   tmp &amp;lt;- lapply(results, `[[`, i)
-  tmp &amp;lt;- mapply(cbind, tmp, &amp;quot;type&amp;quot; = names(tmp), SIMPLIFY=F)
+  tmp &amp;lt;- mapply(cbind, tmp, &amp;quot;type&amp;quot; = names(tmp), SIMPLIFY = FALSE)
   tmp &amp;lt;- do.call(&amp;quot;rbind&amp;quot;, tmp)
   
   tmp &amp;lt;- subset(tmp, Adjusted.P.value &amp;lt; 0.05)
@@ -1521,7 +1545,7 @@ for (i in 1:length(dbs)) {
   plotlist[[i]] &amp;lt;- ggplot(tmp, aes(x = type, y = Term)) +
     geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
     theme_bw(base_size = 9) +
-    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
+    scale_colour_gradient(limits = c(0, max(tmp$Combined.Score) + 0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
     xlab(NULL) + ylab(NULL) +
     ggtitle(dbs[i]) + labs(color = &amp;quot;Combined Score&amp;quot;, size = &amp;quot;-log10(padj)&amp;quot;)
 }
@@ -1544,18 +1568,18 @@ paths$class_with_color &amp;lt;- factor(paths$class_with_color, levels = rev(uni
 ggplot(paths, aes(x = type, y = class_with_color)) +
   geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
   theme_bw(base_size = 8) +
-  scale_colour_gradient(limits=c(0, max(paths$Combined.Score)+0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
+  scale_colour_gradient(limits = c(0, max(paths$Combined.Score) + 0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
   xlab(NULL) + ylab(NULL) +
   ggtitle(NULL) + labs(color = &amp;quot;Combined Score&amp;quot;, size = &amp;quot;-log10(padj)&amp;quot;) +
-  theme(axis.text.y = element_markdown(), axis.text=element_text(size=12))
+  theme(axis.text.y = element_markdown(), axis.text = element_text(size = 12))
 
 
 
 #################################
 ########### Figure 2E ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -1568,7 +1592,7 @@ data$clusters &amp;lt;- Idents(data)
 data &amp;lt;- SeuratWrappers::RunALRA(data)
 data &amp;lt;- ScaleData(data)
 
-genes &amp;lt;- c(&#39;Adipoq&#39;, &#39;Pnpla2&#39;, &#39;Fasn&#39;, &#39;Lep&#39;, &#39;Cebpa&#39;, &#39;Pparg&#39;, &#39;Cidec&#39;, &#39;Car3&#39;, &#39;Gpx3&#39;, &#39;Col1a2&#39;, &#39;Serpine1&#39;, &#39;Vegfa&#39;)
+genes &amp;lt;- c(&#39;Adipoq&#39;, &#39;Pnpla2&#39;, &#39;Fasn&#39;, &#39;Lep&#39;, &#39;Cebpa&#39;, &#39;Pparg&#39;, &#39;Cidec&#39;, &#39;Car3&#39;, &#39;Cd36&#39;, &#39;Gadd45g&#39;, &#39;Serpine1&#39;, &#39;Vegfa&#39;)
 genes &amp;lt;- genes[genes %in% rownames(data)]
 
 df &amp;lt;- NULL
@@ -1592,25 +1616,26 @@ ggboxplot(df, x = &amp;quot;cluster&amp;quot;, y = &amp;quot;value&amp;quot;,
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&#34;figure-3&#34;&gt;Figure 3&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;## Loading R packages
-library(Seurat)
-library(SeuratWrappers)
+library(dplyr)
+library(fgsea)
 library(ggplot2)
 library(ggpubr)
-library(fgsea)
-library(dplyr)
 library(ggrepel)
-library(RColorBrewer)
 library(monocle)
+library(Nebulosa)
+library(RColorBrewer)
 library(scales)
+library(Seurat)
+library(SeuratWrappers)
 library(viridis)
 
-source(&#39;/Users/biagi/PhD/AdipoSNAP/2_Functions.R&#39;)
+source(&#39;/Users/biagi/PhD/Adipocyte/2_Functions.R&#39;)
 
 
 #################################
 ########### Figure 3A ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
 Idents(data) &amp;lt;- as.factor(data$timpoint)
 data &amp;lt;- subset(data, cells = names(which(data$timpoint == &#39;4day&#39; | data$timpoint == &#39;RT&#39; | data$timpoint == &#39;CL&#39;)))
 data$timpoint &amp;lt;- gsub(&#39;4day&#39;, &#39;Cold&#39;, data$timpoint)
@@ -1618,14 +1643,14 @@ data$timpoint &amp;lt;- gsub(&#39;4day&#39;, &#39;Cold&#39;, data$timpoint)
 TSNEPlot(data, pt.size = 1, group.by = &#39;timpoint&#39;) +
   xlab(&amp;quot;t-SNE 1&amp;quot;) + ylab(&amp;quot;t-SNE 2&amp;quot;) +
   theme_classic() + labs(color = &amp;quot;Cluster&amp;quot;) +
-  theme(legend.position=&amp;quot;bottom&amp;quot;)
+  theme(legend.position = &amp;quot;bottom&amp;quot;)
 
 
 
 #################################
 ########### Figure 3B ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
 Idents(data) &amp;lt;- as.factor(data$timpoint)
 data &amp;lt;- subset(data, cells = names(which(data$timpoint == &#39;4day&#39; | data$timpoint == &#39;RT&#39; | data$timpoint == &#39;CL&#39;)))
 
@@ -1635,42 +1660,45 @@ data &amp;lt;- ScaleData(data)
 genes &amp;lt;- c(&#39;Lipe&#39;, &#39;Adrb3&#39;, &#39;Pnpla2&#39;, &#39;Plin1&#39;, &#39;Fasn&#39;, &#39;Acadm&#39;, &#39;Gk&#39;, &#39;Adipoq&#39;, &#39;Retn&#39;, &#39;Cidec&#39;, &#39;Ppara&#39;, &#39;Ucp1&#39;, &#39;Dio2&#39;, &#39;Prdm16&#39;, &#39;Elovl3&#39;)
 genes &amp;lt;- genes[genes %in% rownames(data)]
 
-pt &amp;lt;- FeaturePlot(data, genes,
-                  cols = c(&amp;quot;grey&amp;quot;, &#39;red&#39;), reduction = &#39;tsne&#39;, pt.size = 0.1, combine = F)
-pt &amp;lt;- lapply(pt, function(x) {
-  x + theme_classic() + xlab(&amp;quot;t-SNE 1&amp;quot;) + ylab(&amp;quot;t-SNE 2&amp;quot;) +
-    theme(plot.title = element_text(hjust = 0.5, face = &amp;quot;italic&amp;quot;, size = 10), legend.position = &amp;quot;none&amp;quot;)
-})
+## Nebulosa expression plot
+pt &amp;lt;- plot_density(data, genes, reduction = &amp;quot;tsne&amp;quot;, pal = &amp;quot;inferno&amp;quot;, size = 0.5, combine = FALSE)
 
-ggarrange(plotlist = pt, ncol = 5, nrow = 3, common.legend = T)
+pt &amp;lt;- lapply(pt, function(x){ x + theme_bw() + 
+    theme(panel.background = element_rect(colour = &amp;quot;black&amp;quot;, size = 0.1), 
+          axis.ticks.length = unit(.2, &amp;quot;cm&amp;quot;), axis.text = element_text(size = 11), 
+          panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
+          plot.title = element_text(hjust = 0.5, face = &amp;quot;italic&amp;quot;, size = 10), 
+          legend.position = &amp;quot;none&amp;quot;)})
+
+ggarrange(plotlist = pt, ncol = 5, nrow = 3, common.legend = TRUE)
 
 
 
 #################################
 ########### Figure 3C ###########
 #################################
-ort &amp;lt;- read.table(&amp;quot;/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = T)
-pathways &amp;lt;- gmtPathways(&#39;/Users/biagi/PhD/AdipoSNAP/msigdb.v7.1.symbols.gmt&#39;)
+ort &amp;lt;- read.table(&amp;quot;/projects/cangen/coliveir/cellphonedb/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = TRUE)
+pathways &amp;lt;- gmtPathways(&#39;/Users/biagi/PhD/Adipocyte/msigdb.v7.1.symbols.gmt&#39;)
 
-#ColdxRT
-comp1 &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_ColdxRT_ALL.txt&amp;quot;)
+## ColdxRT
+comp1 &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Diff_Adipocytes_ColdxRT_ALL.txt&amp;quot;)
 comp1 &amp;lt;- subset(comp1, p_val_adj &amp;lt; 0.05)
-comp1 &amp;lt;- comp1[order(comp1$avg_logFC, decreasing = T), ]
+comp1 &amp;lt;- comp1[order(comp1$avg_logFC, decreasing = TRUE), ]
 comp1 &amp;lt;- rbind(head(comp1, 50), tail(comp1, 50))
 comp1 &amp;lt;- merge(ort, comp1, by.x = &amp;quot;Mouse.gene.name&amp;quot;, by.y = &amp;quot;row.names&amp;quot;)
 comp1$Mouse.gene.name &amp;lt;- comp1$Gene.stable.ID &amp;lt;- comp1$Mouse.gene.stable.ID &amp;lt;- NULL
 colnames(comp1)[1] &amp;lt;- &amp;quot;Gene&amp;quot;
 ranks &amp;lt;- structure(comp1$avg_logFC, names = comp1$Gene)
 ranks &amp;lt;- sort(ranks)
-fgseaRes1 &amp;lt;- fgsea(pathways, ranks, minSize=5)
+fgseaRes1 &amp;lt;- fgsea(pathways, ranks, minSize = 5)
 fgseaRes1 &amp;lt;- subset(fgseaRes1, padj &amp;lt; 0.05)
-fgseaRes1 &amp;lt;- fgseaRes1[order(fgseaRes1$NES, decreasing = T), ]
+fgseaRes1 &amp;lt;- fgseaRes1[order(fgseaRes1$NES, decreasing = TRUE), ]
 genes1 &amp;lt;- fgseaRes1$leadingEdge
 for (i in 1:length(genes1)) {
   fgseaRes1$genes[i] &amp;lt;- paste(genes1[[i]], collapse = &#39;;&#39;)
 }
 fgseaRes1$leadingEdge &amp;lt;- NULL
-enrich_ColdxRT &amp;lt;- read.table(&#39;/Users/biagi/PhD/AdipoSNAP/Figures/update/fgsea_ColdxRT.txt&#39;, header = T)
+enrich_ColdxRT &amp;lt;- read.table(&#39;/Users/biagi/PhD/Adipocyte/Figures/update/fgsea_ColdxRT.txt&#39;, header = TRUE)
 pathways_ColdxRT &amp;lt;- c(&#39;GO_ORGANOPHOSPHATE_BIOSYNTHETIC_PROCESS&#39;, &#39;GO_FATTY_ACID_TRANSPORT&#39;, &#39;GO_LONG_CHAIN_FATTY_ACID_TRANSPORT&#39;, &#39;GO_MONOCARBOXYLIC_ACID_TRANSPORT&#39;, &#39;GO_RESPONSE_TO_FATTY_ACID&#39;, &#39;REACTOME_NGF_STIMULATED_TRANSCRIPTION&#39;, &#39;REACTOME_NUCLEAR_EVENTS_KINASE_AND_TRANSCRIPTION_FACTOR_ACTIVATION&#39;, &#39;OSWALD_HEMATOPOIETIC_STEM_CELL_IN_COLLAGEN_GEL_UP&#39;, &#39;NAGASHIMA_EGF_SIGNALING_UP&#39;, &#39;NAGASHIMA_NRG1_SIGNALING_UP&#39;)
 enrich_ColdxRT &amp;lt;- enrich_ColdxRT[which(enrich_ColdxRT$pathway %in% pathways_ColdxRT), ]
 enrich_ColdxRT$class &amp;lt;- ifelse(enrich_ColdxRT$NES &amp;gt; 0, &#39;Up-regulated&#39;, &#39;Down-regulated&#39;)
@@ -1687,25 +1715,25 @@ ggplot(enrich_ColdxRT, aes(order, NES, fill = class)) +
   scale_x_continuous(breaks = enrich_ColdxRT$order, labels = enrich_ColdxRT$pathway, expand = c(0, 0)) +
   ggtitle(&#39;GSEA for Cold x RT&#39;)
 
-#CLxRT
-comp2 &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_CLxRT_ALL.txt&amp;quot;)
+## CLxRT
+comp2 &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Diff_Adipocytes_CLxRT_ALL.txt&amp;quot;)
 comp2 &amp;lt;- subset(comp2, p_val_adj &amp;lt; 0.05)
-comp2 &amp;lt;- comp2[order(comp2$avg_logFC, decreasing = T), ]
+comp2 &amp;lt;- comp2[order(comp2$avg_logFC, decreasing = TRUE), ]
 comp2 &amp;lt;- rbind(head(comp2, 50), tail(comp2, 50))
 comp2 &amp;lt;- merge(ort, comp2, by.x = &amp;quot;Mouse.gene.name&amp;quot;, by.y = &amp;quot;row.names&amp;quot;)
 comp2$Mouse.gene.name &amp;lt;- comp2$Gene.stable.ID &amp;lt;- comp2$Mouse.gene.stable.ID &amp;lt;- NULL
 colnames(comp2)[1] &amp;lt;- &amp;quot;Gene&amp;quot;
 ranks &amp;lt;- structure(comp2$avg_logFC, names = comp2$Gene)
 ranks &amp;lt;- sort(ranks)
-fgseaRes2 &amp;lt;- fgsea(pathways, ranks, minSize=5)
+fgseaRes2 &amp;lt;- fgsea(pathways, ranks, minSize = 5)
 fgseaRes2 &amp;lt;- subset(fgseaRes2, padj &amp;lt; 0.05)
-fgseaRes2 &amp;lt;- fgseaRes2[order(fgseaRes2$NES, decreasing = T), ]
+fgseaRes2 &amp;lt;- fgseaRes2[order(fgseaRes2$NES, decreasing = TRUE), ]
 genes2 &amp;lt;- fgseaRes2$leadingEdge
 for (i in 1:length(genes2)) {
   fgseaRes2$genes[i] &amp;lt;- paste(genes2[[i]], collapse = &#39;;&#39;)
 }
 fgseaRes2$leadingEdge &amp;lt;- NULL
-enrich_CLxRT &amp;lt;- read.table(&#39;/Users/biagi/PhD/AdipoSNAP/Figures/update/fgsea_CLxRT.txt&#39;, header = T)
+enrich_CLxRT &amp;lt;- read.table(&#39;/Users/biagi/PhD/Adipocyte/Figures/update/fgsea_CLxRT.txt&#39;, header = TRUE)
 pathways_CLxRT &amp;lt;- c(&#39;GO_ORGANOPHOSPHATE_METABOLIC_PROCESS&#39;, &#39;GO_MITOCHONDRIAL_ENVELOPE&#39;, &#39;GO_ATP_METABOLIC_PROCESS&#39;, &#39;GO_OXIDOREDUCTASE_ACTIVITY&#39;, &#39;GO_OXIDATIVE_PHOSPHORYLATION&#39;, &#39;GO_NEGATIVE_REGULATION_OF_PROTEIN_METABOLIC_PROCESS&#39;, &#39;GO_RESPONSE_TO_MECHANICAL_STIMULUS&#39;, &#39;GO_NEGATIVE_REGULATION_OF_BIOSYNTHETIC_PROCESS&#39;, &#39;NAGASHIMA_EGF_SIGNALING_UP&#39;, &#39;NAGASHIMA_NRG1_SIGNALING_UP&#39;)
 enrich_CLxRT &amp;lt;- enrich_CLxRT[which(enrich_CLxRT$pathway %in% pathways_CLxRT), ]
 enrich_CLxRT$class &amp;lt;- ifelse(enrich_CLxRT$NES &amp;gt; 0, &#39;Up-regulated&#39;, &#39;Down-regulated&#39;)
@@ -1727,10 +1755,10 @@ ggplot(enrich_CLxRT, aes(order, NES, fill = class)) +
 #################################
 ########### Figure 3D ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
 data$timpoint &amp;lt;- gsub(&#39;4day&#39;, &#39;Cold&#39;, data$timpoint)
 
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -1755,16 +1783,16 @@ df &amp;lt;- merge(tsne, meta, by = &#39;row.names&#39;)
 rownames(df) &amp;lt;- df$Row.names
 df$Row.names &amp;lt;- NULL
 
-### CL
+## CL
 ggplot() +
   geom_point(data = df, aes(x = tSNE_1, y = tSNE_2, color = timpoint), size = 0.5) +
   scale_color_manual(values = rep(&amp;quot;gray75&amp;quot;, 5)) +
-  guides(color = guide_legend(override.aes = list(size=7))) +
+  guides(color = guide_legend(override.aes = list(size = 7))) +
   xlab(&amp;quot;t-SNE 1&amp;quot;) + ylab(&amp;quot;t-SNE 2&amp;quot;) +
   labs(color = &#39;&#39;) + ggtitle(paste0(&#39;CL (&#39;, nrow(anno_CL), &#39; cells)&#39;)) +
   theme_classic() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        legend.position=&amp;quot;none&amp;quot;, plot.title = element_text(hjust = 0.5, size=8)) +
+        legend.position = &amp;quot;none&amp;quot;, plot.title = element_text(hjust = 0.5, size = 8)) +
   annotate(&amp;quot;point&amp;quot;, df[rownames(anno_CL)[anno_CL$clusters == &#39;Ad1&#39;], &#39;tSNE_1&#39;],
            df[rownames(anno_CL)[anno_CL$clusters == &#39;Ad1&#39;], &#39;tSNE_2&#39;], colour = &amp;quot;#11c78b&amp;quot;, size = 1) +
   annotate(&amp;quot;point&amp;quot;, df[rownames(anno_CL)[anno_CL$clusters == &#39;Ad2&#39;], &#39;tSNE_1&#39;],
@@ -1796,16 +1824,16 @@ ggplot(df2, aes(x = &amp;quot;&amp;quot;, y = value, fill = class)) +
   geom_text_repel(aes(x = 1.5, y = pos, label = paste0(value, &amp;quot;%&amp;quot;)), nudge_x = .1,
                   segment.size = .7, show.legend = FALSE)
 
-### RT
+## RT
 ggplot() +
   geom_point(data = df, aes(x = tSNE_1, y = tSNE_2, color = timpoint), size = 0.5) +
   scale_color_manual(values = rep(&amp;quot;gray75&amp;quot;, 5)) +
-  guides(color = guide_legend(override.aes = list(size=7))) +
+  guides(color = guide_legend(override.aes = list(size = 7))) +
   xlab(&amp;quot;t-SNE 1&amp;quot;) + ylab(&amp;quot;t-SNE 2&amp;quot;) +
   labs(color = &#39;&#39;) + ggtitle(paste0(&#39;RT (&#39;, nrow(anno_RT), &#39; cells)&#39;)) +
   theme_classic() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        legend.position=&amp;quot;none&amp;quot;, plot.title = element_text(hjust = 0.5, size=8)) +
+        legend.position = &amp;quot;none&amp;quot;, plot.title = element_text(hjust = 0.5, size = 8)) +
   annotate(&amp;quot;point&amp;quot;, df[rownames(anno_RT)[anno_RT$clusters == &#39;Ad1&#39;], &#39;tSNE_1&#39;],
            df[rownames(anno_RT)[anno_RT$clusters == &#39;Ad1&#39;], &#39;tSNE_2&#39;], colour = &amp;quot;#11c78b&amp;quot;, size = 1) +
   annotate(&amp;quot;point&amp;quot;, df[rownames(anno_RT)[anno_RT$clusters == &#39;Ad2&#39;], &#39;tSNE_1&#39;],
@@ -1837,16 +1865,16 @@ ggplot(df2, aes(x = &amp;quot;&amp;quot;, y = value, fill = class)) +
   geom_text_repel(aes(x = 1.5, y = pos, label = paste0(value, &amp;quot;%&amp;quot;)), nudge_x = .1,
                   segment.size = .7, show.legend = FALSE)
 
-### Cold
+## Cold
 ggplot() +
   geom_point(data = df, aes(x = tSNE_1, y = tSNE_2, color = timpoint), size = 0.5) +
   scale_color_manual(values = rep(&amp;quot;gray75&amp;quot;, 5)) +
   xlab(&amp;quot;t-SNE 1&amp;quot;) + ylab(&amp;quot;t-SNE 2&amp;quot;) +
-  guides(color = guide_legend(override.aes = list(size=7))) +
+  guides(color = guide_legend(override.aes = list(size = 7))) +
   labs(color = &#39;&#39;) + ggtitle(paste0(&#39;Cold (&#39;, nrow(anno_Cold), &#39; cells)&#39;)) +
   theme_classic() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        legend.position = &amp;quot;none&amp;quot;, plot.title = element_text(hjust = 0.5, size=8)) +
+        legend.position = &amp;quot;none&amp;quot;, plot.title = element_text(hjust = 0.5, size = 8)) +
   annotate(&amp;quot;point&amp;quot;, df[rownames(anno_Cold)[anno_Cold$clusters == &#39;Ad1&#39;], &#39;tSNE_1&#39;],
            df[rownames(anno_Cold)[anno_Cold$clusters == &#39;Ad1&#39;], &#39;tSNE_2&#39;], colour = &amp;quot;#11c78b&amp;quot;, size = 1) +
   annotate(&amp;quot;point&amp;quot;, df[rownames(anno_Cold)[anno_Cold$clusters == &#39;Ad2&#39;], &#39;tSNE_1&#39;],
@@ -1883,8 +1911,8 @@ ggplot(df2, aes(x = &amp;quot;&amp;quot;, y = value, fill = class)) +
 #################################
 ########### Figure 3E ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -1901,22 +1929,23 @@ genes &amp;lt;- c(&#39;Acaa2&#39;, &#39;Ehhadh&#39;, &#39;Slc27a2&#39;, &#39;Aca
            &#39;Sdhaf2&#39;, &#39;Pdha1&#39;, &#39;Pdhb&#39;, &#39;Idh3g&#39;, &#39;Mdh1&#39;, &#39;Sdha&#39;, &#39;Ndufs4&#39;, &#39;Sdhc&#39;, &#39;Suclg1&#39;, &#39;Mdh2&#39;, 
            &#39;Akt1&#39;, &#39;Kiss1r&#39;, &#39;Mif&#39;, &#39;Cpt1b&#39;, &#39;Fabp3&#39;, &#39;Acsl5&#39;, &#39;Mfsd2a&#39;, &#39;Abcc4&#39;, &#39;Acsl3&#39;, &#39;Pla2g12a&#39;, 
            &#39;Aldoa&#39;, &#39;Gpi1&#39;, &#39;Pgk1&#39;, &#39;Gapdh&#39;, &#39;Pfkp&#39;, &#39;Pkm&#39;, &#39;Ogdh&#39;, &#39;Ppara&#39;, &#39;Prkaa1&#39;, &#39;Gale&#39;, &#39;Entpd5&#39;, &#39;Stat3&#39;, &#39;Foxk2&#39;, &#39;Igf1&#39;, 
-           &amp;quot;Daglb&amp;quot;, &amp;quot;Slc2a4&amp;quot;, &amp;quot;Gpd1&amp;quot;, &amp;quot;Pcx&amp;quot;, &amp;quot;Abhd5&amp;quot;, &amp;quot;Adrb3&amp;quot;, &amp;quot;Lipe&amp;quot;, &amp;quot;Pck1&amp;quot;, &amp;quot;Pnpla2&amp;quot;)
+           &amp;quot;Daglb&amp;quot;, &amp;quot;Slc2a4&amp;quot;, &amp;quot;Gpd1&amp;quot;, &amp;quot;Pcx&amp;quot;, &amp;quot;Abhd5&amp;quot;, &amp;quot;Adrb3&amp;quot;, &amp;quot;Lipe&amp;quot;, &amp;quot;Pck1&amp;quot;, &amp;quot;Pnpla2&amp;quot;, 
+           &#39;Acaca&#39;, &#39;Acly&#39;, &#39;Fasn&#39;, &#39;Srebf1&#39;, &#39;Dgat2&#39;, &#39;Insig1&#39;, &#39;Hadh&#39;, &#39;Elovl6&#39;, &#39;Lpl&#39;)
 genes &amp;lt;- genes[genes %in% rownames(data)]
 
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
-DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+DoHeatmap(data, features = genes, angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;UCP1 Expression&#39;)
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Ucp1 Expression&#39;)
 
 
 
 #################################
 ########### Figure 3G ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -1932,7 +1961,7 @@ data &amp;lt;- ScaleData(data)
 genes &amp;lt;- c(&#39;Acadm&#39;, &#39;Adipoq&#39;, &#39;Adrb3&#39;, &#39;Lep&#39;, &#39;Fasn&#39;, 
            &#39;Ucp1&#39;, &#39;Cidea&#39;, &#39;Dio2&#39;, &#39;Elovl3&#39;, &#39;Cox8b&#39;, 
            &#39;Cpt1b&#39;, &#39;Gk&#39;, &#39;Plin5&#39;, &#39;Pnpla2&#39;, &#39;Lpl&#39;, 
-           &#39;Acaa2&#39;, &#39;Sdhc&#39;, &#39;Fabp3&#39;, &#39;Ppara&#39;, &#39;Slc2a4&#39;)
+           &#39;Acaca&#39;, &#39;Gadd45g&#39;, &#39;Fabp3&#39;, &#39;Ppara&#39;, &#39;Slc2a4&#39;)
 genes &amp;lt;- genes[genes %in% rownames(data)]
 
 df &amp;lt;- NULL
@@ -1963,10 +1992,10 @@ ggboxplot(df, x = &amp;quot;cluster&amp;quot;, y = &amp;quot;value&amp;quot;,
 #################################
 ########### Figure 3H ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
 data$timpoint &amp;lt;- gsub(&#39;4day&#39;, &#39;Cold&#39;, data$timpoint)
 
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
 new_cluster &amp;lt;- new_cluster + 1
@@ -1989,7 +2018,7 @@ fd &amp;lt;- new(&amp;quot;AnnotatedDataFrame&amp;quot;, data = fdata)
 cds &amp;lt;- newCellDataSet(as(mat, &amp;quot;dgCMatrix&amp;quot;),
                       phenoData = pd,
                       featureData = fd, 
-                      expressionFamily=negbinomial.size())
+                      expressionFamily = negbinomial.size())
 
 rm(data, mat, fdata, pdata, fd, pd)
 
@@ -1999,7 +2028,7 @@ cds &amp;lt;- estimateDispersions(cds)
 cds &amp;lt;- detectGenes(cds, min_expr = 0.1)
 expressed_genes &amp;lt;- row.names(subset(fData(cds), num_cells_expressed &amp;gt;= 10))
 
-diff_test_res &amp;lt;- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = &amp;quot;~cluster&amp;quot;, cores = 6, verbose = T)
+diff_test_res &amp;lt;- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = &amp;quot;~cluster&amp;quot;, cores = 6, verbose = TRUE)
 ordering_genes &amp;lt;- row.names(subset(diff_test_res, qval &amp;lt; 0.01))
 cds &amp;lt;- setOrderingFilter(cds, ordering_genes)
 
@@ -2012,17 +2041,17 @@ plot_cell_trajectory(cds, color_by = &amp;quot;Pseudotime&amp;quot;)
 plot_cell_trajectory(cds, color_by = &amp;quot;cluster&amp;quot;) + 
   scale_color_manual(values = c(&amp;quot;Ad1&amp;quot; = &amp;quot;#11c78b&amp;quot;, &amp;quot;Ad2&amp;quot; = &amp;quot;#800080&amp;quot;, &amp;quot;Ad3&amp;quot; = &amp;quot;#e57400&amp;quot;, &amp;quot;Ad4&amp;quot; = &amp;quot;#0000FF&amp;quot;, &amp;quot;Ad5&amp;quot; = &amp;quot;#dfdf0d&amp;quot;))
 
-plotMonocle(cds, c(&#39;Pparg&#39;, &#39;Creb1&#39;, &#39;Atf2&#39;, &#39;Egr2&#39;, &#39;Dbp&#39;, &#39;Xbp1&#39;, &#39;Clock&#39;, &#39;Zbtb43&#39;, &#39;Zbtb7a&#39;))
+plotMonocle(cds, c(&#39;Ppara&#39;, &#39;Prdm16&#39;, &#39;Ppargc1a&#39;, &#39;Egr2&#39;, &#39;Dbp&#39;, &#39;Xbp1&#39;, &#39;Clock&#39;, &#39;Zbtb43&#39;, &#39;Zbtb7a&#39;))
 
 
 
 #################################
 ########### Figure 3I ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
 data$timpoint &amp;lt;- gsub(&#39;4day&#39;, &#39;Cold&#39;, data$timpoint)
 
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
 new_cluster &amp;lt;- new_cluster + 1
@@ -2045,7 +2074,7 @@ fd &amp;lt;- new(&amp;quot;AnnotatedDataFrame&amp;quot;, data = fdata)
 cds &amp;lt;- newCellDataSet(as(mat, &amp;quot;dgCMatrix&amp;quot;),
                       phenoData = pd,
                       featureData = fd, 
-                      expressionFamily=negbinomial.size())
+                      expressionFamily = negbinomial.size())
 
 rm(data, mat, fdata, pdata, fd, pd)
 
@@ -2055,7 +2084,7 @@ cds &amp;lt;- estimateDispersions(cds)
 cds &amp;lt;- detectGenes(cds, min_expr = 0.1)
 expressed_genes &amp;lt;- row.names(subset(fData(cds), num_cells_expressed &amp;gt;= 10))
 
-diff_test_res &amp;lt;- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = &amp;quot;~cluster&amp;quot;, cores = 6, verbose = T)
+diff_test_res &amp;lt;- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = &amp;quot;~cluster&amp;quot;, cores = 6, verbose = TRUE)
 ordering_genes &amp;lt;- row.names(subset(diff_test_res, qval &amp;lt; 0.01))
 cds &amp;lt;- setOrderingFilter(cds, ordering_genes)
 
@@ -2068,27 +2097,27 @@ plot_cell_trajectory(cds, color_by = &amp;quot;Pseudotime&amp;quot;)
 plot_cell_trajectory(cds, color_by = &amp;quot;cluster&amp;quot;) + 
   scale_color_manual(values = c(&amp;quot;Ad1&amp;quot; = &amp;quot;#11c78b&amp;quot;, &amp;quot;Ad2&amp;quot; = &amp;quot;#800080&amp;quot;, &amp;quot;Ad3&amp;quot; = &amp;quot;#e57400&amp;quot;, &amp;quot;Ad4&amp;quot; = &amp;quot;#0000FF&amp;quot;, &amp;quot;Ad5&amp;quot; = &amp;quot;#dfdf0d&amp;quot;))
 
-plotMonocle(cds, c(&#39;Pparg&#39;, &#39;Creb1&#39;, &#39;Atf2&#39;, &#39;Srebf1&#39;, &#39;Cebpa&#39;, &#39;Egr1&#39;, &#39;Foxn3&#39;, &#39;Esrra&#39;, &#39;Gtf2ird1&#39;))
+plotMonocle(cds, c(&#39;Ppara&#39;, &#39;Prdm16&#39;, &#39;Ppargc1a&#39;, &#39;Srebf1&#39;, &#39;Cebpa&#39;, &#39;Egr1&#39;, &#39;Foxn3&#39;, &#39;Esrra&#39;, &#39;Gtf2ird1&#39;))
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&#34;figure-4&#34;&gt;Figure 4&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;## Loading R packages
+library(circlize)
+library(ComplexHeatmap)
+library(dplyr)
+library(fgsea)
+library(ggplot2)
+library(ggrepel)
+library(Nebulosa)
+library(RColorBrewer)
 library(Seurat)
 library(SeuratWrappers)
-library(ggplot2)
-library(dplyr)
-library(ggrepel)
-library(RColorBrewer)
-library(fgsea)
-library(UpSetR)
-library(ComplexHeatmap)
-library(circlize)
 
 
 #################################
 ########### Figure 4A ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -2121,13 +2150,13 @@ ggplot() +
                  color = factor(cluster_id)), 
              size = 1) + 
   scale_color_manual(values = rep(&amp;quot;#F5F5F5&amp;quot;, length(cols))) + 
-  guides(color = guide_legend(override.aes = list(size=7))) + 
+  guides(color = guide_legend(override.aes = list(size = 7))) + 
   labs(color = &#39;&#39;, x = &#39;t-SNE1&#39;, y = &#39;t-SNE2&#39;) +
   theme_classic() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(), 
         legend.position = &amp;quot;none&amp;quot;, 
-        plot.title = element_text(hjust = 0.5, size=8)) + 
+        plot.title = element_text(hjust = 0.5, size = 8)) + 
   annotate(&amp;quot;point&amp;quot;,
            dims[[&amp;quot;x&amp;quot;]][which(dims[[&amp;quot;cluster_id&amp;quot;]] == &#39;Ad1&#39;)],
            dims[[&amp;quot;y&amp;quot;]][which(dims[[&amp;quot;cluster_id&amp;quot;]] == &#39;Ad1&#39;)], 
@@ -2145,9 +2174,9 @@ ggplot() +
            dims[names(data$UCP1[which(data$UCP1 == &#39;High&#39;)]), 4], 
            colour = &#39;red&#39;, size = 1.5)
 
-#pieplot UCP1 High
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+## pieplot UCP1 High
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -2189,8 +2218,8 @@ ggplot(df, aes(x = &amp;quot;&amp;quot;, y = value, fill = class)) +
 #################################
 ########### Figure 4B ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -2206,27 +2235,27 @@ data &amp;lt;- ScaleData(data, features = rownames(data))
 data$UCP1 &amp;lt;- factor(ifelse(data@assays$SCT@data[&amp;quot;Ucp1&amp;quot;, ] &amp;gt; 0, &amp;quot;High&amp;quot;, &amp;quot;Low&amp;quot;))
 Idents(data) &amp;lt;- data$UCP1
 
-markers &amp;lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+markers &amp;lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = FALSE)
 
 markers &amp;lt;- subset(markers, p_val_adj &amp;lt; 0.05 &amp;amp; cluster == &#39;High&#39;)
-markers &amp;lt;- markers[order(markers$avg_logFC, decreasing = T), ]
+markers &amp;lt;- markers[order(markers$avg_logFC, decreasing = TRUE), ]
 
 genes1 &amp;lt;- c(head(markers$gene, 10), tail(markers$gene, 10))
 
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
 
-DoHeatmap(data, features = genes1, angle = 0, size = 5, label = F) +
+DoHeatmap(data, features = genes1, angle = 0, size = 5, label = FALSE) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;UCP1 Expression&#39;)
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;UCP1 Expression&#39;)
 
 
 
 #################################
 ########### Figure 4C ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -2242,13 +2271,13 @@ data &amp;lt;- ScaleData(data, features = rownames(data))
 data$UCP1 &amp;lt;- factor(ifelse(data@assays$SCT@data[&amp;quot;Ucp1&amp;quot;, ] &amp;gt; 0, &amp;quot;High&amp;quot;, &amp;quot;Low&amp;quot;))
 Idents(data) &amp;lt;- data$UCP1
 
-markers &amp;lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+markers &amp;lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = FALSE)
 
 markers &amp;lt;- subset(markers, p_val_adj &amp;lt; 0.05 &amp;amp; cluster == &#39;High&#39;)
-markers &amp;lt;- markers[order(markers$avg_logFC, decreasing = T), ]
+markers &amp;lt;- markers[order(markers$avg_logFC, decreasing = TRUE), ]
 
-ort &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = T)
-pathways &amp;lt;- gmtPathways(&#39;/Users/biagi/PhD/AdipoSNAP/msigdb.v7.1.symbols.gmt&#39;)
+ort &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = TRUE)
+pathways &amp;lt;- gmtPathways(&#39;/Users/biagi/PhD/Adipocyte/msigdb.v7.1.symbols.gmt&#39;)
 
 comp1 &amp;lt;- rbind(head(markers, 50), tail(markers, 35))
 
@@ -2257,9 +2286,9 @@ comp1$Mouse.gene.name &amp;lt;- comp1$Gene.stable.ID &amp;lt;- comp1$Mouse.gene.
 colnames(comp1)[1] &amp;lt;- &amp;quot;Gene&amp;quot;
 ranks &amp;lt;- structure(comp1$avg_logFC, names = comp1$Gene)
 ranks &amp;lt;- sort(ranks)
-fgseaRes1 &amp;lt;- fgsea(pathways, ranks, minSize=5)
+fgseaRes1 &amp;lt;- fgsea(pathways, ranks, minSize = 5)
 fgseaRes1 &amp;lt;- subset(fgseaRes1, pval &amp;lt; 0.05)
-fgseaRes1 &amp;lt;- fgseaRes1[order(fgseaRes1$NES, decreasing = T), ]
+fgseaRes1 &amp;lt;- fgseaRes1[order(fgseaRes1$NES, decreasing = TRUE), ]
 genes1 &amp;lt;- fgseaRes1$leadingEdge
 for (i in 1:length(genes1)) {
   fgseaRes1$genes[i] &amp;lt;- paste(genes1[[i]], collapse = &#39;;&#39;)
@@ -2287,8 +2316,8 @@ ggplot(fgseaRes1, aes(order, NES, fill = class)) +
 #################################
 ########### Figure 4D ###########
 #################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
 new_cluster &amp;lt;- new_cluster + 1
@@ -2300,8 +2329,8 @@ data &amp;lt;- subset(data, idents = list(&#39;Ad1&#39;))
 tmp1 &amp;lt;- factor(ifelse(data@assays$SCT@data[&amp;quot;Ucp1&amp;quot;, ] &amp;gt; 0, &amp;quot;Ad1_High&amp;quot;, &amp;quot;Ad1_Low&amp;quot;))
 
 
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
 new_cluster &amp;lt;- new_cluster + 1
@@ -2327,34 +2356,26 @@ genes &amp;lt;- c(&#39;Acaa2&#39;, &#39;Ehhadh&#39;, &#39;Slc27a2&#39;, &#39;Aca
            &#39;Sdhaf2&#39;, &#39;Pdha1&#39;, &#39;Pdhb&#39;, &#39;Idh3g&#39;, &#39;Mdh1&#39;, &#39;Sdha&#39;, &#39;Ndufs4&#39;, &#39;Sdhc&#39;, &#39;Suclg1&#39;, &#39;Mdh2&#39;, 
            &#39;Akt1&#39;, &#39;Kiss1r&#39;, &#39;Mif&#39;, &#39;Cpt1b&#39;, &#39;Fabp3&#39;, &#39;Acsl5&#39;, &#39;Mfsd2a&#39;, &#39;Abcc4&#39;, &#39;Acsl3&#39;, &#39;Pla2g12a&#39;, 
            &#39;Aldoa&#39;, &#39;Gpi1&#39;, &#39;Pgk1&#39;, &#39;Gapdh&#39;, &#39;Pfkp&#39;, &#39;Pkm&#39;, &#39;Ogdh&#39;, &#39;Ppara&#39;, &#39;Prkaa1&#39;, &#39;Gale&#39;, &#39;Entpd5&#39;, &#39;Stat3&#39;, &#39;Foxk2&#39;, &#39;Igf1&#39;, 
-           &amp;quot;Daglb&amp;quot;, &amp;quot;Slc2a4&amp;quot;, &amp;quot;Gpd1&amp;quot;, &amp;quot;Pcx&amp;quot;, &amp;quot;Abhd5&amp;quot;, &amp;quot;Adrb3&amp;quot;, &amp;quot;Lipe&amp;quot;, &amp;quot;Pck1&amp;quot;, &amp;quot;Pnpla2&amp;quot;)
+           &amp;quot;Daglb&amp;quot;, &amp;quot;Slc2a4&amp;quot;, &amp;quot;Gpd1&amp;quot;, &amp;quot;Pcx&amp;quot;, &amp;quot;Abhd5&amp;quot;, &amp;quot;Adrb3&amp;quot;, &amp;quot;Lipe&amp;quot;, &amp;quot;Pck1&amp;quot;, &amp;quot;Pnpla2&amp;quot;, 
+           &#39;Acaca&#39;, &#39;Acly&#39;, &#39;Fasn&#39;, &#39;Srebf1&#39;, &#39;Dgat2&#39;, &#39;Insig1&#39;, &#39;Hadh&#39;, &#39;Elovl6&#39;, &#39;Lpl&#39;)
 genes &amp;lt;- genes[genes %in% rownames(data)]
 
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
 
-DoHeatmap(data, features = genes, angle = 0, size = 5, label = F) +
+DoHeatmap(data, features = genes, angle = 0, size = 5, label = FALSE) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;UCP1 Expression&#39;)
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Ucp1 Expression&#39;)
 
 
 
 #################################
 ########### Figure 4F ###########
 #################################
-expressionInput &amp;lt;- c(Set1 = 962, Set2 = 244, Set3 = 73, Set4 = 35, `Set1&amp;amp;Set2` = 315, `Set1&amp;amp;Set3` = 16, `Set2&amp;amp;Set3` = 1, `Set1&amp;amp;Set2&amp;amp;Set3` = 46)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
-upset(fromExpression(expressionInput), set_size.show = T, shade.alpha	= 1)
-
-
-
-#################################
-########### Figure 4G ###########
-#################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
-
-ort &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = T)
+ort &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = TRUE)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -2380,8 +2401,8 @@ df &amp;lt;- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
 df &amp;lt;- t(df)
 
 x &amp;lt;- as.matrix(df)
-m = apply(x, 1, mean, na.rm = T)
-s = apply(x, 1, sd, na.rm = T)
+m = apply(x, 1, mean, na.rm = TRUE)
+s = apply(x, 1, sd, na.rm = TRUE)
 res &amp;lt;- (x - m)/s
 cn = colnames(res)
 
@@ -2394,8 +2415,8 @@ breaks &amp;lt;- seq(-2,2, by= 0.1)
 Heatmap(as.matrix(res), 
         bottom_annotation = ba, 
         name = &amp;quot;zscore&amp;quot;, column_title = &amp;quot;Ad1 UCP1 High&amp;quot;, width = 1, 
-        show_row_names = T, show_column_names = F,
-        cluster_rows = F, cluster_columns = T,
+        show_row_names = TRUE, show_column_names = FALSE,
+        cluster_rows = FALSE, cluster_columns = TRUE,
         col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = &amp;quot;RdBu&amp;quot;)))(41)), 
         heatmap_height = unit(6, &amp;quot;cm&amp;quot;), row_names_gp = gpar(fontsize = 8))
 
@@ -2410,8 +2431,8 @@ df &amp;lt;- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
 df &amp;lt;- t(df)
 
 x &amp;lt;- as.matrix(df)
-m = apply(x, 1, mean, na.rm = T)
-s = apply(x, 1, sd, na.rm = T)
+m = apply(x, 1, mean, na.rm = TRUE)
+s = apply(x, 1, sd, na.rm = TRUE)
 res &amp;lt;- (x - m)/s
 cn = colnames(res)
 
@@ -2424,10 +2445,39 @@ breaks &amp;lt;- seq(-2,2, by= 0.1)
 Heatmap(as.matrix(res), 
         bottom_annotation = ba, 
         name = &amp;quot;zscore&amp;quot;, column_title = &amp;quot;Ad1 UCP1 Low&amp;quot;, width = 1, 
-        show_row_names = T, show_column_names = F,
-        cluster_rows = F, cluster_columns = T,
+        show_row_names = TRUE, show_column_names = FALSE,
+        cluster_rows = FALSE, cluster_columns = TRUE,
         col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = &amp;quot;RdBu&amp;quot;)))(41)), 
         heatmap_height = unit(6, &amp;quot;cm&amp;quot;), row_names_gp = gpar(fontsize = 8))
+
+        
+        
+#################################
+########### Figure 4G ###########
+#################################
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+
+new_cluster &amp;lt;- infos$L1_result
+names(new_cluster) &amp;lt;- rownames(infos)
+new_cluster &amp;lt;- new_cluster + 1
+new_cluster &amp;lt;- paste0(&amp;quot;Ad&amp;quot;, new_cluster)
+new_cluster &amp;lt;- as.factor(new_cluster)
+data$clusters &amp;lt;- new_cluster
+
+Idents(data) &amp;lt;- as.factor(data$timpoint)
+data &amp;lt;- subset(data, cells = names(which(data$timpoint == &#39;4day&#39; | data$timpoint == &#39;RT&#39; | data$timpoint == &#39;CL&#39;)))
+
+pt &amp;lt;- plot_density(data, c(&#39;Slc36a2&#39;, &#39;Acadm&#39;, &#39;Slc27a1&#39;, &#39;Fasn&#39;), reduction = &amp;quot;tsne&amp;quot;, pal = &amp;quot;inferno&amp;quot;, combine = FALSE)
+
+pt &amp;lt;- lapply(pt, function(x){ x + theme_bw() + 
+               theme(panel.background = element_rect(colour = &amp;quot;black&amp;quot;, size = 0.1), 
+                     axis.ticks.length = unit(.2, &amp;quot;cm&amp;quot;), 
+                     axis.text = element_text(size = 11), 
+                     panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank())})
+
+ggarrange(plotlist = pt)
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
@@ -2439,33 +2489,33 @@ Heatmap(as.matrix(res),
       <guid>https://cbiagii.github.io/AdipoSNAP/post/11_supplementary_figures/</guid>
       <description>&lt;h2 id=&#34;figure-s1&#34;&gt;Figure S1&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;## Loading R packages
-library(Seurat)
-library(ggplot2)
-library(metacell)
 library(dplyr)
-library(ggpubr)
-library(pheatmap)
 library(enrichR)
+library(ggplot2)
+library(ggpubr)
+library(metacell)
+library(pheatmap)
+library(Seurat)
 
 
 ##################################
 ########### Figure S1A ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_Processed.rds&amp;quot;)
 Idents(data) &amp;lt;- factor(data$CellTypeRefined)
 
 TSNEPlot(data, label = FALSE, pt.size = 0.3) +
   xlab(&amp;quot;t-SNE 1&amp;quot;) + ylab(&amp;quot;t-SNE 2&amp;quot;) +
   theme_classic() + labs(color = &amp;quot;Cluster&amp;quot;) +
-  theme(legend.position=&amp;quot;bottom&amp;quot;)
+  theme(legend.position = &amp;quot;bottom&amp;quot;)
 
 
 
 ##################################
 ########### Figure S1B ###########
 ##################################
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda&amp;quot;)
-lfp = log2(object@mc_fp)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc.test_mc_f.Rda&amp;quot;)
+lfp &amp;lt;- log2(object@mc_fp)
 
 marks_colors &amp;lt;- NULL
 marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte_1&amp;quot;, &amp;quot;Acsl1&amp;quot;, &amp;quot;#0000b3&amp;quot;, 1, 2.5))
@@ -2493,11 +2543,11 @@ colnames(marks_colors) &amp;lt;- c(&amp;quot;group&amp;quot;, &amp;quot;gene&amp
 marks_colors$priority &amp;lt;- as.integer(marks_colors$priority)
 marks_colors$T_fold &amp;lt;- as.numeric(marks_colors$T_fold)
 
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc2d.test_2dproj.Rda&amp;quot;)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc2d.test_2dproj.Rda&amp;quot;)
 dims &amp;lt;- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda&amp;quot;)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc.test_mc_f.Rda&amp;quot;)
 tmp1 &amp;lt;- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 &amp;lt;- data.frame(cols = object@colors)
 teste &amp;lt;- merge(tmp1, tmp2, by.x = &amp;quot;cols&amp;quot;, by.y = &amp;quot;row.names&amp;quot;)
@@ -2509,7 +2559,7 @@ teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;q
 teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;quot;Endothelial&amp;quot;, marks_colors$group)], &amp;quot;Endothelials&amp;quot;, teste$cellType)
 tab &amp;lt;- merge(dims, teste, by.x = &amp;quot;row.names&amp;quot;, by.y = &amp;quot;cells&amp;quot;)
 
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_Processed.rds&amp;quot;)
 Idents(data) &amp;lt;- factor(data$CellTypeRefined)
 infos &amp;lt;- data@meta.data
 infos &amp;lt;- infos[tab$Row.names, ]
@@ -2531,7 +2581,7 @@ cls &amp;lt;- c(&amp;quot;#FFA500&amp;quot;, &amp;quot;#329932&amp;quot;, &amp;q
 TSNEPlot(data, label = FALSE, pt.size = 0.3, cols = cls) +
   xlab(&amp;quot;t-SNE 1&amp;quot;) + ylab(&amp;quot;t-SNE 2&amp;quot;) +
   theme_classic() + labs(color = &amp;quot;Cluster&amp;quot;) +
-  theme(legend.position=&amp;quot;bottom&amp;quot;)
+  theme(legend.position = &amp;quot;bottom&amp;quot;)
 
 
 a &amp;lt;- round((sum(Idents(data) == &amp;quot;AD&amp;quot;)/ncol(data))*100, 2); a1 &amp;lt;- sum(Idents(data) == &amp;quot;AD&amp;quot;)
@@ -2563,8 +2613,22 @@ ggplot(df, aes(x = &amp;quot;&amp;quot;, y = value, fill = class)) +
 ##################################
 ########### Figure S1C ###########
 ##################################
-filelist = list.files(path = &amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes&amp;quot;,
-                      pattern = &amp;quot;sccaf_assess&amp;quot;, recursive = T, full.names = T)
+import warnings
+warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
+from SCCAF import *
+  
+ad = sc.read(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad&amp;quot;)
+
+y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_result&#39;], n_jobs = 8)
+aucs = plot_roc(y_prob, y_test, clf, cvsm = cvsm, acc = acc)
+
+
+
+##################################
+########### Figure S1D ###########
+##################################
+filelist &amp;lt;- list.files(path = &amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes&amp;quot;,
+                      pattern = &amp;quot;sccaf_assess&amp;quot;, recursive = TRUE, full.names = TRUE)
 fnames &amp;lt;- gsub(&amp;quot;sccaf_assess_&amp;quot;, &amp;quot;&amp;quot;, basename(filelist))
 fnames &amp;lt;- gsub(&amp;quot;.txt&amp;quot;, &amp;quot;&amp;quot;, fnames)
 
@@ -2589,62 +2653,31 @@ ggplot(datafr, aes(x = Round, y = Accuracy, fill = Type)) +
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         axis.line = element_line(colour = &amp;quot;black&amp;quot;),
-        panel.border = element_rect(colour = &amp;quot;black&amp;quot;, fill=NA, size=0.5),
+        panel.border = element_rect(colour = &amp;quot;black&amp;quot;, fill = NA, size = 0.5),
         plot.title = element_text(hjust = 0.5),
         legend.position = c(0.9, 0.15), legend.title = element_blank())
 
 
 
 ##################################
-########### Figure S1D ###########
-##################################
-import warnings
-warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
-from SCCAF import *
-  
-ad = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad&amp;quot;)
-
-y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_result&#39;],n_jobs=8)
-aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
-plt.savefig(&#39;/Users/biagi/PhD/AdipoSNAP/paper/Figure_SD.eps&#39;)
-
-
-
-##################################
 ########### Figure S1E ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
+scdb_init(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT2/db&amp;quot;, force_reinit = TRUE)
+scfigs_init(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT2/figs&amp;quot;)
 
-pt &amp;lt;- FeaturePlot(data, c(&amp;quot;Adrb3&amp;quot;, &amp;quot;Pecam1&amp;quot;, &amp;quot;Ptprc&amp;quot;, &amp;quot;Cd34&amp;quot;, &amp;quot;Pdgfra&amp;quot;, &amp;quot;Itgb1&amp;quot;),
-                  cols = c(&amp;quot;grey&amp;quot;, &#39;red&#39;), reduction = &#39;tsne&#39;, pt.size = 0.1, combine = F)
-pt &amp;lt;- lapply(pt, function(x) {
-  x + theme_classic() + xlab(&amp;quot;t-SNE 1&amp;quot;) + ylab(&amp;quot;t-SNE 2&amp;quot;) +
-    theme(plot.title = element_text(hjust = 0.5, face = &amp;quot;italic&amp;quot;))
-})
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT2/db/mc.test_mc_f.Rda&amp;quot;)
+lfp &amp;lt;- log2(object@mc_fp)
 
-ggarrange(plotlist = pt, common.legend = T)
+mc &amp;lt;- scdb_mc(&amp;quot;test_mc_f&amp;quot;)
+gset &amp;lt;- scdb_gset(&amp;quot;test_markers&amp;quot;)
 
+gene_folds &amp;lt;- mc@mc_fp
 
+good_marks &amp;lt;- intersect(names(gset@gene_set), rownames(mc@mc_fp))
+mc_ord &amp;lt;- 1:ncol(mc@mc_fp)
 
-##################################
-########### Figure S1F ###########
-##################################
-scdb_init(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT2/db&amp;quot;, force_reinit=T)
-scfigs_init(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT2/figs&amp;quot;)
-
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT2/db/mc.test_mc_f.Rda&amp;quot;)
-lfp = log2(object@mc_fp)
-
-mc = scdb_mc(&amp;quot;test_mc_f&amp;quot;)
-gset = scdb_gset(&amp;quot;test_markers&amp;quot;)
-
-gene_folds = mc@mc_fp
-
-good_marks = intersect(names(gset@gene_set), rownames(mc@mc_fp))
-mc_ord = 1:ncol(mc@mc_fp)
-
-mat = log2(gene_folds[good_marks, mc_ord])
-mat = pmax(pmin(mat, 3), -3)
+mat &amp;lt;- log2(gene_folds[good_marks, mc_ord])
+mat &amp;lt;- pmax(pmin(mat, 3), -3)
 
 mat_A &amp;lt;- mat[, which(mc@colors == &amp;quot;blue&amp;quot;)]
 mat_A &amp;lt;- mat_A[rowSums(mat_A) &amp;gt; quantile(rowSums(mat_A), 0.9), ]
@@ -2669,14 +2702,14 @@ pheatmap(mat_P, fontsize = 8, main = &#39;Progenitors&#39;, legend = TRUE, treeh
 
 
 ##################################
-########### Figure S1G ###########
+########### Figure S1F ###########
 ##################################
 dbs &amp;lt;- c(&amp;quot;KEGG_2019_Mouse&amp;quot;, &amp;quot;WikiPathways_2019_Mouse&amp;quot;, &amp;quot;Jensen_TISSUES&amp;quot;, &amp;quot;GO_Biological_Process_2018&amp;quot;)
 
-genes_A &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_A.txt&amp;quot;)
-genes_E &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_E.txt&amp;quot;)
-genes_I &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_I.txt&amp;quot;)
-genes_P &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_P.txt&amp;quot;)
+genes_A &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_A.txt&amp;quot;)
+genes_E &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_E.txt&amp;quot;)
+genes_I &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_I.txt&amp;quot;)
+genes_P &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_P.txt&amp;quot;)
 
 genes &amp;lt;- list(Adipocyte = genes_A,
               Endothelial = genes_E,
@@ -2691,7 +2724,7 @@ tmplist &amp;lt;- NULL
 paths &amp;lt;- NULL
 for (i in 1:length(dbs)) {
   tmp &amp;lt;- lapply(results, `[[`, i)
-  tmp &amp;lt;- mapply(cbind, tmp, &amp;quot;type&amp;quot; = names(tmp), SIMPLIFY=F)
+  tmp &amp;lt;- mapply(cbind, tmp, &amp;quot;type&amp;quot; = names(tmp), SIMPLIFY = FALSE)
   tmp &amp;lt;- do.call(&amp;quot;rbind&amp;quot;, tmp)
   
   tmp &amp;lt;- subset(tmp, Adjusted.P.value &amp;lt; 0.05)
@@ -2709,8 +2742,8 @@ for (i in 1:length(dbs)) {
   plotlist[[i]] &amp;lt;- ggplot(tmp, aes(x = type, y = Term)) +
     geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
     theme_bw(base_size = 9) +
-    theme(plot.title = element_text(hjust = 0.5), axis.text=element_text(size=12)) +
-    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
+    theme(plot.title = element_text(hjust = 0.5), axis.text = element_text(size = 12)) +
+    scale_colour_gradient(limits = c(0, max(tmp$Combined.Score) + 0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
     xlab(NULL) + ylab(NULL) +
     ggtitle(dbs[i]) + labs(color = &amp;quot;Combined Score&amp;quot;, size = &amp;quot;-log10(padj)&amp;quot;)
 }
@@ -2720,21 +2753,35 @@ ggarrange(plotlist = plotlist)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&#34;figure-s2&#34;&gt;Figure S2&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;## Loading R packages
-library(Seurat)
+library(dplyr)
+library(enrichR)
 library(ggplot2)
 library(ggpubr)
 library(ggrepel)
-library(enrichR)
-library(dplyr)
+library(Seurat)
 
-source(&#39;/Users/biagi/PhD/AdipoSNAP/2_Functions.R&#39;)
+source(&#39;/Users/biagi/PhD/Adipocyte/2_Functions.R&#39;)
 
 
 ##################################
 ########### Figure S2A ###########
 ##################################
-filelist = list.files(path = &amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly&amp;quot;,
-                      pattern = &amp;quot;sccaf_assess&amp;quot;, recursive = T, full.names = T)
+import warnings
+warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
+from SCCAF import *
+  
+ad = sc.read(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results.h5ad&amp;quot;)
+
+y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_result&#39;], n_jobs = 8)
+aucs = plot_roc(y_prob, y_test, clf, cvsm = cvsm, acc = acc)
+
+
+
+##################################
+########### Figure S2B ###########
+##################################
+filelist &amp;lt;- list.files(path = &amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly&amp;quot;,
+                      pattern = &amp;quot;sccaf_assess&amp;quot;, recursive = TRUE, full.names = TRUE)
 fnames &amp;lt;- gsub(&amp;quot;sccaf_assess_&amp;quot;, &amp;quot;&amp;quot;, basename(filelist))
 fnames &amp;lt;- gsub(&amp;quot;.txt&amp;quot;, &amp;quot;&amp;quot;, fnames)
 
@@ -2759,32 +2806,17 @@ ggplot(datafr, aes(x = Round, y = Accuracy, fill = Type)) +
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         axis.line = element_line(colour = &amp;quot;black&amp;quot;),
-        panel.border = element_rect(colour = &amp;quot;black&amp;quot;, fill=NA, size=0.5),
+        panel.border = element_rect(colour = &amp;quot;black&amp;quot;, fill = NA, size = 0.5),
         plot.title = element_text(hjust = 0.5),
         legend.position = c(0.9, 0.15), legend.title = element_blank())
 
 
 
 ##################################
-########### Figure S2B ###########
-##################################
-import warnings
-warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
-from SCCAF import *
-  
-ad = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad&amp;quot;)
-
-y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_result&#39;],n_jobs=8)
-aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
-plt.savefig(&#39;/Users/biagi/PhD/AdipoSNAP/paper/Figure_2A_3.eps&#39;)
-
-
-
-##################################
 ########### Figure S2C ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -2794,13 +2826,13 @@ new_cluster &amp;lt;- as.factor(new_cluster)
 Idents(data) &amp;lt;- new_cluster
 
 pt &amp;lt;- VlnPlot(data, c(&#39;Adipoq&#39;, &#39;Adrb3&#39;, &#39;Cidec&#39;, &#39;Dgat1&#39;, &#39;Fasn&#39;, &#39;Lipe&#39;, &#39;Pck1&#39;, &#39;Plin1&#39;, &#39;Pnpla2&#39;, &#39;Retn&#39;),
-              cols = c(&amp;quot;#11c78b&amp;quot;, &amp;quot;#800080&amp;quot;, &amp;quot;#e57400&amp;quot;, &amp;quot;#0000FF&amp;quot;, &amp;quot;#dfdf0d&amp;quot;), assay = &amp;quot;RNA&amp;quot;, combine = F)
+              cols = c(&amp;quot;#11c78b&amp;quot;, &amp;quot;#800080&amp;quot;, &amp;quot;#e57400&amp;quot;, &amp;quot;#0000FF&amp;quot;, &amp;quot;#dfdf0d&amp;quot;), assay = &amp;quot;RNA&amp;quot;, combine = FALSE)
 pt &amp;lt;- lapply(pt, function(x) {
   x + theme_bw(base_size = 9) + xlab(NULL) + ylab(NULL) +
     theme(plot.title = element_text(hjust = 0.5))
 })
 
-figure &amp;lt;- ggarrange(plotlist = pt, nrow = 2, ncol = 5, common.legend = T, legend = &amp;quot;bottom&amp;quot;)
+figure &amp;lt;- ggarrange(plotlist = pt, nrow = 2, ncol = 5, common.legend = TRUE, legend = &amp;quot;bottom&amp;quot;)
 annotate_figure(figure, left = text_grob(&amp;quot;Expression Level&amp;quot;, rot = 90))
 
 
@@ -2808,8 +2840,8 @@ annotate_figure(figure, left = text_grob(&amp;quot;Expression Level&amp;quot;, r
 ##################################
 ########### Figure S2D ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -2818,7 +2850,7 @@ new_cluster &amp;lt;- paste0(&amp;quot;Ad&amp;quot;, new_cluster)
 new_cluster &amp;lt;- as.factor(new_cluster)
 Idents(data) &amp;lt;- new_cluster
 
-markers &amp;lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+markers &amp;lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = FALSE)
 
 markers_1 &amp;lt;- subset(markers, cluster == &amp;quot;Ad1&amp;quot;)
 mks_1 &amp;lt;- subset(markers_1, p_val_adj &amp;lt; 0.01)
@@ -2855,7 +2887,7 @@ upGenes &amp;lt;- head(subset(mks_5, avg_logFC &amp;gt; 0)$gene, 50)
 downGenes &amp;lt;- head(subset(mks_5, avg_logFC &amp;lt; 0)$gene, 50)
 pt_5 &amp;lt;- volcano.plot(res = markers_5, upGenes = upGenes, downGenes = downGenes) + ggtitle(&amp;quot;Ad5&amp;quot;) + theme(plot.title = element_text(hjust = 0.5))
 
-ggarrange(pt_1, pt_2, pt_3, pt_4, pt_5, nrow = 2, ncol = 3, common.legend = T)
+ggarrange(pt_1, pt_2, pt_3, pt_4, pt_5, nrow = 2, ncol = 3, common.legend = TRUE)
 
 
 
@@ -2864,11 +2896,11 @@ ggarrange(pt_1, pt_2, pt_3, pt_4, pt_5, nrow = 2, ncol = 3, common.legend = T)
 ##################################
 dbs &amp;lt;- c(&amp;quot;Jensen_TISSUES&amp;quot;, &amp;quot;Mouse_Gene_Atlas&amp;quot;)
 
-genes_1 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_1.txt&amp;quot;)
-genes_2 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_2.txt&amp;quot;)
-genes_3 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_3.txt&amp;quot;)
-genes_4 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_4.txt&amp;quot;)
-genes_5 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_5.txt&amp;quot;)
+genes_1 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_1.txt&amp;quot;)
+genes_2 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_2.txt&amp;quot;)
+genes_3 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_3.txt&amp;quot;)
+genes_4 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_4.txt&amp;quot;)
+genes_5 &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_5.txt&amp;quot;)
 
 genes &amp;lt;- list(Ad1 = genes_1,
               Ad2 = genes_2,
@@ -2884,7 +2916,7 @@ tmplist &amp;lt;- NULL
 paths &amp;lt;- NULL
 for (i in 1:length(dbs)) {
   tmp &amp;lt;- lapply(results, `[[`, i)
-  tmp &amp;lt;- mapply(cbind, tmp, &amp;quot;type&amp;quot; = names(tmp), SIMPLIFY=F)
+  tmp &amp;lt;- mapply(cbind, tmp, &amp;quot;type&amp;quot; = names(tmp), SIMPLIFY = FALSE)
   tmp &amp;lt;- do.call(&amp;quot;rbind&amp;quot;, tmp)
   
   tmp &amp;lt;- subset(tmp, Adjusted.P.value &amp;lt; 0.05)
@@ -2905,7 +2937,7 @@ for (i in 1:length(dbs)) {
   plotlist[[i]] &amp;lt;- ggplot(tmp, aes(x = type, y = Term)) +
     geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
     theme_bw(base_size = 12) +
-    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
+    scale_colour_gradient(limits = c(0, max(tmp$Combined.Score) + 0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
     xlab(NULL) + ylab(NULL) +
     ggtitle(dbs[i]) + labs(color = &amp;quot;Combined Score&amp;quot;, size = &amp;quot;-log10(padj)&amp;quot;)
 }
@@ -2918,8 +2950,8 @@ ggarrange(plotlist = plotlist)
 ##################################
 ########### Figure S2H ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -2931,7 +2963,7 @@ Idents(data) &amp;lt;- new_cluster
 count_raw &amp;lt;- data@assays$SCT@counts[, rownames(data@meta.data)]
 count_norm &amp;lt;- apply(count_raw, 2, function(x) (x/sum(x))*10000)
 
-ort &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = T)
+ort &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = TRUE)
 mat &amp;lt;- merge(ort, count_norm, by.x = &amp;quot;Mouse.gene.name&amp;quot;, by.y = &amp;quot;row.names&amp;quot;)
 mat$Mouse.gene.name &amp;lt;- mat$Gene.stable.ID &amp;lt;- mat$Mouse.gene.stable.ID &amp;lt;- NULL
 colnames(mat)[1] &amp;lt;- &amp;quot;Gene&amp;quot;
@@ -2939,39 +2971,38 @@ colnames(mat)[1] &amp;lt;- &amp;quot;Gene&amp;quot;
 anno &amp;lt;- data.frame(Cell = names(Idents(data)), 
                    cluster = Idents(data), row.names = NULL)
 
-write.table(mat, &amp;quot;/Users/biagi/PhD/AdipoSNAP/cellphonedb/counts.txt&amp;quot;, row.names = F, col.names = T, sep = &amp;quot;\t&amp;quot;, quote = F)
-write.table(anno, &amp;quot;/Users/biagi/PhD/AdipoSNAP/cellphonedb/meta.txt&amp;quot;, row.names = F, col.names = T, sep = &amp;quot;\t&amp;quot;, quote = F)
+write.table(mat, &amp;quot;/Users/biagi/PhD/Adipocyte/cellphonedb/counts.txt&amp;quot;, row.names = FALSE, col.names = TRUE, sep = &amp;quot;\t&amp;quot;, quote = FALSE)
+write.table(anno, &amp;quot;/Users/biagi/PhD/Adipocyte/cellphonedb/meta.txt&amp;quot;, row.names = FALSE, col.names = TRUE, sep = &amp;quot;\t&amp;quot;, quote = FALSE)
 
-
-#Python
-cd /Users/biagi/PhD/AdipoSNAP/cellphonedb
+## Python
+cd /Users/biagi/PhD/Adipocyte/cellphonedb
 cellphonedb method statistical_analysis meta.txt counts.txt --threads=16 --counts-data=gene_name --pvalue=0.05 --iterations=1000
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&#34;figure-s3&#34;&gt;Figure S3&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;## Loading R packages
+library(ComplexHeatmap)
+library(dplyr)
+library(enrichR)
+library(ggplot2)
+library(ggpubr)
+library(ggtext)
+library(glue)
+library(monocle)
+library(RColorBrewer)
+library(scales)
 library(Seurat)
 library(SeuratWrappers)
-library(dplyr)
-library(ggplot2)
-library(RColorBrewer)
-library(enrichR)
-library(glue)
-library(ggtext)
-library(tidyr)
 library(tibble)
-library(ComplexHeatmap)
-library(monocle)
-library(scales)
-library(ggpubr)
+library(tidyr)
 library(viridis)
 
-source(&#39;/Users/biagi/PhD/AdipoSNAP/2_Functions.R&#39;)
+source(&#39;/Users/biagi/PhD/Adipocyte/2_Functions.R&#39;)
 
 
 ##################################
 ########### Figure S3A ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
 data$timpoint &amp;lt;- gsub(&#39;4day&#39;, &#39;Cold&#39;, data$timpoint)
 
 Idents(data) &amp;lt;- as.factor(data$timpoint)
@@ -2994,10 +3025,10 @@ topGenes &amp;lt;- rbind(top1, top2)
 cls &amp;lt;- c(&amp;quot;blue&amp;quot;, &amp;quot;red&amp;quot;, &amp;quot;green&amp;quot;)
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
 
-DoHeatmap(data2, features = topGenes$gene, group.colors = cls, angle = 0, size = 5, label = F) +
+DoHeatmap(data2, features = topGenes$gene, group.colors = cls, angle = 0, size = 5, label = FALSE) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;Timepoint&#39;)
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Timepoint&#39;)
 
 
 
@@ -3006,8 +3037,8 @@ DoHeatmap(data2, features = topGenes$gene, group.colors = cls, angle = 0, size =
 ##################################
 dbs &amp;lt;- c(&amp;quot;KEGG_2019_Mouse&amp;quot;, &amp;quot;WikiPathways_2019_Mouse&amp;quot;, &amp;quot;Jensen_TISSUES&amp;quot;, &amp;quot;GO_Biological_Process_2018&amp;quot;)
 
-genes_ColdxRT &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_ColdxRT.txt&amp;quot;)
-genes_CLxRT &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Figures/update/Diff_Adipocytes_CLxRT.txt&amp;quot;)
+genes_ColdxRT &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Diff_Adipocytes_ColdxRT.txt&amp;quot;)
+genes_CLxRT &amp;lt;- readLines(&amp;quot;/Users/biagi/PhD/Adipocyte/Figures/update/Diff_Adipocytes_CLxRT.txt&amp;quot;)
 
 genes &amp;lt;- list(ColdxRT = genes_ColdxRT,
               CLxRT = genes_CLxRT)
@@ -3020,7 +3051,7 @@ tmplist &amp;lt;- NULL
 paths &amp;lt;- NULL
 for (i in 1:length(dbs)) {
   tmp &amp;lt;- lapply(results, `[[`, i)
-  tmp &amp;lt;- mapply(cbind, tmp, &amp;quot;type&amp;quot; = names(tmp), SIMPLIFY=F)
+  tmp &amp;lt;- mapply(cbind, tmp, &amp;quot;type&amp;quot; = names(tmp), SIMPLIFY = FALSE)
   tmp &amp;lt;- do.call(&amp;quot;rbind&amp;quot;, tmp)
   
   tmp &amp;lt;- subset(tmp, Adjusted.P.value &amp;lt; 0.05)
@@ -3041,7 +3072,7 @@ for (i in 1:length(dbs)) {
   plotlist[[i]] &amp;lt;- ggplot(tmp, aes(x = type, y = Term)) +
     geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
     theme_bw(base_size = 9) +
-    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
+    scale_colour_gradient(limits = c(0, max(tmp$Combined.Score) + 0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
     xlab(NULL) + ylab(NULL) +
     ggtitle(dbs[i]) + labs(color = &amp;quot;Combined Score&amp;quot;, size = &amp;quot;-log10(padj)&amp;quot;)
 }
@@ -3064,18 +3095,18 @@ paths$class_with_color &amp;lt;- factor(paths$class_with_color, levels = rev(uni
 ggplot(paths, aes(x = type, y = class_with_color)) +
   geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
   theme_bw(base_size = 8) +
-  scale_colour_gradient(limits=c(0, max(paths$Combined.Score)+0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
+  scale_colour_gradient(limits = c(0, max(paths$Combined.Score) + 0.5), high = &amp;quot;#2b9348&amp;quot;, low = &amp;quot;#eeef20&amp;quot;) +
   xlab(NULL) + ylab(NULL) +
   ggtitle(NULL) + labs(color = &amp;quot;Combined Score&amp;quot;, size = &amp;quot;-log10(padj)&amp;quot;) +
-  theme(axis.text.y = element_markdown(), axis.text=element_text(size=12))
+  theme(axis.text.y = element_markdown(), axis.text = element_text(size = 12))
 
 
 
 ##################################
 ########### Figure S3C ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -3088,84 +3119,104 @@ data$cluster &amp;lt;- factor(new_cluster)
 data &amp;lt;- SeuratWrappers::RunALRA(data)
 data &amp;lt;- ScaleData(data, features = rownames(data))
 
-##Fatty Acid Oxidation
+## Fatty Acid Oxidation
 genes1 &amp;lt;- c(&#39;Abcb11&#39;, &#39;Abcd1&#39;, &#39;Abcd2&#39;, &#39;Abcd3&#39;, &#39;Abcd4&#39;, &#39;Acaa1a&#39;, &#39;Acaa1b&#39;, &#39;Acaa2&#39;, &#39;Acacb&#39;, &#39;Acad11&#39;, &#39;Acadl&#39;, &#39;Acadm&#39;, &#39;Acads&#39;, &#39;Acadvl&#39;, &#39;Acat1&#39;, &#39;Acat2&#39;, &#39;Acat3&#39;, &#39;Acox1&#39;, &#39;Acox2&#39;, &#39;Acox3&#39;, &#39;Acoxl&#39;, &#39;Acsbg2&#39;, &#39;Acsl5&#39;, &#39;Adh4&#39;, &#39;Adh5&#39;, &#39;Adh7&#39;, &#39;Adipoq&#39;, &#39;Adipor1&#39;, &#39;Adipor2&#39;, &#39;Akt1&#39;, &#39;Akt2&#39;, &#39;Alox12&#39;, &#39;Appl2&#39;, &#39;Auh&#39;, &#39;Bdh2&#39;, &#39;C1qtnf2&#39;, &#39;C1qtnf9&#39;, &#39;Cd36&#39;, &#39;Cnr1&#39;, &#39;Cpt1a&#39;, &#39;Cpt2&#39;, &#39;Crat&#39;, &#39;Crot&#39;, &#39;Cygb&#39;, &#39;Cyp4v3&#39;, &#39;Cyp24a1&#39;, &#39;Dbi&#39;, &#39;Decr1&#39;, &#39;Dgat1&#39;, &#39;Dgat2&#39;, &#39;Echdc1&#39;, &#39;Echdc2&#39;, &#39;Echs1&#39;, &#39;Eci1&#39;, &#39;Eci2&#39;, &#39;Eci3&#39;, &#39;Ehhadh&#39;, &#39;Etfa&#39;, &#39;Etfb&#39;, &#39;Etfbkmt&#39;, &#39;Etfdh&#39;, &#39;Fabp1&#39;, &#39;Fabp3&#39;, &#39;Gcdh&#39;, &#39;Gm45753&#39;, &#39;Gm49387&#39;, &#39;Hacl1&#39;, &#39;Hadh&#39;, &#39;Hadha&#39;, &#39;Hadhb&#39;, &#39;Hao1&#39;, &#39;Hao2&#39;, &#39;Hsd17b4&#39;, &#39;Hsd17b10&#39;, &#39;Ilvbl&#39;, &#39;Irs1&#39;, &#39;Irs2&#39;, &#39;Ivd&#39;, &#39;Lep&#39;, &#39;Lonp2&#39;, &#39;Mapk14&#39;, &#39;Mfsd2a&#39;, &#39;Mir199a-2&#39;, &#39;Mir214&#39;, &#39;Mir696&#39;, &#39;Mlycd&#39;, &#39;Mtor&#39;, &#39;Nr4a3&#39;, &#39;Nucb2&#39;, &#39;Pdk4&#39;, &#39;Pex2&#39;, &#39;Pex5&#39;, &#39;Pex7&#39;, &#39;Pex13&#39;, &#39;Phyh&#39;, &#39;Plin5&#39;, &#39;Por&#39;, &#39;Ppara&#39;, &#39;Ppard&#39;, &#39;Pparg&#39;, &#39;Ppargc1a&#39;, &#39;Prkaa1&#39;, &#39;Scp2&#39;, &#39;Sesn2&#39;, &#39;Sirt4&#39;, &#39;Slc25a17&#39;, &#39;Slc27a2&#39;, &#39;Sox9&#39;, &#39;Twist1&#39;, &#39;Tysnd1&#39;)
 genes1 &amp;lt;- genes1[genes1 %in% rownames(data)]
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
-ht1 &amp;lt;- DoHeatmap(data, features = genes1, angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+ht1 &amp;lt;- DoHeatmap(data, features = genes1, angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;Expression&#39;)
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Expression&#39;)
 y &amp;lt;- ht1$data %&amp;gt;% drop_na()
 x &amp;lt;- y %&amp;gt;% group_by(Identity) %&amp;gt;% select(Feature, Cell, Identity, Expression) %&amp;gt;%
   spread(key = Feature, value = Expression)
 w &amp;lt;- y %&amp;gt;% select(Feature, Cell, Expression) %&amp;gt;%
   spread(key = Cell, value = Expression) %&amp;gt;% column_to_rownames(&amp;quot;Feature&amp;quot;) %&amp;gt;% as.matrix()
-pt &amp;lt;- Heatmap(w, cluster_columns = F)
-DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+pt &amp;lt;- Heatmap(w, cluster_columns = FALSE)
+DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;Expression&#39;) + ggtitle(&#39;Fatty Acid Oxidation&#39;) + 
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Expression&#39;) + ggtitle(&#39;Fatty Acid Oxidation&#39;) + 
   theme(plot.title = element_text(hjust = 0.5))
 
-##Tricarboxylic Acid Cycle
+## Tricarboxylic Acid Cycle
 genes2 &amp;lt;- c(&#39;4933405O20Rik&#39;, &#39;Aco1&#39;, &#39;Aco2&#39;, &#39;Cs&#39;, &#39;Csl&#39;, &#39;Dhtkd1&#39;, &#39;Dlat&#39;, &#39;Dlst&#39;, &#39;Fh1&#39;, &#39;Idh1&#39;, &#39;Idh2&#39;, &#39;Idh3a&#39;, &#39;Idh3b&#39;, &#39;Idh3g&#39;, &#39;Ireb2&#39;, &#39;Mdh1&#39;, &#39;Mdh1b&#39;, &#39;Mdh2&#39;, &#39;Ndufs4&#39;, &#39;Ogdh&#39;, &#39;Ogdhl&#39;, &#39;Pdha1&#39;, &#39;Pdha2&#39;, &#39;Pdhb&#39;, &#39;Sdha&#39;, &#39;Sdhaf2&#39;, &#39;Sdhb&#39;, &#39;Sdhc&#39;, &#39;Sdhd&#39;, &#39;Sucla2&#39;, &#39;Suclg1&#39;, &#39;Suclg2&#39;)
 genes2 &amp;lt;- genes2[genes2 %in% rownames(data)]
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
-ht1 &amp;lt;- DoHeatmap(data, features = genes2, angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+ht1 &amp;lt;- DoHeatmap(data, features = genes2, angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;Expression&#39;)
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Expression&#39;)
 y &amp;lt;- ht1$data %&amp;gt;% drop_na()
 x &amp;lt;- y %&amp;gt;% group_by(Identity) %&amp;gt;% select(Feature, Cell, Identity, Expression) %&amp;gt;%
   spread(key = Feature, value = Expression)
 w &amp;lt;- y %&amp;gt;% select(Feature, Cell, Expression) %&amp;gt;%
   spread(key = Cell, value = Expression) %&amp;gt;% column_to_rownames(&amp;quot;Feature&amp;quot;) %&amp;gt;% as.matrix()
-pt &amp;lt;- Heatmap(w, cluster_columns = F)
-DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+pt &amp;lt;- Heatmap(w, cluster_columns = FALSE)
+DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;Expression&#39;) + ggtitle(&#39;Tricarboxylic Acid Cycle&#39;) + 
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Expression&#39;) + ggtitle(&#39;Tricarboxylic Acid Cycle&#39;) + 
   theme(plot.title = element_text(hjust = 0.5))
 
-##Fat Acid Transport
+## Fat Acid Transport
 genes3 &amp;lt;- c(&#39;Abcc1&#39;, &#39;Abcc2&#39;, &#39;Abcc4&#39;, &#39;Abcd1&#39;, &#39;Abcd2&#39;, &#39;Abcd3&#39;, &#39;Abcd4&#39;, &#39;Ace&#39;, &#39;Acsl1&#39;, &#39;Acsl3&#39;, &#39;Acsl4&#39;, &#39;Acsl5&#39;, &#39;Acsl6&#39;, &#39;Agtr2&#39;, &#39;Akt1&#39;, &#39;Akt2&#39;, &#39;Anxa1&#39;, &#39;Apoe&#39;, &#39;Atp5j&#39;, &#39;Avpr1b&#39;, &#39;Bdkrb2&#39;, &#39;Cd36&#39;, &#39;Cpt1b&#39;, &#39;Crot&#39;, &#39;Cyp4f18&#39;, &#39;Drd2&#39;, &#39;Drd3&#39;, &#39;Drd4&#39;, &#39;Edn1&#39;, &#39;Eprs&#39;, &#39;Erfe&#39;, &#39;Fabp1&#39;, &#39;Fabp2&#39;, &#39;Fabp3&#39;, &#39;Fabp4&#39;, &#39;Fabp5&#39;, &#39;Hnf1a&#39;, &#39;Hrh2&#39;, &#39;Il1a&#39;, &#39;Il1b&#39;, &#39;Irs2&#39;, &#39;Kiss1r&#39;, &#39;Lep&#39;, &#39;Lhcgr&#39;, &#39;Map2k6&#39;, &#39;Mapk9&#39;, &#39;Mfsd2a&#39;, &#39;Mif&#39;, &#39;Nmb&#39;, &#39;Nmur2&#39;, &#39;Nos2&#39;, &#39;Ntsr1&#39;, &#39;Oc90&#39;, &#39;Oxt&#39;, &#39;P2rx7&#39;, &#39;P2ry2&#39;, &#39;Pla2g1b&#39;, &#39;Pla2g2c&#39;, &#39;Pla2g2d&#39;, &#39;Pla2g2e&#39;, &#39;Pla2g2f&#39;, &#39;Pla2g3&#39;, &#39;Pla2g4a&#39;, &#39;Pla2g4f&#39;, &#39;Pla2g5&#39;, &#39;Pla2g6&#39;, &#39;Pla2g10&#39;, &#39;Pla2g12a&#39;, &#39;Pla2g12b&#39;, &#39;Pla2r1&#39;, &#39;Plin2&#39;, &#39;Pnpla8&#39;, &#39;Pparg&#39;, &#39;Ptges&#39;, &#39;Repin1&#39;, &#39;Rps6kb1&#39;, &#39;Slc2a1&#39;, &#39;Slc5a8&#39;, &#39;Slc22a22&#39;, &#39;Slc25a17&#39;, &#39;Slc27a1&#39;, &#39;Slc27a2&#39;, &#39;Slc27a3&#39;, &#39;Slc27a4&#39;, &#39;Slc27a5&#39;, &#39;Slc27a6&#39;, &#39;Slco2a1&#39;, &#39;Slco3a1&#39;, &#39;Spx&#39;, &#39;Sstr4&#39;, &#39;Syk&#39;, &#39;Thbs1&#39;, &#39;Tnfrsf11a&#39;, &#39;Tnfsf11&#39;)
 genes3 &amp;lt;- genes3[genes3 %in% rownames(data)]
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
-ht1 &amp;lt;- DoHeatmap(data, features = genes3, angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+ht1 &amp;lt;- DoHeatmap(data, features = genes3, angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;Expression&#39;)
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Expression&#39;)
 y &amp;lt;- ht1$data %&amp;gt;% drop_na()
 x &amp;lt;- y %&amp;gt;% group_by(Identity) %&amp;gt;% select(Feature, Cell, Identity, Expression) %&amp;gt;%
   spread(key = Feature, value = Expression)
 w &amp;lt;- y %&amp;gt;% select(Feature, Cell, Expression) %&amp;gt;%
   spread(key = Cell, value = Expression) %&amp;gt;% column_to_rownames(&amp;quot;Feature&amp;quot;) %&amp;gt;% as.matrix()
-pt &amp;lt;- Heatmap(w, cluster_columns = F)
-DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+pt &amp;lt;- Heatmap(w, cluster_columns = FALSE)
+DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;Expression&#39;) + ggtitle(&#39;Fat Acid Transport&#39;) + 
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Expression&#39;) + ggtitle(&#39;Fat Acid Transport&#39;) + 
   theme(plot.title = element_text(hjust = 0.5))
 
-##Triglyceride/Fatty Acid Cycle
+## Triglyceride/Fatty Acid Cycle
 genes4 &amp;lt;- c(&#39;Aadac&#39;, &#39;Abhd5&#39;, &#39;Daglb&#39;, &#39;Pnpla2&#39;, &#39;Pck1&#39;, &#39;Pcx&#39; , &#39;Gpd1&#39;, &#39;Slc2a4&#39;, &#39;Lipe&#39;, &#39;Adrb3&#39;)
 genes4 &amp;lt;- genes4[genes4 %in% rownames(data)]
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
-ht1 &amp;lt;- DoHeatmap(data, features = genes4, angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+ht1 &amp;lt;- DoHeatmap(data, features = genes4, angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;Expression&#39;)
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Expression&#39;)
 y &amp;lt;- ht1$data %&amp;gt;% drop_na()
 x &amp;lt;- y %&amp;gt;% group_by(Identity) %&amp;gt;% select(Feature, Cell, Identity, Expression) %&amp;gt;%
   spread(key = Feature, value = Expression)
 w &amp;lt;- y %&amp;gt;% select(Feature, Cell, Expression) %&amp;gt;%
   spread(key = Cell, value = Expression) %&amp;gt;% column_to_rownames(&amp;quot;Feature&amp;quot;) %&amp;gt;% as.matrix()
-pt &amp;lt;- Heatmap(w, cluster_columns = F)
-DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+pt &amp;lt;- Heatmap(w, cluster_columns = FALSE)
+DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;Expression&#39;) + ggtitle(&#39;Triglyceride/Fatty Acid Cycle&#39;) + 
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Expression&#39;) + ggtitle(&#39;Triglyceride/Fatty Acid Cycle&#39;) + 
+  theme(plot.title = element_text(hjust = 0.5))
+
+## de novo Lipogenesis
+genes5 &amp;lt;- c(&#39;Acly&#39;, &#39;Acaca&#39;, &#39;Scd&#39;, &#39;Gpat&#39;, &#39;Dgat2&#39;, &#39;Fabp4&#39;, &#39;Fabp5&#39;, &#39;Fasn&#39;, &#39;Lpl&#39;, &#39;Pnpla5&#39;, &#39;Slc27a5&#39;, &#39;Srebf1&#39;, &#39;Acad9&#39;, &#39;Acsl3&#39;, &#39;Acsl5&#39;, &#39;Acss2&#39;, &#39;Elovl5&#39;, &#39;Elovl6&#39;, &#39;Hadh&#39;, &#39;Hao3&#39;, &#39;Hpgd&#39;, &#39;Insig1&#39;, &#39;Pcsk9&#39;, &#39;Sc5d&#39;, &#39;Ucp2&#39;, &#39;Gk2&#39;, &#39;Ces3&#39;, &#39;Ppap2a&#39;, &#39;Ppap2c&#39;)
+genes5 &amp;lt;- genes5[genes5 %in% rownames(data)]
+mapal &amp;lt;- colorRampPalette(RColorBrewer::brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
+ht1 &amp;lt;- DoHeatmap(data, features = genes5, angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
+  scale_fill_gradientn(colours = rev(mapal)) +
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Expression&#39;)
+y &amp;lt;- ht1$data %&amp;gt;% drop_na()
+x &amp;lt;- y %&amp;gt;% group_by(Identity) %&amp;gt;% dplyr::select(Feature, Cell, Identity, Expression) %&amp;gt;%
+  tidyr::spread(key = Feature, value = Expression)
+w &amp;lt;- y %&amp;gt;% dplyr::select(Feature, Cell, Expression) %&amp;gt;%
+  tidyr::spread(key = Cell, value = Expression) %&amp;gt;% column_to_rownames(&amp;quot;Feature&amp;quot;) %&amp;gt;% as.matrix()
+pt &amp;lt;- Heatmap(w, cluster_columns = FALSE)
+DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
+  scale_fill_gradientn(colours = rev(mapal)) +
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;Expression&#39;) + ggtitle(&#39;de novo Lipogenesis&#39;) + 
   theme(plot.title = element_text(hjust = 0.5))
 
 
@@ -3173,8 +3224,8 @@ DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, labe
 ##################################
 ########### Figure S3H ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -3186,7 +3237,7 @@ Idents(data) &amp;lt;- new_cluster
 count_raw &amp;lt;- data@assays$SCT@counts[, rownames(data@meta.data)]
 count_norm &amp;lt;- apply(count_raw, 2, function(x) (x/sum(x))*10000)
 
-ort &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = T)
+ort &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = TRUE)
 mat &amp;lt;- merge(ort, count_norm, by.x = &amp;quot;Mouse.gene.name&amp;quot;, by.y = &amp;quot;row.names&amp;quot;)
 mat$Mouse.gene.name &amp;lt;- mat$Gene.stable.ID &amp;lt;- mat$Mouse.gene.stable.ID &amp;lt;- NULL
 colnames(mat)[1] &amp;lt;- &amp;quot;Gene&amp;quot;
@@ -3194,12 +3245,11 @@ colnames(mat)[1] &amp;lt;- &amp;quot;Gene&amp;quot;
 anno &amp;lt;- data.frame(Cell = names(Idents(data)), 
                    cluster = Idents(data), row.names = NULL)
 
-write.table(mat, &amp;quot;/Users/biagi/PhD/AdipoSNAP/cellphonedb/counts.txt&amp;quot;, row.names = F, col.names = T, sep = &amp;quot;\t&amp;quot;, quote = F)
-write.table(anno, &amp;quot;/Users/biagi/PhD/AdipoSNAP/cellphonedb/meta.txt&amp;quot;, row.names = F, col.names = T, sep = &amp;quot;\t&amp;quot;, quote = F)
+write.table(mat, &amp;quot;/Users/biagi/PhD/Adipocyte/cellphonedb/counts.txt&amp;quot;, row.names = FALSE, col.names = TRUE, sep = &amp;quot;\t&amp;quot;, quote = FALSE)
+write.table(anno, &amp;quot;/Users/biagi/PhD/Adipocyte/cellphonedb/meta.txt&amp;quot;, row.names = FALSE, col.names = TRUE, sep = &amp;quot;\t&amp;quot;, quote = FALSE)
 
-
-#Python
-cd /Users/biagi/PhD/AdipoSNAP/cellphonedb
+## Python
+cd /Users/biagi/PhD/Adipocyte/cellphonedb
 cellphonedb method statistical_analysis meta.txt counts.txt --threads=16 --counts-data=gene_name --pvalue=0.05 --iterations=1000
 
 
@@ -3207,10 +3257,10 @@ cellphonedb method statistical_analysis meta.txt counts.txt --threads=16 --count
 ##################################
 ########### Figure S3I ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
 data$timpoint &amp;lt;- gsub(&#39;4day&#39;, &#39;Cold&#39;, data$timpoint)
 
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
 new_cluster &amp;lt;- new_cluster + 1
@@ -3233,7 +3283,7 @@ fd &amp;lt;- new(&amp;quot;AnnotatedDataFrame&amp;quot;, data = fdata)
 cds &amp;lt;- newCellDataSet(as(mat, &amp;quot;dgCMatrix&amp;quot;),
                       phenoData = pd,
                       featureData = fd, 
-                      expressionFamily=negbinomial.size())
+                      expressionFamily = negbinomial.size())
 
 rm(data, mat, fdata, pdata, fd, pd)
 
@@ -3243,7 +3293,7 @@ cds &amp;lt;- estimateDispersions(cds)
 cds &amp;lt;- detectGenes(cds, min_expr = 0.1)
 expressed_genes &amp;lt;- row.names(subset(fData(cds), num_cells_expressed &amp;gt;= 10))
 
-diff_test_res &amp;lt;- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = &amp;quot;~cluster&amp;quot;, cores = 6, verbose = T)
+diff_test_res &amp;lt;- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = &amp;quot;~cluster&amp;quot;, cores = 6, verbose = TRUE)
 ordering_genes &amp;lt;- row.names(subset(diff_test_res, qval &amp;lt; 0.01))
 cds &amp;lt;- setOrderingFilter(cds, ordering_genes)
 
@@ -3262,10 +3312,10 @@ plotMonocle(cds, c(&#39;Ucp1&#39;, &#39;Ppara&#39;, &#39;Dio2&#39;, &#39;Chst1&#
 ##################################
 ########### Figure S3J ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
 data$timpoint &amp;lt;- gsub(&#39;4day&#39;, &#39;Cold&#39;, data$timpoint)
 
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
 new_cluster &amp;lt;- new_cluster + 1
@@ -3288,7 +3338,7 @@ fd &amp;lt;- new(&amp;quot;AnnotatedDataFrame&amp;quot;, data = fdata)
 cds &amp;lt;- newCellDataSet(as(mat, &amp;quot;dgCMatrix&amp;quot;),
                       phenoData = pd,
                       featureData = fd, 
-                      expressionFamily=negbinomial.size())
+                      expressionFamily = negbinomial.size())
 
 rm(data, mat, fdata, pdata, fd, pd)
 
@@ -3298,7 +3348,7 @@ cds &amp;lt;- estimateDispersions(cds)
 cds &amp;lt;- detectGenes(cds, min_expr = 0.1)
 expressed_genes &amp;lt;- row.names(subset(fData(cds), num_cells_expressed &amp;gt;= 10))
 
-diff_test_res &amp;lt;- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = &amp;quot;~cluster&amp;quot;, cores = 6, verbose = T)
+diff_test_res &amp;lt;- differentialGeneTest(cds[expressed_genes, ], fullModelFormulaStr = &amp;quot;~cluster&amp;quot;, cores = 6, verbose = TRUE)
 ordering_genes &amp;lt;- row.names(subset(diff_test_res, qval &amp;lt; 0.01))
 cds &amp;lt;- setOrderingFilter(cds, ordering_genes)
 
@@ -3314,24 +3364,24 @@ plotMonocle(cds, c(&#39;Ucp1&#39;, &#39;Ppara&#39;, &#39;Dio2&#39;, &#39;Ccdc80&
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&#34;figure-s4&#34;&gt;Figure S4&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;## Loading R packages
+library(circlize)
+library(ComplexHeatmap)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(ggrepel)
+library(RColorBrewer)
 library(Seurat)
 library(SeuratWrappers)
-library(ggplot2)
-library(dplyr)
-library(ggrepel)
-library(ggpubr)
-library(RColorBrewer)
-library(tidyr)
 library(tibble)
-library(ComplexHeatmap)
-library(circlize)
+library(tidyr)
 
 
 ##################################
 ########### Figure S4A ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -3379,8 +3429,8 @@ ggarrange(plotlist = plotList)
 ##################################
 ########### Figure S4B ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -3396,25 +3446,25 @@ data &amp;lt;- ScaleData(data, features = rownames(data))
 data$UCP1 &amp;lt;- factor(ifelse(data@assays$SCT@data[&amp;quot;Ucp1&amp;quot;, ] &amp;gt; 0, &amp;quot;High&amp;quot;, &amp;quot;Low&amp;quot;))
 Idents(data) &amp;lt;- data$UCP1
 
-markers &amp;lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+markers &amp;lt;- FindAllMarkers(data, logfc.threshold = 0, only.pos = FALSE)
 
 markers &amp;lt;- subset(markers, p_val_adj &amp;lt; 0.05 &amp;amp; cluster == &#39;High&#39;)
-markers &amp;lt;- markers[order(markers$avg_logFC, decreasing = T), ]
+markers &amp;lt;- markers[order(markers$avg_logFC, decreasing = TRUE), ]
 
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
 
-DoHeatmap(data, features = markers$gene, angle = 0, size = 5, label = F) +
+DoHeatmap(data, features = markers$gene, angle = 0, size = 5, label = FALSE) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=3)) +
-  labs(color=&#39;UCP1 Expression&#39;)
+  theme(axis.text = element_text(size = 3)) +
+  labs(color = &#39;UCP1 Expression&#39;)
 
 
 
 ##################################
 ########### Figure S4C ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
 new_cluster &amp;lt;- new_cluster + 1
@@ -3425,8 +3475,8 @@ data$cluster &amp;lt;- Idents(data)
 data &amp;lt;- subset(data, idents = list(&#39;Ad1&#39;))
 tmp1 &amp;lt;- factor(ifelse(data@assays$SCT@data[&amp;quot;Ucp1&amp;quot;, ] &amp;gt; 0, &amp;quot;Ad1_High&amp;quot;, &amp;quot;Ad1_Low&amp;quot;))
 
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
 new_cluster &amp;lt;- new_cluster + 1
@@ -3448,75 +3498,75 @@ data$cluster &amp;lt;- Idents(data)
 data &amp;lt;- SeuratWrappers::RunALRA(data)
 data &amp;lt;- ScaleData(data, features = rownames(data))
 
-# SERCA2
+## SERCA2
 genes &amp;lt;- c(&#39;Atp2a1&#39;, &#39;Atp2a2&#39;, &#39;Tmtc4&#39;, &#39;Adra1a&#39;, &#39;Arpc2&#39;)
 genes &amp;lt;- genes[genes %in% rownames(data)]
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
-ht1 &amp;lt;- DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+ht1 &amp;lt;- DoHeatmap(data, features = genes, angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;UCP1 Expression&#39;)
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;UCP1 Expression&#39;)
 y &amp;lt;- ht1$data %&amp;gt;% drop_na()
 x &amp;lt;- y %&amp;gt;% group_by(Identity) %&amp;gt;% select(Feature, Cell, Identity, Expression) %&amp;gt;%
   spread(key = Feature, value = Expression)
 w &amp;lt;- y %&amp;gt;% select(Feature, Cell, Expression) %&amp;gt;%
   spread(key = Cell, value = Expression) %&amp;gt;% column_to_rownames(&amp;quot;Feature&amp;quot;) %&amp;gt;% as.matrix()
-pt &amp;lt;- Heatmap(w, cluster_columns = F)
-DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+pt &amp;lt;- Heatmap(w, cluster_columns = FALSE)
+DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;UCP1 Expression&#39;) + ggtitle(&#39;SERCA2&#39;) + 
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;UCP1 Expression&#39;) + ggtitle(&#39;SERCA2&#39;) + 
   theme(plot.title = element_text(hjust = 0.5))
 
-# Arginine/creatine and proline metabolism v
+## Arginine/creatine and proline metabolism v
 genes &amp;lt;- c(&#39;Slc6a8&#39;, &#39;Gatm&#39;, &#39;Gamt&#39;, &#39;Ckmt1&#39;, &#39;Ckmt2&#39;)
 genes &amp;lt;- genes[genes %in% rownames(data)]
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
-ht1 &amp;lt;- DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+ht1 &amp;lt;- DoHeatmap(data, features = genes, angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;UCP1 Expression&#39;)
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;UCP1 Expression&#39;)
 y &amp;lt;- ht1$data %&amp;gt;% drop_na()
 x &amp;lt;- y %&amp;gt;% group_by(Identity) %&amp;gt;% select(Feature, Cell, Identity, Expression) %&amp;gt;%
   spread(key = Feature, value = Expression)
 w &amp;lt;- y %&amp;gt;% select(Feature, Cell, Expression) %&amp;gt;%
   spread(key = Cell, value = Expression) %&amp;gt;% column_to_rownames(&amp;quot;Feature&amp;quot;) %&amp;gt;% as.matrix()
-pt &amp;lt;- Heatmap(w, cluster_columns = F)
-DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+pt &amp;lt;- Heatmap(w, cluster_columns = FALSE)
+DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;UCP1 Expression&#39;) + ggtitle(&#39;Arginine/creatine and proline metabolism v&#39;) + 
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;UCP1 Expression&#39;) + ggtitle(&#39;Arginine/creatine and proline metabolism v&#39;) + 
   theme(plot.title = element_text(hjust = 0.5))
 
-# Glycolytic process
+## Glycolytic process
 genes &amp;lt;- c(&#39;Actn3&#39;, &#39;Adpgk&#39;, &#39;Aldoa&#39;, &#39;Aldoart1&#39;, &#39;Aldoart2&#39;, &#39;Aldob&#39;, &#39;Aldoc&#39;, &#39;App&#39;, &#39;Bpgm&#39;, &#39;Cbfa2t3&#39;, &#39;Ddit4&#39;, &#39;Dhtkd1&#39;, &#39;Eif6&#39;, &#39;Eno1&#39;, &#39;Eno1b&#39;, &#39;Eno2&#39;, &#39;Eno3&#39;, &#39;Eno4&#39;, &#39;Entpd5&#39;, &#39;Ep300&#39;, &#39;Esrrb&#39;, &#39;Fbp1&#39;, &#39;Foxk1&#39;, &#39;Foxk2&#39;, &#39;Gale&#39;, &#39;Galk1&#39;, &#39;Galt&#39;, &#39;Gapdh&#39;, &#39;Gapdhs&#39;, &#39;Gck&#39;, &#39;Gm3839&#39;, &#39;Gm10358&#39;, &#39;Gm11214&#39;, &#39;Gm12117&#39;, &#39;Gm15294&#39;, &#39;Gpd1&#39;, &#39;Gpi1&#39;, &#39;Hdac4&#39;, &#39;Hif1a&#39;, &#39;Hk1&#39;, &#39;Hk2&#39;, &#39;Hk3&#39;, &#39;Hkdc1&#39;, &#39;Htr2a&#39;, &#39;Ier3&#39;, &#39;Ifng&#39;, &#39;Igf1&#39;, &#39;Il3&#39;, &#39;Ins2&#39;, &#39;Insr&#39;, &#39;Jmjd8&#39;, &#39;Khk&#39;, &#39;Mif&#39;, &#39;Mlxipl&#39;, &#39;Mpi&#39;, &#39;Mtch2&#39;, &#39;Myc&#39;, &#39;Myog&#39;, &#39;Ncor1&#39;, &#39;Nupr1&#39;, &#39;Ogdh&#39;, &#39;Ogt&#39;, &#39;P2rx7&#39;, &#39;Pfkfb2&#39;, &#39;Pfkl&#39;, &#39;Pfkm&#39;, &#39;Pfkp&#39;, &#39;Pgam1&#39;, &#39;Pgam2&#39;, &#39;Pgk1&#39;, &#39;Pgk2&#39;, &#39;Pklr&#39;, &#39;Pkm&#39;, &#39;Ppara&#39;, &#39;Ppargc1a&#39;, &#39;Prkaa1&#39;, &#39;Prkaa2&#39;, &#39;Prkag2&#39;, &#39;Prkag3&#39;, &#39;Prxl2c&#39;, &#39;Psen1&#39;, &#39;Sirt6&#39;, &#39;Slc2a6&#39;, &#39;Slc4a1&#39;, &#39;Slc4a4&#39;, &#39;Stat3&#39;, &#39;Tigar&#39;, &#39;Tkfc&#39;, &#39;Tpi1&#39;, &#39;Trex1&#39;, &#39;Zbtb7a&#39;, &#39;Zbtb20&#39;)
 genes &amp;lt;- genes[genes %in% rownames(data)]
 mapal &amp;lt;- colorRampPalette(brewer.pal(11,&amp;quot;RdBu&amp;quot;))(256)
-ht1 &amp;lt;- DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+ht1 &amp;lt;- DoHeatmap(data, features = genes, angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;UCP1 Expression&#39;)
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;UCP1 Expression&#39;)
 y &amp;lt;- ht1$data %&amp;gt;% drop_na()
 x &amp;lt;- y %&amp;gt;% group_by(Identity) %&amp;gt;% select(Feature, Cell, Identity, Expression) %&amp;gt;%
   spread(key = Feature, value = Expression)
 w &amp;lt;- y %&amp;gt;% select(Feature, Cell, Expression) %&amp;gt;%
   spread(key = Cell, value = Expression) %&amp;gt;% column_to_rownames(&amp;quot;Feature&amp;quot;) %&amp;gt;% as.matrix()
-pt &amp;lt;- Heatmap(w, cluster_columns = F)
-DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = &#39;cluster&#39;) +
+pt &amp;lt;- Heatmap(w, cluster_columns = FALSE)
+DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = FALSE, group.by = &#39;cluster&#39;) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color=&#39;UCP1 Expression&#39;) + ggtitle(&#39;Glycolytic Process&#39;) + 
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = &#39;UCP1 Expression&#39;) + ggtitle(&#39;Glycolytic Process&#39;) + 
   theme(plot.title = element_text(hjust = 0.5))
 
 
 
 ##################################
-########### Figure S4H ###########
+########### Figure S4G ###########
 ##################################
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv&amp;quot;)
 
-ort &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = T)
+ort &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/Orthologs_human_mouse.txt&amp;quot;, sep = &amp;quot;,&amp;quot;, header = TRUE)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -3542,8 +3592,8 @@ tabLow &amp;lt;- as.matrix(data@assays$SCT@data[genes, names(data$UCP1)[which(da
 df &amp;lt;- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
 df &amp;lt;- t(df)
 x &amp;lt;- as.matrix(df)
-m = apply(x, 1, mean, na.rm = T)
-s = apply(x, 1, sd, na.rm = T)
+m = apply(x, 1, mean, na.rm = TRUE)
+s = apply(x, 1, sd, na.rm = TRUE)
 res &amp;lt;- (x - m)/s
 cn = colnames(res)
 
@@ -3556,8 +3606,8 @@ breaks &amp;lt;- seq(-2,2, by= 0.1)
 Heatmap(as.matrix(res), 
         bottom_annotation = ba, 
         name = &amp;quot;zscore&amp;quot;, column_title = &amp;quot;Ad1 UCP1 Targets TF High&amp;quot;, width = 1, 
-        show_row_names = T, show_column_names = F,
-        cluster_rows = F, cluster_columns = T,
+        show_row_names = TRUE, show_column_names = FALSE,
+        cluster_rows = FALSE, cluster_columns = TRUE,
         col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = &amp;quot;RdBu&amp;quot;)))(41)), 
         heatmap_height = unit(6, &amp;quot;cm&amp;quot;), row_names_gp = gpar(fontsize = 8))
 
@@ -3572,8 +3622,8 @@ tabLow &amp;lt;- as.matrix(data@assays$SCT@data[genes, names(data$UCP1)[which(da
 df &amp;lt;- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
 df &amp;lt;- t(df)
 x &amp;lt;- as.matrix(df)
-m = apply(x, 1, mean, na.rm = T)
-s = apply(x, 1, sd, na.rm = T)
+m = apply(x, 1, mean, na.rm = TRUE)
+s = apply(x, 1, sd, na.rm = TRUE)
 res &amp;lt;- (x - m)/s
 cn = colnames(res)
 
@@ -3586,8 +3636,8 @@ breaks &amp;lt;- seq(-2,2, by= 0.1)
 Heatmap(as.matrix(res), 
         bottom_annotation = ba, 
         name = &amp;quot;zscore&amp;quot;, column_title = &amp;quot;Ad1 UCP1 Targets TF Low&amp;quot;, width = 1, 
-        show_row_names = T, show_column_names = F,
-        cluster_rows = F, cluster_columns = T,
+        show_row_names = TRUE, show_column_names = FALSE,
+        cluster_rows = FALSE, cluster_columns = TRUE,
         col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = &amp;quot;RdBu&amp;quot;)))(41)), 
         heatmap_height = unit(6, &amp;quot;cm&amp;quot;), row_names_gp = gpar(fontsize = 8))
 &lt;/code&gt;&lt;/pre&gt;
