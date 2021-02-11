@@ -51,7 +51,7 @@ subtitle = ""
 +++
 
 
-# AdipoSNAP: Adipose Single-Nuclei Analysis Pipeline <img src="Logo.png" align="right" width="300" />
+# Multidimensional Single-Nuclei RNA-Seq Reconstruction of Adipose Tissue Reveals Mature Adipocyte Plasticity Underlying Thermogenic Response <img src="Logo.png" align="right" width="300" />
 ## Table of Contents
 - [What is this?](#what-is-this)
 - [Workflow](#workflow)
@@ -70,11 +70,10 @@ subtitle = ""
 
 
 ### What is this?
-This repository contains coding scripts utilized for the analysis performed in the "Single-nuclei reconstruction of the adipose tissue using AdipoSNAP (Adipose Single-Nuclei Analysis Pipeline) reveals the mature adipocyte landscape underlying thermogenic response" publication [(XXX)](XXX). The purpose of providing the code here is to allow for transparency and robust data-analysis reproducibility. The methodology has already been described extensively in the manuscript. However, this analysis relies heavily on powerful scRNAseq analysis algorithms like [`Seurat`](https://satijalab.org/seurat/) [(Butler et al., 2018: Nature Biotechnology;](https://www.nature.com/articles/nbt.4096) [Stuart et al., 2018: Cell)](https://www.sciencedirect.com/science/article/pii/S0092867419305598?via%3Dihub), [`SCCAF`](https://github.com/SCCAF/sccaf), [`Metacell`](https://tanaylab.github.io/metacell/) [(Baran et al., 2019: Genome Biology)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1812-2) and [`cellphonedb`](https://www.cellphonedb.org) [(Efremova et al., 2020: Nature;](https://www.nature.com/articles/s41596-020-0292-x) [Vento-Tormo et al., 2018: Nature)](https://www.nature.com/articles/s41586-018-0698-6) (for a complete list of dependencies and code utilized see analysis & visualization programs).
+This repository contains coding scripts utilized for the analysis performed in the "Multidimensional Single-Nuclei RNA-Seq Reconstruction of Adipose Tissue Reveals Mature Adipocyte Plasticity Underlying Thermogenic Response" publication [(XXX)](XXX). The purpose of providing the code here is to allow for transparency and robust data-analysis reproducibility. The methodology has already been described extensively in the manuscript. However, this analysis relies heavily on powerful snRNAseq analysis algorithms like [`Seurat`](https://satijalab.org/seurat/) [(Butler et al., 2018: Nature Biotechnology;](https://www.nature.com/articles/nbt.4096) [Stuart et al., 2018: Cell)](https://www.sciencedirect.com/science/article/pii/S0092867419305598?via%3Dihub), [`SCCAF`](https://github.com/SCCAF/sccaf), [`Metacell`](https://tanaylab.github.io/metacell/) [(Baran et al., 2019: Genome Biology)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1812-2) and [`cellphonedb`](https://www.cellphonedb.org) [(Efremova et al., 2020: Nature;](https://www.nature.com/articles/s41596-020-0292-x) [Vento-Tormo et al., 2018: Nature)](https://www.nature.com/articles/s41586-018-0698-6) (for a complete list of dependencies and code utilized see analysis & visualization programs).
 
 
 ### Workflow
-AdipoSNAP contains three main steps:
 1. **`Dataset`**
 2. **`Clustering`**
     1. Overclustering;
@@ -126,7 +125,7 @@ Public data files utilized in this analysis have been downloaded from [Gene Expr
 
 ### Setting up the environment
 1. Install R and Rstudio.
-2. Once you have installed R and RStudio, run the [**setup script**](https://cbiagii.github.io/AdipoSNAP/post/1_setup/) to install R packages dependencies.
+2. Once you have installed R and RStudio, run the [**setup script**](https://cbiagii.github.io/snRNAseq_adipocyte/post/1_setup/) to install R packages dependencies.
 3. Together with *Seurat*, a conda environment called ***r-reticulate*** will be installed. We will install the `anndata`, `scanpy`, `igraph` and `louvain` modules within this environment so that we can run the Python code inside R using the ***reticulate*** package previously installed. So, to check the installed environment full name just type the following commands in a new terminal:
 ```
 conda env list
