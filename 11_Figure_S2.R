@@ -1,19 +1,33 @@
 ## Loading R packages
-library(Seurat)
+library(dplyr)
+library(enrichR)
 library(ggplot2)
 library(ggpubr)
 library(ggrepel)
-library(enrichR)
-library(dplyr)
+library(Seurat)
 
-source('/Users/biagi/PhD/AdipoSNAP/2_Functions.R')
+source('/Users/biagi/PhD/Adipocyte/2_Functions.R')
 
 
 ##################################
 ########### Figure S2A ###########
 ##################################
-filelist = list.files(path = "/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly",
-                      pattern = "sccaf_assess", recursive = T, full.names = T)
+import warnings
+warnings.filterwarnings("ignore")
+from SCCAF import *
+  
+  ad = sc.read("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results.h5ad")
+
+y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_result'], n_jobs = 8)
+aucs = plot_roc(y_prob, y_test, clf, cvsm = cvsm, acc = acc)
+
+
+
+##################################
+########### Figure S2B ###########
+##################################
+filelist <- list.files(path = "/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly",
+                       pattern = "sccaf_assess", recursive = TRUE, full.names = TRUE)
 fnames <- gsub("sccaf_assess_", "", basename(filelist))
 fnames <- gsub(".txt", "", fnames)
 
@@ -38,32 +52,17 @@ ggplot(datafr, aes(x = Round, y = Accuracy, fill = Type)) +
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         axis.line = element_line(colour = "black"),
-        panel.border = element_rect(colour = "black", fill=NA, size=0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
         plot.title = element_text(hjust = 0.5),
         legend.position = c(0.9, 0.15), legend.title = element_blank())
 
 
 
 ##################################
-########### Figure S2B ###########
-##################################
-import warnings
-warnings.filterwarnings("ignore")
-from SCCAF import *
-  
-ad = sc.read("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad")
-
-y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_result'],n_jobs=8)
-aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
-plt.savefig('/Users/biagi/PhD/AdipoSNAP/paper/Figure_2A_3.eps')
-
-
-
-##################################
 ########### Figure S2C ###########
 ##################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -73,13 +72,13 @@ new_cluster <- as.factor(new_cluster)
 Idents(data) <- new_cluster
 
 pt <- VlnPlot(data, c('Adipoq', 'Adrb3', 'Cidec', 'Dgat1', 'Fasn', 'Lipe', 'Pck1', 'Plin1', 'Pnpla2', 'Retn'),
-              cols = c("#11c78b", "#800080", "#e57400", "#0000FF", "#dfdf0d"), assay = "RNA", combine = F)
+              cols = c("#11c78b", "#800080", "#e57400", "#0000FF", "#dfdf0d"), assay = "RNA", combine = FALSE)
 pt <- lapply(pt, function(x) {
   x + theme_bw(base_size = 9) + xlab(NULL) + ylab(NULL) +
     theme(plot.title = element_text(hjust = 0.5))
 })
 
-figure <- ggarrange(plotlist = pt, nrow = 2, ncol = 5, common.legend = T, legend = "bottom")
+figure <- ggarrange(plotlist = pt, nrow = 2, ncol = 5, common.legend = TRUE, legend = "bottom")
 annotate_figure(figure, left = text_grob("Expression Level", rot = 90))
 
 
@@ -87,8 +86,8 @@ annotate_figure(figure, left = text_grob("Expression Level", rot = 90))
 ##################################
 ########### Figure S2D ###########
 ##################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -97,7 +96,7 @@ new_cluster <- paste0("Ad", new_cluster)
 new_cluster <- as.factor(new_cluster)
 Idents(data) <- new_cluster
 
-markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = FALSE)
 
 markers_1 <- subset(markers, cluster == "Ad1")
 mks_1 <- subset(markers_1, p_val_adj < 0.01)
@@ -134,7 +133,7 @@ upGenes <- head(subset(mks_5, avg_logFC > 0)$gene, 50)
 downGenes <- head(subset(mks_5, avg_logFC < 0)$gene, 50)
 pt_5 <- volcano.plot(res = markers_5, upGenes = upGenes, downGenes = downGenes) + ggtitle("Ad5") + theme(plot.title = element_text(hjust = 0.5))
 
-ggarrange(pt_1, pt_2, pt_3, pt_4, pt_5, nrow = 2, ncol = 3, common.legend = T)
+ggarrange(pt_1, pt_2, pt_3, pt_4, pt_5, nrow = 2, ncol = 3, common.legend = TRUE)
 
 
 
@@ -143,11 +142,11 @@ ggarrange(pt_1, pt_2, pt_3, pt_4, pt_5, nrow = 2, ncol = 3, common.legend = T)
 ##################################
 dbs <- c("Jensen_TISSUES", "Mouse_Gene_Atlas")
 
-genes_1 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_1.txt")
-genes_2 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_2.txt")
-genes_3 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_3.txt")
-genes_4 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_4.txt")
-genes_5 <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig2C_Markers_5.txt")
+genes_1 <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_1.txt")
+genes_2 <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_2.txt")
+genes_3 <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_3.txt")
+genes_4 <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_4.txt")
+genes_5 <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig2C_Markers_5.txt")
 
 genes <- list(Ad1 = genes_1,
               Ad2 = genes_2,
@@ -163,7 +162,7 @@ tmplist <- NULL
 paths <- NULL
 for (i in 1:length(dbs)) {
   tmp <- lapply(results, `[[`, i)
-  tmp <- mapply(cbind, tmp, "type" = names(tmp), SIMPLIFY=F)
+  tmp <- mapply(cbind, tmp, "type" = names(tmp), SIMPLIFY = FALSE)
   tmp <- do.call("rbind", tmp)
   
   tmp <- subset(tmp, Adjusted.P.value < 0.05)
@@ -184,7 +183,7 @@ for (i in 1:length(dbs)) {
   plotlist[[i]] <- ggplot(tmp, aes(x = type, y = Term)) +
     geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
     theme_bw(base_size = 12) +
-    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = "#2b9348", low = "#eeef20") +
+    scale_colour_gradient(limits = c(0, max(tmp$Combined.Score) + 0.5), high = "#2b9348", low = "#eeef20") +
     xlab(NULL) + ylab(NULL) +
     ggtitle(dbs[i]) + labs(color = "Combined Score", size = "-log10(padj)")
 }
@@ -197,8 +196,8 @@ ggarrange(plotlist = plotlist)
 ##################################
 ########### Figure S2H ###########
 ##################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -210,7 +209,7 @@ Idents(data) <- new_cluster
 count_raw <- data@assays$SCT@counts[, rownames(data@meta.data)]
 count_norm <- apply(count_raw, 2, function(x) (x/sum(x))*10000)
 
-ort <- read.table("/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt", sep = ",", header = T)
+ort <- read.table("/Users/biagi/PhD/Adipocyte/Orthologs_human_mouse.txt", sep = ",", header = TRUE)
 mat <- merge(ort, count_norm, by.x = "Mouse.gene.name", by.y = "row.names")
 mat$Mouse.gene.name <- mat$Gene.stable.ID <- mat$Mouse.gene.stable.ID <- NULL
 colnames(mat)[1] <- "Gene"
@@ -218,10 +217,9 @@ colnames(mat)[1] <- "Gene"
 anno <- data.frame(Cell = names(Idents(data)), 
                    cluster = Idents(data), row.names = NULL)
 
-write.table(mat, "/Users/biagi/PhD/AdipoSNAP/cellphonedb/counts.txt", row.names = F, col.names = T, sep = "\t", quote = F)
-write.table(anno, "/Users/biagi/PhD/AdipoSNAP/cellphonedb/meta.txt", row.names = F, col.names = T, sep = "\t", quote = F)
+write.table(mat, "/Users/biagi/PhD/Adipocyte/cellphonedb/counts.txt", row.names = FALSE, col.names = TRUE, sep = "\t", quote = FALSE)
+write.table(anno, "/Users/biagi/PhD/Adipocyte/cellphonedb/meta.txt", row.names = FALSE, col.names = TRUE, sep = "\t", quote = FALSE)
 
-
-#Python
-cd /Users/biagi/PhD/AdipoSNAP/cellphonedb
+## Python
+cd /Users/biagi/PhD/Adipocyte/cellphonedb
 cellphonedb method statistical_analysis meta.txt counts.txt --threads=16 --counts-data=gene_name --pvalue=0.05 --iterations=1000

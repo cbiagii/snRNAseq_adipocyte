@@ -1,22 +1,22 @@
 ## Loading R packages
+library(circlize)
+library(ComplexHeatmap)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(ggrepel)
+library(RColorBrewer)
 library(Seurat)
 library(SeuratWrappers)
-library(ggplot2)
-library(dplyr)
-library(ggrepel)
-library(ggpubr)
-library(RColorBrewer)
-library(tidyr)
 library(tibble)
-library(ComplexHeatmap)
-library(circlize)
+library(tidyr)
 
 
 ##################################
 ########### Figure S4A ###########
 ##################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -64,8 +64,8 @@ ggarrange(plotlist = plotList)
 ##################################
 ########### Figure S4B ###########
 ##################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -81,25 +81,25 @@ data <- ScaleData(data, features = rownames(data))
 data$UCP1 <- factor(ifelse(data@assays$SCT@data["Ucp1", ] > 0, "High", "Low"))
 Idents(data) <- data$UCP1
 
-markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = F)
+markers <- FindAllMarkers(data, logfc.threshold = 0, only.pos = FALSE)
 
 markers <- subset(markers, p_val_adj < 0.05 & cluster == 'High')
-markers <- markers[order(markers$avg_logFC, decreasing = T), ]
+markers <- markers[order(markers$avg_logFC, decreasing = TRUE), ]
 
 mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
 
-DoHeatmap(data, features = markers$gene, angle = 0, size = 5, label = F) +
+DoHeatmap(data, features = markers$gene, angle = 0, size = 5, label = FALSE) +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=3)) +
-  labs(color='UCP1 Expression')
+  theme(axis.text = element_text(size = 3)) +
+  labs(color = 'UCP1 Expression')
 
 
 
 ##################################
 ########### Figure S4C ###########
 ##################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -110,8 +110,8 @@ data$cluster <- Idents(data)
 data <- subset(data, idents = list('Ad1'))
 tmp1 <- factor(ifelse(data@assays$SCT@data["Ucp1", ] > 0, "Ad1_High", "Ad1_Low"))
 
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
 new_cluster <- new_cluster + 1
@@ -133,75 +133,75 @@ data$cluster <- Idents(data)
 data <- SeuratWrappers::RunALRA(data)
 data <- ScaleData(data, features = rownames(data))
 
-# SERCA2
+## SERCA2
 genes <- c('Atp2a1', 'Atp2a2', 'Tmtc4', 'Adra1a', 'Arpc2')
 genes <- genes[genes %in% rownames(data)]
 mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
-ht1 <- DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = 'cluster') +
+ht1 <- DoHeatmap(data, features = genes, angle = 0, size = 5, label = FALSE, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color='UCP1 Expression')
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = 'UCP1 Expression')
 y <- ht1$data %>% drop_na()
 x <- y %>% group_by(Identity) %>% select(Feature, Cell, Identity, Expression) %>%
   spread(key = Feature, value = Expression)
 w <- y %>% select(Feature, Cell, Expression) %>%
   spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
-pt <- Heatmap(w, cluster_columns = F)
-DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = 'cluster') +
+pt <- Heatmap(w, cluster_columns = FALSE)
+DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = FALSE, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color='UCP1 Expression') + ggtitle('SERCA2') + 
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = 'UCP1 Expression') + ggtitle('SERCA2') + 
   theme(plot.title = element_text(hjust = 0.5))
 
-# Arginine/creatine and proline metabolism v
+## Arginine/creatine and proline metabolism v
 genes <- c('Slc6a8', 'Gatm', 'Gamt', 'Ckmt1', 'Ckmt2')
 genes <- genes[genes %in% rownames(data)]
 mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
-ht1 <- DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = 'cluster') +
+ht1 <- DoHeatmap(data, features = genes, angle = 0, size = 5, label = FALSE, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color='UCP1 Expression')
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = 'UCP1 Expression')
 y <- ht1$data %>% drop_na()
 x <- y %>% group_by(Identity) %>% select(Feature, Cell, Identity, Expression) %>%
   spread(key = Feature, value = Expression)
 w <- y %>% select(Feature, Cell, Expression) %>%
   spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
-pt <- Heatmap(w, cluster_columns = F)
-DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = 'cluster') +
+pt <- Heatmap(w, cluster_columns = FALSE)
+DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = FALSE, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color='UCP1 Expression') + ggtitle('Arginine/creatine and proline metabolism v') + 
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = 'UCP1 Expression') + ggtitle('Arginine/creatine and proline metabolism v') + 
   theme(plot.title = element_text(hjust = 0.5))
 
-# Glycolytic process
+## Glycolytic process
 genes <- c('Actn3', 'Adpgk', 'Aldoa', 'Aldoart1', 'Aldoart2', 'Aldob', 'Aldoc', 'App', 'Bpgm', 'Cbfa2t3', 'Ddit4', 'Dhtkd1', 'Eif6', 'Eno1', 'Eno1b', 'Eno2', 'Eno3', 'Eno4', 'Entpd5', 'Ep300', 'Esrrb', 'Fbp1', 'Foxk1', 'Foxk2', 'Gale', 'Galk1', 'Galt', 'Gapdh', 'Gapdhs', 'Gck', 'Gm3839', 'Gm10358', 'Gm11214', 'Gm12117', 'Gm15294', 'Gpd1', 'Gpi1', 'Hdac4', 'Hif1a', 'Hk1', 'Hk2', 'Hk3', 'Hkdc1', 'Htr2a', 'Ier3', 'Ifng', 'Igf1', 'Il3', 'Ins2', 'Insr', 'Jmjd8', 'Khk', 'Mif', 'Mlxipl', 'Mpi', 'Mtch2', 'Myc', 'Myog', 'Ncor1', 'Nupr1', 'Ogdh', 'Ogt', 'P2rx7', 'Pfkfb2', 'Pfkl', 'Pfkm', 'Pfkp', 'Pgam1', 'Pgam2', 'Pgk1', 'Pgk2', 'Pklr', 'Pkm', 'Ppara', 'Ppargc1a', 'Prkaa1', 'Prkaa2', 'Prkag2', 'Prkag3', 'Prxl2c', 'Psen1', 'Sirt6', 'Slc2a6', 'Slc4a1', 'Slc4a4', 'Stat3', 'Tigar', 'Tkfc', 'Tpi1', 'Trex1', 'Zbtb7a', 'Zbtb20')
 genes <- genes[genes %in% rownames(data)]
 mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
-ht1 <- DoHeatmap(data, features = genes, angle = 0, size = 5, label = F, group.by = 'cluster') +
+ht1 <- DoHeatmap(data, features = genes, angle = 0, size = 5, label = FALSE, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color='UCP1 Expression')
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = 'UCP1 Expression')
 y <- ht1$data %>% drop_na()
 x <- y %>% group_by(Identity) %>% select(Feature, Cell, Identity, Expression) %>%
   spread(key = Feature, value = Expression)
 w <- y %>% select(Feature, Cell, Expression) %>%
   spread(key = Cell, value = Expression) %>% column_to_rownames("Feature") %>% as.matrix()
-pt <- Heatmap(w, cluster_columns = F)
-DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = F, group.by = 'cluster') +
+pt <- Heatmap(w, cluster_columns = FALSE)
+DoHeatmap(data, features = rownames(w)[row_order(pt)], angle = 0, size = 5, label = FALSE, group.by = 'cluster') +
   scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=6)) +
-  labs(color='UCP1 Expression') + ggtitle('Glycolytic Process') + 
+  theme(axis.text = element_text(size = 6)) +
+  labs(color = 'UCP1 Expression') + ggtitle('Glycolytic Process') + 
   theme(plot.title = element_text(hjust = 0.5))
 
 
 
 ##################################
-########### Figure S4H ###########
+########### Figure S4G ###########
 ##################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results/obs.csv")
 
-ort <- read.table("/Users/biagi/PhD/AdipoSNAP/Orthologs_human_mouse.txt", sep = ",", header = T)
+ort <- read.table("/Users/biagi/PhD/Adipocyte/Orthologs_human_mouse.txt", sep = ",", header = TRUE)
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -227,8 +227,8 @@ tabLow <- as.matrix(data@assays$SCT@data[genes, names(data$UCP1)[which(data$UCP1
 df <- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
 df <- t(df)
 x <- as.matrix(df)
-m = apply(x, 1, mean, na.rm = T)
-s = apply(x, 1, sd, na.rm = T)
+m = apply(x, 1, mean, na.rm = TRUE)
+s = apply(x, 1, sd, na.rm = TRUE)
 res <- (x - m)/s
 cn = colnames(res)
 
@@ -241,8 +241,8 @@ breaks <- seq(-2,2, by= 0.1)
 Heatmap(as.matrix(res), 
         bottom_annotation = ba, 
         name = "zscore", column_title = "Ad1 UCP1 Targets TF High", width = 1, 
-        show_row_names = T, show_column_names = F,
-        cluster_rows = F, cluster_columns = T,
+        show_row_names = TRUE, show_column_names = FALSE,
+        cluster_rows = FALSE, cluster_columns = TRUE,
         col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = "RdBu")))(41)), 
         heatmap_height = unit(6, "cm"), row_names_gp = gpar(fontsize = 8))
 
@@ -257,8 +257,8 @@ tabLow <- as.matrix(data@assays$SCT@data[genes, names(data$UCP1)[which(data$UCP1
 df <- data.frame(High = rowSums(tabHigh), Low = rowSums(tabLow))
 df <- t(df)
 x <- as.matrix(df)
-m = apply(x, 1, mean, na.rm = T)
-s = apply(x, 1, sd, na.rm = T)
+m = apply(x, 1, mean, na.rm = TRUE)
+s = apply(x, 1, sd, na.rm = TRUE)
 res <- (x - m)/s
 cn = colnames(res)
 
@@ -271,7 +271,7 @@ breaks <- seq(-2,2, by= 0.1)
 Heatmap(as.matrix(res), 
         bottom_annotation = ba, 
         name = "zscore", column_title = "Ad1 UCP1 Targets TF Low", width = 1, 
-        show_row_names = T, show_column_names = F,
-        cluster_rows = F, cluster_columns = T,
+        show_row_names = TRUE, show_column_names = FALSE,
+        cluster_rows = FALSE, cluster_columns = TRUE,
         col = colorRamp2(breaks, colorRampPalette(rev(brewer.pal(n = 10, name = "RdBu")))(41)), 
         heatmap_height = unit(6, "cm"), row_names_gp = gpar(fontsize = 8))

@@ -1,13 +1,14 @@
 ## Loading R packages
-library(metacell)
-library(Seurat)
-library(ggplot2)
 library(dplyr)
-library(RColorBrewer)
-library(ggpubr)
 library(enrichR)
-library(glue)
+library(ggplot2)
+library(ggpubr)
 library(ggtext)
+library(glue)
+library(metacell)
+library(Nebulosa)
+library(RColorBrewer)
+library(Seurat)
 
 
 #################################
@@ -39,11 +40,11 @@ colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
 marks_colors$priority <- as.integer(marks_colors$priority)
 marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
 dims <- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
 tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 <- data.frame(cols = object@colors)
 teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
@@ -55,8 +56,8 @@ teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", mar
 teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
 tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
 
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -84,7 +85,7 @@ cls <- c("#FFA500", "#ffae19", "#ffb732", "#ffc04c", "#66b266", "#7fbf7f", "#ffa
 TSNEPlot(data, label = FALSE, pt.size = 0.3, cols = cls) +
   xlab("t-SNE 1") + ylab("t-SNE 2") +
   theme_classic() + labs(color = "Cell Type") +
-  theme(legend.position="bottom")
+  theme(legend.position = "bottom")
 
 
 a <- round((sum(Idents(data) == "AD1" | Idents(data) == "AD2" | Idents(data) == "AD3" | Idents(data) == "AD4")/ncol(data))*100, 2); a1 <- sum(Idents(data) == "AD1" | Idents(data) == "AD2" | Idents(data) == "AD3" | Idents(data) == "AD4")
@@ -116,83 +117,21 @@ ggplot(df, aes(x = "", y = value, fill = class)) +
 #################################
 ########### Figure 1C ###########
 #################################
-marks_colors <- NULL
-marks_colors <- rbind(marks_colors, c("Adipocyte_1", "Acsl1", "#0000b3", 1, 2.5))
-marks_colors <- rbind(marks_colors, c("Adipocyte_2", "Plin4", "#0000cc", 1, 2.5))
-marks_colors <- rbind(marks_colors, c("Adipocyte_3", "Mlxipl", "#0000e6", 1, 2.5))
-marks_colors <- rbind(marks_colors, c("Adipocyte_4", "Pck1", "#0000ff", 1, 2.5))
-marks_colors <- rbind(marks_colors, c("Adipocyte_5", "Adrb3", "#1a1aff", 1, 2.5))
-marks_colors <- rbind(marks_colors, c("Endothelial_1", "Btnl9", "#00cd00", 1, 1.8))
-marks_colors <- rbind(marks_colors, c("Endothelial_2", "Ushbp1", "#00b300", 1, 1.8))
-marks_colors <- rbind(marks_colors, c("Endothelial_3", "Egfl7", "#009a00", 1, 1.8))
-marks_colors <- rbind(marks_colors, c("Endothelial_4", "Mcf2l", "#008000", 1, 1.8))
-marks_colors <- rbind(marks_colors, c("Endothelial_5", "Ptprb", "#006700", 1, 1.8))
-marks_colors <- rbind(marks_colors, c("Immune_1", "Zeb2", "#ff7f7f", 1, 0.9))
-marks_colors <- rbind(marks_colors, c("Immune_2", "Trps1", "#ff6666", 1, 0.9))
-marks_colors <- rbind(marks_colors, c("Immune_3", "Runx1", "#ff4c4c", 1, 0.9))
-marks_colors <- rbind(marks_colors, c("Immune_4", "Ptprc", "#ff3232", 1, 0.9))
-marks_colors <- rbind(marks_colors, c("Immune_5", "Adap2", "#ff1919", 1, 0.9))
-marks_colors <- rbind(marks_colors, c("Progenitor_1", "Dcn", "#ffff4d", 1, 2.4))
-marks_colors <- rbind(marks_colors, c("Progenitor_2", "Celf2", "#ffff33", 1, 2.4))
-marks_colors <- rbind(marks_colors, c("Progenitor_3", "Meg3", "#ffff1a", 1, 2.4))
-marks_colors <- rbind(marks_colors, c("Progenitor_4", "Col1a2", "#ffff00", 1, 2.4))
-marks_colors <- rbind(marks_colors, c("Progenitor_5", "Col3a1", "#e6e600", 1, 2.4))
-marks_colors <- as.data.frame(marks_colors)
-colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
-marks_colors$priority <- as.integer(marks_colors$priority)
-marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds")
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
-dims <- data.frame(x = object@sc_x,
-                   y = object@sc_y)
+pt <- plot_density(data, c("Adrb3", "Pecam1", "Ptprc", "Cd34", "Pdgfra", "Itgb1"), reduction = "tsne", pal = "inferno", combine = FALSE)
+pt <- lapply(pt, function(x) {
+  x + theme_bw() + xlab("t-SNE 1") + ylab("t-SNE 2") +
+    theme(plot.title = element_text(hjust = 0.5, face = "italic"), 
+          panel.background = element_rect(colour = "black", size = 0.1), 
+          axis.ticks.length = unit(.2, "cm"), 
+          axis.text = element_text(size = 11), 
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(), 
+          legend.position = "none")
+})
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
-tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
-tmp2 <- data.frame(cols = object@colors)
-teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
-teste$cols <- NULL
-
-teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Adipocyte", marks_colors$group)], "Adipocytes", "Unknown")
-teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Progenitor", marks_colors$group)], "Progenitors", teste$cellType)
-teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", marks_colors$group)], "Immunes", teste$cellType)
-teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
-tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
-
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv")
-
-new_cluster <- infos$L1_result
-names(new_cluster) <- rownames(infos)
-new_cluster <- as.factor(new_cluster)
-data$clusters_sccaf <- new_cluster
-
-infos <- data@meta.data
-infos <- infos[tab$Row.names, ]
-
-final <- merge(infos, tab, by.x = "row.names", by.y = "Row.names")
-
-Idents(data) <- data$clusters_sccaf
-new.cluster.ids <- c("EN", "PG", "PG", "AD", "AD", "PG", "PG", "IM", "AD", "AD", "EN", "IM", "IM", "PG")
-names(new.cluster.ids) <- levels(data)
-data <- RenameIdents(data, new.cluster.ids)
-Idents(data) <- factor(Idents(data), levels = c('AD', 'EN', 'IM', 'PG'))
-
-markers <- FindAllMarkers(data, only.pos = T)
-
-top20 <- markers %>% group_by(cluster) %>% top_n(n = 20, wt = avg_logFC)
-
-data2 <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
-
-Idents(data2) <- Idents(data)
-rm(data)
-data2 <- ScaleData(data2)
-
-cls <- c("#FFA500", "#329932", "#ff9999", "#6666ff")
-mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
-
-DoHeatmap(data2, features = top20$gene, group.colors = cls, angle = 0, size = 5, label = F) +
-  scale_fill_gradientn(colours = rev(mapal)) +
-  theme(axis.text=element_text(size=5))
+ggarrange(plotlist = pt)
 
 
 
@@ -225,11 +164,11 @@ colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
 marks_colors$priority <- as.integer(marks_colors$priority)
 marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc2d.test_2dproj.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda")
 dims <- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc.test_mc_f.Rda")
 tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 <- data.frame(cols = object@colors)
 teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
@@ -241,8 +180,91 @@ teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", mar
 teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
 tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
 
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
-infos <- read.table("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv")
+
+new_cluster <- infos$L1_result
+names(new_cluster) <- rownames(infos)
+new_cluster <- as.factor(new_cluster)
+data$clusters_sccaf <- new_cluster
+
+infos <- data@meta.data
+infos <- infos[tab$Row.names, ]
+
+final <- merge(infos, tab, by.x = "row.names", by.y = "Row.names")
+
+Idents(data) <- data$clusters_sccaf
+new.cluster.ids <- c("EN", "PG", "PG", "AD", "AD", "PG", "PG", "IM", "AD", "AD", "EN", "IM", "IM", "PG")
+names(new.cluster.ids) <- levels(data)
+data <- RenameIdents(data, new.cluster.ids)
+Idents(data) <- factor(Idents(data), levels = c('AD', 'EN', 'IM', 'PG'))
+
+markers <- FindAllMarkers(data, only.pos = TRUE)
+
+top20 <- markers %>% group_by(cluster) %>% top_n(n = 20, wt = avg_logFC)
+
+data2 <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds")
+
+Idents(data2) <- Idents(data)
+rm(data)
+data2 <- ScaleData(data2)
+
+cls <- c("#FFA500", "#329932", "#ff9999", "#6666ff")
+mapal <- colorRampPalette(brewer.pal(11,"RdBu"))(256)
+
+DoHeatmap(data2, features = top20$gene, group.colors = cls, angle = 0, size = 5, label = FALSE) +
+  scale_fill_gradientn(colours = rev(mapal)) +
+  theme(axis.text = element_text(size = 5))
+
+
+
+#################################
+########### Figure 1E ###########
+#################################
+marks_colors <- NULL
+marks_colors <- rbind(marks_colors, c("Adipocyte_1", "Acsl1", "#0000b3", 1, 2.5))
+marks_colors <- rbind(marks_colors, c("Adipocyte_2", "Plin4", "#0000cc", 1, 2.5))
+marks_colors <- rbind(marks_colors, c("Adipocyte_3", "Mlxipl", "#0000e6", 1, 2.5))
+marks_colors <- rbind(marks_colors, c("Adipocyte_4", "Pck1", "#0000ff", 1, 2.5))
+marks_colors <- rbind(marks_colors, c("Adipocyte_5", "Adrb3", "#1a1aff", 1, 2.5))
+marks_colors <- rbind(marks_colors, c("Endothelial_1", "Btnl9", "#00cd00", 1, 1.8))
+marks_colors <- rbind(marks_colors, c("Endothelial_2", "Ushbp1", "#00b300", 1, 1.8))
+marks_colors <- rbind(marks_colors, c("Endothelial_3", "Egfl7", "#009a00", 1, 1.8))
+marks_colors <- rbind(marks_colors, c("Endothelial_4", "Mcf2l", "#008000", 1, 1.8))
+marks_colors <- rbind(marks_colors, c("Endothelial_5", "Ptprb", "#006700", 1, 1.8))
+marks_colors <- rbind(marks_colors, c("Immune_1", "Zeb2", "#ff7f7f", 1, 0.9))
+marks_colors <- rbind(marks_colors, c("Immune_2", "Trps1", "#ff6666", 1, 0.9))
+marks_colors <- rbind(marks_colors, c("Immune_3", "Runx1", "#ff4c4c", 1, 0.9))
+marks_colors <- rbind(marks_colors, c("Immune_4", "Ptprc", "#ff3232", 1, 0.9))
+marks_colors <- rbind(marks_colors, c("Immune_5", "Adap2", "#ff1919", 1, 0.9))
+marks_colors <- rbind(marks_colors, c("Progenitor_1", "Dcn", "#ffff4d", 1, 2.4))
+marks_colors <- rbind(marks_colors, c("Progenitor_2", "Celf2", "#ffff33", 1, 2.4))
+marks_colors <- rbind(marks_colors, c("Progenitor_3", "Meg3", "#ffff1a", 1, 2.4))
+marks_colors <- rbind(marks_colors, c("Progenitor_4", "Col1a2", "#ffff00", 1, 2.4))
+marks_colors <- rbind(marks_colors, c("Progenitor_5", "Col3a1", "#e6e600", 1, 2.4))
+marks_colors <- as.data.frame(marks_colors)
+colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
+marks_colors$priority <- as.integer(marks_colors$priority)
+marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
+
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc2d.test_2dproj.Rda")
+dims <- data.frame(x = object@sc_x,
+                   y = object@sc_y)
+
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc.test_mc_f.Rda")
+tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
+tmp2 <- data.frame(cols = object@colors)
+teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
+teste$cols <- NULL
+
+teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Adipocyte", marks_colors$group)], "Adipocytes", "Unknown")
+teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Progenitor", marks_colors$group)], "Progenitors", teste$cellType)
+teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", marks_colors$group)], "Immunes", teste$cellType)
+teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
+tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
+
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds")
+infos <- read.table("/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv")
 
 new_cluster <- infos$L1_result
 names(new_cluster) <- rownames(infos)
@@ -269,13 +291,13 @@ DotPlot(data, features = c("Acsl1", "Plin4", "Mlxipl", "Pck1", "Adrb3",
                            "Btnl9", "Ushbp1", "Egfl7", "Mcf2l", "Ptprb",
                            "Trps1", "Runx1", "Ptprc", "Adap2",
                            "Dcn", "Celf2", "Meg3", "Col1a2", "Col3a1"), cols = c("grey", 'red')) +
-  xlab("") + ylab("") + theme(axis.text.x = element_text(angle = 45, hjust=1))
+  xlab("") + ylab("") + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
+## Nebulosa expression plot
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds")
 
-pt <- FeaturePlot(data, c("Mlxipl", "Egfl7", "Runx1", "Celf2"),
-                  cols = c("grey", 'red'), reduction = 'tsne', pt.size = 0.1, combine = F)
+pt <- plot_density(data, c("Mlxipl", "Egfl7", "Runx1", "Celf2"), reduction = "tsne", pal = "inferno", combine = FALSE)
 pt <- lapply(pt, function(x) {
   x + theme_void() + xlab("") + ylab("") +
     theme(plot.title = element_text(hjust = 0.5, face = "italic"),
@@ -287,14 +309,14 @@ ggarrange(plotlist = pt)
 
 
 #################################
-########### Figure 1E ###########
+########### Figure 1F ###########
 #################################
 dbs <- c("KEGG_2019_Mouse", "WikiPathways_2019_Mouse", "Jensen_TISSUES", "GO_Biological_Process_2018")
 
-genes_A <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_A.txt")
-genes_E <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_E.txt")
-genes_I <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_I.txt")
-genes_P <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_P.txt")
+genes_A <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_A.txt")
+genes_E <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_E.txt")
+genes_I <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_I.txt")
+genes_P <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_P.txt")
 
 genes <- list(Adipocyte = genes_A,
               Endothelial = genes_E,
@@ -309,7 +331,7 @@ tmplist <- NULL
 paths <- NULL
 for (i in 1:length(dbs)) {
   tmp <- lapply(results, `[[`, i)
-  tmp <- mapply(cbind, tmp, "type" = names(tmp), SIMPLIFY=F)
+  tmp <- mapply(cbind, tmp, "type" = names(tmp), SIMPLIFY = FALSE)
   tmp <- do.call("rbind", tmp)
   
   tmp <- subset(tmp, Adjusted.P.value < 0.05)
@@ -330,7 +352,7 @@ for (i in 1:length(dbs)) {
   plotlist[[i]] <- ggplot(tmp, aes(x = type, y = Term)) +
     geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
     theme_bw(base_size = 9) +
-    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = "#2b9348", low = "#eeef20") +
+    scale_colour_gradient(limits = c(0, max(tmp$Combined.Score) + 0.5), high = "#2b9348", low = "#eeef20") +
     xlab(NULL) + ylab(NULL) +
     ggtitle(dbs[i]) + labs(color = "Combined Score", size = "-log10(padj)")
 }
@@ -351,7 +373,7 @@ paths$class_with_color <- factor(paths$class_with_color, levels = rev(unique(pat
 ggplot(paths, aes(x = type, y = class_with_color)) +
   geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
   theme_bw(base_size = 8) +
-  scale_colour_gradient(limits=c(0, max(paths$Combined.Score)+0.5), high = "#2b9348", low = "#eeef20") +
+  scale_colour_gradient(limits = c(0, max(paths$Combined.Score) + 0.5), high = "#2b9348", low = "#eeef20") +
   xlab(NULL) + ylab(NULL) +
   ggtitle(NULL) + labs(color = "Combined Score", size = "-log10(padj)") +
-  theme(axis.text.y = element_markdown(), axis.text=element_text(size=12))
+  theme(axis.text.y = element_markdown(), axis.text = element_text(size = 12))

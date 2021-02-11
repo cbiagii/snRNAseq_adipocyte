@@ -1,31 +1,31 @@
 ## Loading R packages
-library(Seurat)
-library(ggplot2)
-library(metacell)
 library(dplyr)
-library(ggpubr)
-library(pheatmap)
 library(enrichR)
+library(ggplot2)
+library(ggpubr)
+library(metacell)
+library(pheatmap)
+library(Seurat)
 
 
 ##################################
 ########### Figure S1A ###########
 ##################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_Processed.rds")
 Idents(data) <- factor(data$CellTypeRefined)
 
 TSNEPlot(data, label = FALSE, pt.size = 0.3) +
   xlab("t-SNE 1") + ylab("t-SNE 2") +
   theme_classic() + labs(color = "Cluster") +
-  theme(legend.position="bottom")
+  theme(legend.position = "bottom")
 
 
 
 ##################################
 ########### Figure S1B ###########
 ##################################
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda")
-lfp = log2(object@mc_fp)
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc.test_mc_f.Rda")
+lfp <- log2(object@mc_fp)
 
 marks_colors <- NULL
 marks_colors <- rbind(marks_colors, c("Adipocyte_1", "Acsl1", "#0000b3", 1, 2.5))
@@ -53,11 +53,11 @@ colnames(marks_colors) <- c("group", "gene", "color", "priority", "T_fold")
 marks_colors$priority <- as.integer(marks_colors$priority)
 marks_colors$T_fold <- as.numeric(marks_colors$T_fold)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc2d.test_2dproj.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc2d.test_2dproj.Rda")
 dims <- data.frame(x = object@sc_x,
                    y = object@sc_y)
 
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda")
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc.test_mc_f.Rda")
 tmp1 <- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 <- data.frame(cols = object@colors)
 teste <- merge(tmp1, tmp2, by.x = "cols", by.y = "row.names")
@@ -69,7 +69,7 @@ teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Immune", mar
 teste$cellType <- ifelse(teste$cols.y %in% marks_colors$color[grep("Endothelial", marks_colors$group)], "Endothelials", teste$cellType)
 tab <- merge(dims, teste, by.x = "row.names", by.y = "cells")
 
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds")
+data <- readRDS("/Users/biagi/PhD/Adipocyte/output/10x/10x_Processed.rds")
 Idents(data) <- factor(data$CellTypeRefined)
 infos <- data@meta.data
 infos <- infos[tab$Row.names, ]
@@ -91,7 +91,7 @@ cls <- c("#FFA500", "#329932", "#ff9999", "#6666ff")
 TSNEPlot(data, label = FALSE, pt.size = 0.3, cols = cls) +
   xlab("t-SNE 1") + ylab("t-SNE 2") +
   theme_classic() + labs(color = "Cluster") +
-  theme(legend.position="bottom")
+  theme(legend.position = "bottom")
 
 
 a <- round((sum(Idents(data) == "AD")/ncol(data))*100, 2); a1 <- sum(Idents(data) == "AD")
@@ -123,8 +123,22 @@ ggplot(df, aes(x = "", y = value, fill = class)) +
 ##################################
 ########### Figure S1C ###########
 ##################################
-filelist = list.files(path = "/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes",
-                      pattern = "sccaf_assess", recursive = T, full.names = T)
+import warnings
+warnings.filterwarnings("ignore")
+from SCCAF import *
+  
+  ad = sc.read("/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad")
+
+y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_result'], n_jobs = 8)
+aucs = plot_roc(y_prob, y_test, clf, cvsm = cvsm, acc = acc)
+
+
+
+##################################
+########### Figure S1D ###########
+##################################
+filelist <- list.files(path = "/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes",
+                       pattern = "sccaf_assess", recursive = TRUE, full.names = TRUE)
 fnames <- gsub("sccaf_assess_", "", basename(filelist))
 fnames <- gsub(".txt", "", fnames)
 
@@ -149,62 +163,31 @@ ggplot(datafr, aes(x = Round, y = Accuracy, fill = Type)) +
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         axis.line = element_line(colour = "black"),
-        panel.border = element_rect(colour = "black", fill=NA, size=0.5),
+        panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
         plot.title = element_text(hjust = 0.5),
         legend.position = c(0.9, 0.15), legend.title = element_blank())
 
 
 
 ##################################
-########### Figure S1D ###########
-##################################
-import warnings
-warnings.filterwarnings("ignore")
-from SCCAF import *
-  
-ad = sc.read("/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad")
-
-y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs['L1_result'],n_jobs=8)
-aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
-plt.savefig('/Users/biagi/PhD/AdipoSNAP/paper/Figure_SD.eps')
-
-
-
-##################################
 ########### Figure S1E ###########
 ##################################
-data <- readRDS("/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds")
+scdb_init("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT2/db", force_reinit = TRUE)
+scfigs_init("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT2/figs")
 
-pt <- FeaturePlot(data, c("Adrb3", "Pecam1", "Ptprc", "Cd34", "Pdgfra", "Itgb1"),
-                  cols = c("grey", 'red'), reduction = 'tsne', pt.size = 0.1, combine = F)
-pt <- lapply(pt, function(x) {
-  x + theme_classic() + xlab("t-SNE 1") + ylab("t-SNE 2") +
-    theme(plot.title = element_text(hjust = 0.5, face = "italic"))
-})
+load("/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT2/db/mc.test_mc_f.Rda")
+lfp <- log2(object@mc_fp)
 
-ggarrange(plotlist = pt, common.legend = T)
+mc <- scdb_mc("test_mc_f")
+gset <- scdb_gset("test_markers")
 
+gene_folds <- mc@mc_fp
 
+good_marks <- intersect(names(gset@gene_set), rownames(mc@mc_fp))
+mc_ord <- 1:ncol(mc@mc_fp)
 
-##################################
-########### Figure S1F ###########
-##################################
-scdb_init("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT2/db", force_reinit=T)
-scfigs_init("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT2/figs")
-
-load("/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT2/db/mc.test_mc_f.Rda")
-lfp = log2(object@mc_fp)
-
-mc = scdb_mc("test_mc_f")
-gset = scdb_gset("test_markers")
-
-gene_folds = mc@mc_fp
-
-good_marks = intersect(names(gset@gene_set), rownames(mc@mc_fp))
-mc_ord = 1:ncol(mc@mc_fp)
-
-mat = log2(gene_folds[good_marks, mc_ord])
-mat = pmax(pmin(mat, 3), -3)
+mat <- log2(gene_folds[good_marks, mc_ord])
+mat <- pmax(pmin(mat, 3), -3)
 
 mat_A <- mat[, which(mc@colors == "blue")]
 mat_A <- mat_A[rowSums(mat_A) > quantile(rowSums(mat_A), 0.9), ]
@@ -229,14 +212,14 @@ pheatmap(mat_P, fontsize = 8, main = 'Progenitors', legend = TRUE, treeheight_ro
 
 
 ##################################
-########### Figure S1G ###########
+########### Figure S1F ###########
 ##################################
 dbs <- c("KEGG_2019_Mouse", "WikiPathways_2019_Mouse", "Jensen_TISSUES", "GO_Biological_Process_2018")
 
-genes_A <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_A.txt")
-genes_E <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_E.txt")
-genes_I <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_I.txt")
-genes_P <- readLines("/Users/biagi/PhD/AdipoSNAP/Figures/update/Fig1D_2_Markers_P.txt")
+genes_A <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_A.txt")
+genes_E <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_E.txt")
+genes_I <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_I.txt")
+genes_P <- readLines("/Users/biagi/PhD/Adipocyte/Figures/update/Fig1D_2_Markers_P.txt")
 
 genes <- list(Adipocyte = genes_A,
               Endothelial = genes_E,
@@ -251,7 +234,7 @@ tmplist <- NULL
 paths <- NULL
 for (i in 1:length(dbs)) {
   tmp <- lapply(results, `[[`, i)
-  tmp <- mapply(cbind, tmp, "type" = names(tmp), SIMPLIFY=F)
+  tmp <- mapply(cbind, tmp, "type" = names(tmp), SIMPLIFY = FALSE)
   tmp <- do.call("rbind", tmp)
   
   tmp <- subset(tmp, Adjusted.P.value < 0.05)
@@ -269,8 +252,8 @@ for (i in 1:length(dbs)) {
   plotlist[[i]] <- ggplot(tmp, aes(x = type, y = Term)) +
     geom_point(aes(size = Adjusted.P.value, color = Combined.Score)) +
     theme_bw(base_size = 9) +
-    theme(plot.title = element_text(hjust = 0.5), axis.text=element_text(size=12)) +
-    scale_colour_gradient(limits=c(0, max(tmp$Combined.Score)+0.5), high = "#2b9348", low = "#eeef20") +
+    theme(plot.title = element_text(hjust = 0.5), axis.text = element_text(size = 12)) +
+    scale_colour_gradient(limits = c(0, max(tmp$Combined.Score) + 0.5), high = "#2b9348", low = "#eeef20") +
     xlab(NULL) + ylab(NULL) +
     ggtitle(dbs[i]) + labs(color = "Combined Score", size = "-log10(padj)")
 }
