@@ -158,9 +158,9 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
     ggtitle(&amp;quot;&amp;quot;) +
     theme_bw() +
     scale_y_continuous(limits = c(0, -log10(input$p_val_adj)))
-  p &amp;lt;- p + geom_point(data=subset(input, input$Significance == &#39;Not_different&#39;), aes(avg_logFC, -log10(p_val_adj)), colour=&amp;quot;gray70&amp;quot;) +
-    geom_point(data=subset(input, input$Significance == &#39;Up_regulated&#39;), aes(avg_logFC, -log10(p_val_adj)), colour=&amp;quot;firebrick4&amp;quot;) +
-    geom_point(data=subset(input, input$Significance == &#39;Down_regulated&#39;), aes(avg_logFC, -log10(p_val_adj)), colour=&amp;quot;dodgerblue&amp;quot;) +
+  p &amp;lt;- p + geom_point(data=subset(input, input$Significance == &#39;Not_different&#39;), aes(avg_logFC, -log10(p_val_adj)), colour = &amp;quot;gray70&amp;quot;) +
+    geom_point(data=subset(input, input$Significance == &#39;Up_regulated&#39;), aes(avg_logFC, -log10(p_val_adj)), colour = &amp;quot;firebrick4&amp;quot;) +
+    geom_point(data=subset(input, input$Significance == &#39;Down_regulated&#39;), aes(avg_logFC, -log10(p_val_adj)), colour = &amp;quot;dodgerblue&amp;quot;) +
     xlab(&amp;quot;logFC&amp;quot;) + ylab(&amp;quot;-log10(padj)&amp;quot;)
   p &amp;lt;- p + geom_text_repel(data=input[c(head(upGenes, 5), head(downGenes, 5)), ], aes(label=gene))
   
@@ -196,10 +196,9 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
       theme(axis.line.y = element_line(size=0.25, color=&amp;quot;black&amp;quot;)) +
       theme(panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank()) +
       theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank()) + 
-      theme(panel.background = element_rect(fill=&#39;white&#39;)) +
-      theme(legend.key=element_blank())
+      theme(panel.background = element_rect(fill = &#39;white&#39;)) +
+      theme(legend.key = element_blank())
   }
-  
   
   tmp &amp;lt;- cds@assayData$exprs[gene, ]
   if (length(gene) == 1) {
@@ -228,7 +227,6 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
   edge_df[, cn2] &amp;lt;- as.matrix(edge_df[, cn2]) %*% t(rot_mat)
   edge_df[, cn3] &amp;lt;- as.matrix(edge_df[, cn3]) %*% t(rot_mat)
   
-  
   data_df &amp;lt;- pt$data
   
   g &amp;lt;- ggplot(data = data_df, aes(x = data_dim_1, y = data_dim_2))
@@ -239,7 +237,9 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
                         linetype = &amp;quot;solid&amp;quot;, na.rm = TRUE, data = edge_df)
   
   mst_branch_nodes &amp;lt;- cds@auxOrderingData[[cds@dim_reduce_type]]$branch_points
-  branch_point_df &amp;lt;- ica_space_df %&amp;gt;% dplyr::slice(match(mst_branch_nodes, sample_name)) %&amp;gt;% mutate(branch_point_idx = seq_len(n()))
+  branch_point_df &amp;lt;- ica_space_df %&amp;gt;% slice(match(mst_branch_nodes, sample_name)) %&amp;gt;% mutate(branch_point_idx = seq_len(n()))
+  g &amp;lt;- g + geom_point(aes_string(x = &amp;quot;prin_graph_dim_1&amp;quot;, y = &amp;quot;prin_graph_dim_2&amp;quot;), size = 5, na.rm = TRUE, branch_point_df) + 
+    geom_text(aes_string(x = &amp;quot;prin_graph_dim_1&amp;quot;, y = &amp;quot;prin_graph_dim_2&amp;quot;, label = &amp;quot;branch_point_idx&amp;quot;), size = 4, color = &amp;quot;white&amp;quot;, na.rm = TRUE, branch_point_df)
   
   g &amp;lt;- g + monocle_theme_opts() + xlab(&amp;quot;Component 1&amp;quot;) + ylab(&amp;quot;Component 2&amp;quot;) + 
     theme(legend.position = &amp;quot;top&amp;quot;, legend.key.height = grid::unit(0.35, &amp;quot;in&amp;quot;)) + theme(legend.key = element_blank()) + 
@@ -247,15 +247,13 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
   
   plotlist &amp;lt;- list()
   for (i in 1:length(gene)) {
-    plotlist[[i]] &amp;lt;- g + geom_point(data = data_df[which(data_df[[gene[i]]] &amp;lt; 0), ], aes_string(color = paste0(&#39;`&#39;, gene[i], &#39;`&#39;)), size = I(0.5), na.rm = TRUE) + 
-      geom_point(data = data_df[which(data_df[[gene[i]]] &amp;gt; 0), ], aes_string(color = paste0(&#39;`&#39;, gene[i], &#39;`&#39;)), size = I(0.8), na.rm = TRUE) + 
-      scale_color_viridis(option = &#39;C&#39;, discrete = F, end = 0.9) + ggtitle(gene[i]) + 
-      theme(plot.title = element_text(hjust = 0.5)) + labs(color = &amp;quot;&amp;quot;) + 
-      geom_point(aes_string(x = &amp;quot;prin_graph_dim_1&amp;quot;, y = &amp;quot;prin_graph_dim_2&amp;quot;), size = 4, na.rm = TRUE, branch_point_df) + 
-      geom_text(aes_string(x = &amp;quot;prin_graph_dim_1&amp;quot;, y = &amp;quot;prin_graph_dim_2&amp;quot;, label = &amp;quot;branch_point_idx&amp;quot;), size = 3, color = &amp;quot;white&amp;quot;, na.rm = TRUE, branch_point_df)
+    plotlist[[i]] &amp;lt;- g + geom_point(data = data_df[which(data_df[[gene[i]]] &amp;lt; 0), ], aes_string(color = paste0(&#39;`&#39;, gene[i], &#39;`&#39;)), size = I(1), na.rm = TRUE) + 
+      geom_point(data = data_df[which(data_df[[gene[i]]] &amp;gt; 0), ], aes_string(color = paste0(&#39;`&#39;, gene[i], &#39;`&#39;)), size = I(1.5), na.rm = TRUE) + 
+      scale_color_viridis(option = &#39;C&#39;, discrete = FALSE, end = 0.9) + ggtitle(gene[i]) + 
+      theme(plot.title = element_text(hjust = 0.5)) + labs(color = &amp;quot;&amp;quot;)
   }
   
-  pt2 &amp;lt;- ggarrange(plotlist = plotlist, common.legend = T)
+  pt2 &amp;lt;- ggarrange(plotlist = plotlist, common.legend = TRUE)
   
   return(pt2)
 }
@@ -273,10 +271,10 @@ if(length(&#39;metacell&#39;[!(&#39;metacell&#39; %in% installed.packages()[,&am
 library(Seurat)
 
 ## Loading data Cellranger output format
-data &amp;lt;- Read10X(&amp;quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&amp;quot;)
+data &amp;lt;- Read10X(&amp;quot;/Users/biagi/PhD/Adipocyte/data/10x/&amp;quot;)
 
 ## Reading metadata annotation
-anno &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv&amp;quot;)
+anno &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/data/GSE133486_10XAdiposeNuclei.metaData.tsv&amp;quot;)
 
 ## Creating Seurat object
 data &amp;lt;- CreateSeuratObject(counts = data,
@@ -338,10 +336,10 @@ data &amp;lt;- FindClusters(data)
 data &amp;lt;- RunUMAP(data, dims = 1:best_pc)
 
 ## RunUMAP
-data &amp;lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 5000, perplexity = 50, verbose = T)
+data &amp;lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 5000, perplexity = 50, verbose = TRUE)
 
 ## Saving RDS file
-saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds&amp;quot;)
+saveRDS(data, &amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_Processed.rds&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
@@ -361,21 +359,21 @@ library(DropletUtils)
 library(pheatmap)
 
 ## Convert an Seurat object to 10x format to input in metacell
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds&amp;quot;)
-write10xCounts(x = data@assays$RNA@counts, path = &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/data&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_Processed.rds&amp;quot;)
+write10xCounts(x = data@assays$RNA@counts, path = &amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/data&amp;quot;)
 
 
 ## Initializing a database
-if(!dir.exists(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db&amp;quot;)) dir.create(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db&amp;quot;)
-scdb_init(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db&amp;quot;, force_reinit=T)
+if(!dir.exists(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/db&amp;quot;)) dir.create(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/db&amp;quot;)
+scdb_init(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/db&amp;quot;, force_reinit = TRUE)
 
 ## Loading the data generated by the 10x conversion above
-mcell_import_scmat_10x(&amp;quot;test1&amp;quot;, base_dir=&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/data&amp;quot;)
-mat = scdb_mat(&amp;quot;test1&amp;quot;)
+mcell_import_scmat_10x(&amp;quot;test1&amp;quot;, base_dir = &amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/data&amp;quot;)
+mat &amp;lt;- scdb_mat(&amp;quot;test1&amp;quot;)
 
 ## Linking to a figure directory
-if(!dir.exists(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/figs&amp;quot;)) dir.create(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/figs&amp;quot;)
-scfigs_init(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/figs&amp;quot;)
+if(!dir.exists(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/figs&amp;quot;)) dir.create(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/figs&amp;quot;)
+scfigs_init(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/figs&amp;quot;)
 
 ## Plotting the distribution of UMI count per cell
 mcell_plot_umis_per_cell(&amp;quot;test1&amp;quot;)
@@ -383,60 +381,60 @@ mcell_plot_umis_per_cell(&amp;quot;test1&amp;quot;)
 ## Cleaning the data using a list of mitochondrial genes that typically mark cells as being stressed or dying, as well as immunoglobulin genes that may represent strong clonal signatures in plasma cells
 mat &amp;lt;- scdb_mat(&amp;quot;test1&amp;quot;)
 nms &amp;lt;- c(rownames(mat@mat), rownames(mat@ignore_gmat))
-ig_genes &amp;lt;- c(grep(&amp;quot;^Igj&amp;quot;, nms, v=T), 
-             grep(&amp;quot;^Igh&amp;quot;,nms,v=T),
-             grep(&amp;quot;^Igk&amp;quot;, nms, v=T), 
-             grep(&amp;quot;^Igl&amp;quot;, nms, v=T))
-bad_genes &amp;lt;- unique(c(grep(&amp;quot;^mt-&amp;quot;, nms, v=T), grep(&amp;quot;^mtmr&amp;quot;, nms, v=T), grep(&amp;quot;^Mtnd&amp;quot;, nms, v=T),&amp;quot;NEAT1&amp;quot;,&amp;quot;TMSB4X&amp;quot;, &amp;quot;TMSB10&amp;quot;, ig_genes))
-mcell_mat_ignore_genes(new_mat_id=&amp;quot;test1&amp;quot;, mat_id=&amp;quot;test1&amp;quot;, bad_genes, reverse=F)
+ig_genes &amp;lt;- c(grep(&amp;quot;^Igj&amp;quot;, nms, v = TRUE), 
+             grep(&amp;quot;^Igh&amp;quot;,nms,v = TRUE),
+             grep(&amp;quot;^Igk&amp;quot;, nms, v = TRUE), 
+             grep(&amp;quot;^Igl&amp;quot;, nms, v = TRUE))
+bad_genes &amp;lt;- unique(c(grep(&amp;quot;^mt-&amp;quot;, nms, v = TRUE), grep(&amp;quot;^mtmr&amp;quot;, nms, v = TRUE), grep(&amp;quot;^Mtnd&amp;quot;, nms, v = TRUE),&amp;quot;NEAT1&amp;quot;,&amp;quot;TMSB4X&amp;quot;, &amp;quot;TMSB10&amp;quot;, ig_genes))
+mcell_mat_ignore_genes(new_mat_id = &amp;quot;test1&amp;quot;, mat_id = &amp;quot;test1&amp;quot;, bad_genes, reverse = FALSE)
 
 ## Eliminating cells with less than 700 UMIs
 mcell_mat_ignore_small_cells(&amp;quot;test1&amp;quot;, &amp;quot;test1&amp;quot;, 700)
 
 ## Computing statistics on the distributions of each gene in the data, which are going to be our main tool for selecting feature genes
-mcell_add_gene_stat(gstat_id=&amp;quot;test1&amp;quot;, mat_id=&amp;quot;test1&amp;quot;, force=T)
+mcell_add_gene_stat(gstat_id = &amp;quot;test1&amp;quot;, mat_id = &amp;quot;test1&amp;quot;, force = TRUE)
 
 ## We create a new object of type gset, to which all genes whose scaled variance (variance divided by mean) exceeds a given threshold are added:
-mcell_gset_filter_varmean(gset_id=&amp;quot;test_feats&amp;quot;, gstat_id=&amp;quot;test1&amp;quot;, T_vm=0.08, force_new=T)
-mcell_gset_filter_cov(gset_id = &amp;quot;test_feats&amp;quot;, gstat_id=&amp;quot;test1&amp;quot;, T_tot=100, T_top3=2)
+mcell_gset_filter_varmean(gset_id = &amp;quot;test_feats&amp;quot;, gstat_id = &amp;quot;test1&amp;quot;, T_vm = 0.08, force_new = TRUE)
+mcell_gset_filter_cov(gset_id = &amp;quot;test_feats&amp;quot;, gstat_id = &amp;quot;test1&amp;quot;, T_tot = 100, T_top3 = 2)
 
 ## Plotting all genes and our selected gene set given the mean and variance statistics
-mcell_plot_gstats(gstat_id=&amp;quot;test1&amp;quot;, gset_id=&amp;quot;test_feats&amp;quot;)
+mcell_plot_gstats(gstat_id = &amp;quot;test1&amp;quot;, gset_id = &amp;quot;test_feats&amp;quot;)
 
 ## Creating a similarity graph, using a construction called balanced K-nn graph
-mcell_add_cgraph_from_mat_bknn(mat_id=&amp;quot;test1&amp;quot;, 
+mcell_add_cgraph_from_mat_bknn(mat_id = &amp;quot;test1&amp;quot;, 
                                gset_id = &amp;quot;test_feats&amp;quot;, 
-                               graph_id=&amp;quot;test_graph&amp;quot;,
-                               K=150,
-                               dsamp=F)
+                               graph_id = &amp;quot;test_graph&amp;quot;,
+                               K = 150,
+                               dsamp = FALSE)
 
 ## Use the cgraph to sample 1000 metacell partitions, each covering 75% of the cells and organizing them in dense subgraphs
 mcell_coclust_from_graph_resamp(
-  coc_id=&amp;quot;test_coc500&amp;quot;, 
-  graph_id=&amp;quot;test_graph&amp;quot;,
-  min_mc_size=20, 
-  p_resamp=0.75, n_resamp=1000)
+  coc_id = &amp;quot;test_coc500&amp;quot;,  
+  graph_id = &amp;quot;test_graph&amp;quot;,
+  min_mc_size = 20, 
+  p_resamp = 0.75, n_resamp = 1000)
 
 ## The co-clustering statistics are used to generate a new similarity graph, based on which accurate calling of the final set of metacells
 mcell_mc_from_coclust_balanced(
-  coc_id=&amp;quot;test_coc500&amp;quot;, 
-  mat_id= &amp;quot;test1&amp;quot;,
-  mc_id= &amp;quot;test_mc&amp;quot;, 
-  K=20, min_mc_size=20, alpha=2)
+  coc_id = &amp;quot;test_coc500&amp;quot;, 
+  mat_id = &amp;quot;test1&amp;quot;,
+  mc_id = &amp;quot;test_mc&amp;quot;, 
+  K = 20, min_mc_size = 20, alpha = 2)
 
 ## Splitting metacells whose underlying similarity structure supports the existence of multiple sub-clusters, and removes outlier cells that strongly deviate from their metacell&#39;s expression profile
-mcell_plot_outlier_heatmap(mc_id=&amp;quot;test_mc&amp;quot;, mat_id = &amp;quot;test1&amp;quot;, T_lfc=3)
-mcell_mc_split_filt(new_mc_id=&amp;quot;test_mc_f&amp;quot;, 
-                    mc_id=&amp;quot;test_mc&amp;quot;, 
-                    mat_id=&amp;quot;test1&amp;quot;,
-                    T_lfc=3, plot_mats=F)
+mcell_plot_outlier_heatmap(mc_id = &amp;quot;test_mc&amp;quot;, mat_id = &amp;quot;test1&amp;quot;, T_lfc = 3)
+mcell_mc_split_filt(new_mc_id = &amp;quot;test_mc_f&amp;quot;, 
+                    mc_id = &amp;quot;test_mc&amp;quot;, 
+                    mat_id = &amp;quot;test1&amp;quot;,
+                    T_lfc = 3, plot_mats = FALSE)
 
 ## The filtered metacell object test_mc_f can now be visualized. In order to do this effectively, we usually go through one or two iterations of selecting informative marker genes. The package can select markers for you automatically - by simply looking for genes that are strongly enriched in any of the metacells
-mcell_gset_from_mc_markers(gset_id=&amp;quot;test_markers&amp;quot;, mc_id=&amp;quot;test_mc_f&amp;quot;)
+mcell_gset_from_mc_markers(gset_id = &amp;quot;test_markers&amp;quot;, mc_id = &amp;quot;test_mc_f&amp;quot;)
 
 
 ## Running 1st Round with known markers
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/mc.test_mc_f.Rda&amp;quot;)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/mc.test_mc_f.Rda&amp;quot;)
 lfp &amp;lt;- log2(object@mc_fp)
 
 marks_colors &amp;lt;- NULL
@@ -451,43 +449,43 @@ colnames(marks_colors) &amp;lt;- c(&amp;quot;group&amp;quot;, &amp;quot;gene&amp
 marks_colors$priority &amp;lt;- as.integer(marks_colors$priority)
 marks_colors$T_fold &amp;lt;- as.numeric(marks_colors$T_fold)
 
-mc = scdb_mc(&amp;quot;test_mc_f&amp;quot;)
+mc &amp;lt;- scdb_mc(&amp;quot;test_mc_f&amp;quot;)
 gene_folds &amp;lt;- mc@mc_fp
 
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell/db/gset.test_markers.Rda&amp;quot;)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell/db/gset.test_markers.Rda&amp;quot;)
 gset &amp;lt;- object
 good_marks &amp;lt;- intersect(names(gset@gene_set), rownames(mc@mc_fp))
 mc_ord &amp;lt;- 1:ncol(mc@mc_fp)
 
-mat = log2(gene_folds[good_marks, mc_ord])
-mat = pmax(pmin(mat, 3), -3)
+mat &amp;lt;- log2(gene_folds[good_marks, mc_ord])
+mat &amp;lt;- pmax(pmin(mat, 3), -3)
 
 ## Selecting best markers for adipocyte cells
 mat_A &amp;lt;- mat[, which(mc@colors == &amp;quot;blue&amp;quot;)]
 mat_A &amp;lt;- mat_A[rowSums(mat_A) &amp;gt; quantile(rowSums(mat_A), 0.9), ]
-rowMeans(mat_A[names(head(sort(rowSums(mat_A), decreasing = T), 5)), ])
+rowMeans(mat_A[names(head(sort(rowSums(mat_A), decreasing = TRUE), 5)), ])
 
 ## Selecting best markers for endothelial cells
 mat_E &amp;lt;- mat[, which(mc@colors == &amp;quot;green&amp;quot;)]
 mat_E &amp;lt;- mat_E[rowSums(mat_E) &amp;gt; quantile(rowSums(mat_E), 0.9), ]
-rowMeans(mat_E[names(head(sort(rowSums(mat_E), decreasing = T), 5)), ])
+rowMeans(mat_E[names(head(sort(rowSums(mat_E), decreasing = TRUE), 5)), ])
 
 ## Selecting best markers for immune cells
 mat_I &amp;lt;- mat[, which(mc@colors %in% c(&amp;quot;#ff748c&amp;quot;, &amp;quot;#ff8fa3&amp;quot;))]
 mat_I &amp;lt;- mat_I[rowSums(mat_I) &amp;gt; quantile(rowSums(mat_I), 0.9), ]
-rowMeans(mat_I[names(head(sort(rowSums(mat_I), decreasing = T), 5)), ])
+rowMeans(mat_I[names(head(sort(rowSums(mat_I), decreasing = TRUE), 5)), ])
 
 ## Selecting best markers for progenitor cells
 mat_P &amp;lt;- mat[, which(mc@colors %in% c(&amp;quot;#ffa500&amp;quot;, &amp;quot;#ffb732&amp;quot;))]
 mat_P &amp;lt;- mat_P[rowSums(mat_P) &amp;gt; quantile(rowSums(mat_P), 0.9), ]
-rowMeans(mat_P[names(head(sort(rowSums(mat_P), decreasing = T), 5)), ])
+rowMeans(mat_P[names(head(sort(rowSums(mat_P), decreasing = TRUE), 5)), ])
 
 ## Plotting heatmat to check the found markers
 items &amp;lt;- list(Adipocytes = mat_A, Endothelials = mat_E, Immunes = mat_I, Progenitors = mat_P)
-plot_list=list()
+plot_list &amp;lt;- list()
 for (i in 1:length(items)){
   x &amp;lt;- pheatmap(items[[i]], fontsize = 6, main = names(items)[i], legend = FALSE, treeheight_row = 0, treeheight_col = 0)
-  plot_list[[i]] = x[[4]]
+  plot_list[[i]] &amp;lt;- x[[4]]
 }
 gggpubr(plotlist = plot_list, ncol = 2)
 
@@ -523,14 +521,14 @@ mc_colorize(&amp;quot;test_mc_f&amp;quot;, marker_colors=marks_colors)
 mc &amp;lt;- scdb_mc(&amp;quot;test_mc_f&amp;quot;)
 
 ## We can use the colors to produce a labeled heat map, showing selected genes and their distributions over metacells, with the colored annotation shown at the bottom
-mcell_mc_plot_marks(mc_id=&amp;quot;test_mc_f&amp;quot;, gset_id=&amp;quot;test_markers&amp;quot;, mat_id=&amp;quot;test1&amp;quot;, plot_cells = F)
+mcell_mc_plot_marks(mc_id = &amp;quot;test_mc_f&amp;quot;, gset_id = &amp;quot;test_markers&amp;quot;, mat_id = &amp;quot;test1&amp;quot;, plot_cells = FALSE)
 
 lfp &amp;lt;- log2(mc@mc_fp)
 
 ## Projecting metacells and cells in 2D
-mcell_mc2d_force_knn(mc2d_id=&amp;quot;test_2dproj&amp;quot;,mc_id=&amp;quot;test_mc_f&amp;quot;, graph_id=&amp;quot;test_graph&amp;quot;)
-tgconfig::set_param(&amp;quot;mcell_mc2d_height&amp;quot;,1000, &amp;quot;metacell&amp;quot;)
-tgconfig::set_param(&amp;quot;mcell_mc2d_width&amp;quot;,1000, &amp;quot;metacell&amp;quot;)
+mcell_mc2d_force_knn(mc2d_id = &amp;quot;test_2dproj&amp;quot;,mc_id = &amp;quot;test_mc_f&amp;quot;, graph_id = &amp;quot;test_graph&amp;quot;)
+tgconfig::set_param(&amp;quot;mcell_mc2d_height&amp;quot;, 1000, &amp;quot;metacell&amp;quot;)
+tgconfig::set_param(&amp;quot;mcell_mc2d_width&amp;quot;, 1000, &amp;quot;metacell&amp;quot;)
 mcell_mc2d_plot(mc2d_id=&amp;quot;test_2dproj&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 </description>
@@ -552,10 +550,10 @@ options(future.globals.maxSize = +Inf)
 plan(&amp;quot;multiprocess&amp;quot;, workers = 12)
 
 ## Loading data Cellranger output format
-data &amp;lt;- Read10X(&amp;quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&amp;quot;)
+data &amp;lt;- Read10X(&amp;quot;/Users/biagi/PhD/Adipocyte/data/10x/&amp;quot;)
 
 ## Reading metadata annotation
-anno &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv&amp;quot;)
+anno &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/data/GSE133486_10XAdiposeNuclei.metaData.tsv&amp;quot;)
 
 ## Creating Seurat object
 data &amp;lt;- CreateSeuratObject(counts = data,
@@ -611,14 +609,14 @@ data &amp;lt;- FindClusters(data)
 data &amp;lt;- RunUMAP(data, dims = 1:best_pc)
 
 ## RunTSNE
-data &amp;lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = T)
+data &amp;lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = TRUE)
 
 ## Saving RDS file
-saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&amp;quot;)
+saveRDS(data, &amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds&amp;quot;)
 
 ## Running Adaptively-thresholded Low Rank Approximation (ALRA)
 data &amp;lt;- SeuratWrappers::RunALRA(data)
-saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
+saveRDS(data, &amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
@@ -633,37 +631,38 @@ saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_
 
 source(&amp;quot;/projects/cangen/coliveir/SeuratToH5ad.R&amp;quot;)
 
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&amp;quot;)
-SeuratToH5ad(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&amp;quot;, &amp;quot;SCT&amp;quot;, 1)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds&amp;quot;)
+SeuratToH5ad(data, &amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/data.h5ad&amp;quot;, &amp;quot;SCT&amp;quot;, 1)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Defining the optimal accuracy number:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import warnings
 warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
 from SCCAF import *
   
-ad = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad&amp;quot;)
+ad = sc.read(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/data.h5ad&amp;quot;)
 
-y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_Round0&#39;],n=100)
-aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
+y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_Round0&#39;], n = 100)
+aucs = plot_roc(y_prob, y_test, clf, cvsm = cvsm, acc = acc)
 plt.show()
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Optimisation and general purpose usage:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cd /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/
-  sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.796 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.pdf
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;cd /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/
+sccaf -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.796 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad --optimisation-plots-output /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.pdf
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Parallel run of assessments:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/sccaf_assess_L1_Round3.txt --slot-for-existing-clustering L1_Round3 --iterations 20 --cores 16
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/sccaf_assess_L1_Round3.txt --slot-for-existing-clustering L1_Round3 --iterations 20 --cores 16
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Merging parallel runs to produce plot&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes -r /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/rounds-acc-comparison-plot.png
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess-merger -i /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes -r /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/rounds.txt -o /Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/rounds-acc-comparison-plot.png
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Exporting SCCAF results&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import scanpy as sc
-adata = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results.h5ad&amp;quot;)
-adata.write_csvs(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results&amp;quot;, sep=&#39;\t&#39;, skip_data=True)
+
+adata = sc.read(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results.h5ad&amp;quot;)
+adata.write_csvs(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results&amp;quot;, sep = &#39;\t&#39;, skip_data = True)
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
@@ -683,83 +682,83 @@ library(DropletUtils)
 library(pheatmap)
 
 ## Convert an Seurat object to 10x format to input in metacell
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&amp;quot;)
-write10xCounts(x = data@assays$RNA@counts, path = &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/data&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds&amp;quot;)
+write10xCounts(x = data@assays$RNA@counts, path = &amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/data&amp;quot;)
 
 
 ## Initializing a database
-if(!dir.exists(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db&amp;quot;)) dir.create(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db&amp;quot;)
-scdb_init(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db&amp;quot;, force_reinit=T)
+if(!dir.exists(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db&amp;quot;)) dir.create(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db&amp;quot;)
+scdb_init(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db&amp;quot;, force_reinit = TRUE)
 
 ## Loading the data generated by the 10x conversion above
-mcell_import_scmat_10x(&amp;quot;test1&amp;quot;, base_dir=&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/data&amp;quot;)
-mat = scdb_mat(&amp;quot;test1&amp;quot;)
+mcell_import_scmat_10x(&amp;quot;test1&amp;quot;, base_dir = &amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/data&amp;quot;)
+mat &amp;lt;- scdb_mat(&amp;quot;test1&amp;quot;)
 
 ## Linking to a figure directory
-if(!dir.exists(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/figs&amp;quot;)) dir.create(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/figs&amp;quot;)
-scfigs_init(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/figs&amp;quot;)
+if(!dir.exists(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/figs&amp;quot;)) dir.create(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/figs&amp;quot;)
+scfigs_init(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/figs&amp;quot;)
 
 ## Plotting the distribution of UMI count per cell
 mcell_plot_umis_per_cell(&amp;quot;test1&amp;quot;)
 
 ## Cleaning the data using a list of mitochondrial genes that typically mark cells as being stressed or dying, as well as immunoglobulin genes that may represent strong clonal signatures in plasma cells
-mat = scdb_mat(&amp;quot;test1&amp;quot;)
-nms = c(rownames(mat@mat), rownames(mat@ignore_gmat))
-ig_genes = c(grep(&amp;quot;^Igj&amp;quot;, nms, v=T),
-             grep(&amp;quot;^Igh&amp;quot;,nms,v=T),
-             grep(&amp;quot;^Igk&amp;quot;, nms, v=T),
-             grep(&amp;quot;^Igl&amp;quot;, nms, v=T))
-bad_genes = unique(c(grep(&amp;quot;^mt-&amp;quot;, nms, v=T), grep(&amp;quot;^mtmr&amp;quot;, nms, v=T), grep(&amp;quot;^Mtnd&amp;quot;, nms, v=T),&amp;quot;NEAT1&amp;quot;,&amp;quot;TMSB4X&amp;quot;, &amp;quot;TMSB10&amp;quot;, ig_genes))
-mcell_mat_ignore_genes(new_mat_id=&amp;quot;test1&amp;quot;, mat_id=&amp;quot;test1&amp;quot;, bad_genes, reverse=F)
+mat &amp;lt;- scdb_mat(&amp;quot;test1&amp;quot;)
+nms &amp;lt;- c(rownames(mat@mat), rownames(mat@ignore_gmat))
+ig_genes &amp;lt;- c(grep(&amp;quot;^Igj&amp;quot;, nms, v = TRUE),
+             grep(&amp;quot;^Igh&amp;quot;,nms,v = TRUE),
+             grep(&amp;quot;^Igk&amp;quot;, nms, v = TRUE),
+             grep(&amp;quot;^Igl&amp;quot;, nms, v = TRUE))
+bad_genes &amp;lt;- unique(c(grep(&amp;quot;^mt-&amp;quot;, nms, v = TRUE), grep(&amp;quot;^mtmr&amp;quot;, nms, v = TRUE), grep(&amp;quot;^Mtnd&amp;quot;, nms, v = TRUE),&amp;quot;NEAT1&amp;quot;,&amp;quot;TMSB4X&amp;quot;, &amp;quot;TMSB10&amp;quot;, ig_genes))
+mcell_mat_ignore_genes(new_mat_id = &amp;quot;test1&amp;quot;, mat_id = &amp;quot;test1&amp;quot;, bad_genes, reverse = FALSE)
 
 ## Eliminating cells with less than 700 UMIs
 mcell_mat_ignore_small_cells(&amp;quot;test1&amp;quot;, &amp;quot;test1&amp;quot;, 700)
 
 ## Computing statistics on the distributions of each gene in the data, which are going to be our main tool for selecting feature genes
-mcell_add_gene_stat(gstat_id=&amp;quot;test1&amp;quot;, mat_id=&amp;quot;test1&amp;quot;, force=T)
+mcell_add_gene_stat(gstat_id = &amp;quot;test1&amp;quot;, mat_id = &amp;quot;test1&amp;quot;, force = TRUE)
 
 ## We create a new object of type gset, to which all genes whose scaled variance (variance divided by mean) exceeds a given threshold are added:
-mcell_gset_filter_varmean(gset_id=&amp;quot;test_feats&amp;quot;, gstat_id=&amp;quot;test1&amp;quot;, T_vm=0.08, force_new=T)
-mcell_gset_filter_cov(gset_id = &amp;quot;test_feats&amp;quot;, gstat_id=&amp;quot;test1&amp;quot;, T_tot=100, T_top3=2)
+mcell_gset_filter_varmean(gset_id = &amp;quot;test_feats&amp;quot;, gstat_id = &amp;quot;test1&amp;quot;, T_vm = 0.08, force_new = TRUE)
+mcell_gset_filter_cov(gset_id = &amp;quot;test_feats&amp;quot;, gstat_id = &amp;quot;test1&amp;quot;, T_tot = 100, T_top3 = 2)
 
 ## Plotting all genes and our selected gene set given the mean and variance statistics
-mcell_plot_gstats(gstat_id=&amp;quot;test1&amp;quot;, gset_id=&amp;quot;test_feats&amp;quot;)
+mcell_plot_gstats(gstat_id = &amp;quot;test1&amp;quot;, gset_id = &amp;quot;test_feats&amp;quot;)
 
 ## Creating a similarity graph, using a construction called balanced K-nn graph
-mcell_add_cgraph_from_mat_bknn(mat_id=&amp;quot;test1&amp;quot;,
+mcell_add_cgraph_from_mat_bknn(mat_id = &amp;quot;test1&amp;quot;,
                                gset_id = &amp;quot;test_feats&amp;quot;,
-                               graph_id=&amp;quot;test_graph&amp;quot;,
-                               K=150,
-                               dsamp=F)
+                               graph_id = &amp;quot;test_graph&amp;quot;,
+                               K = 150,
+                               dsamp = FALSE)
 
 ## Use the cgraph to sample 1000 metacell partitions, each covering 75% of the cells and organizing them in dense subgraphs
 mcell_coclust_from_graph_resamp(
-  coc_id=&amp;quot;test_coc500&amp;quot;,
-  graph_id=&amp;quot;test_graph&amp;quot;,
-  min_mc_size=20,
-  p_resamp=0.75, n_resamp=1000)
+  coc_id = &amp;quot;test_coc500&amp;quot;,
+  graph_id = &amp;quot;test_graph&amp;quot;,
+  min_mc_size = 20,
+  p_resamp = 0.75, n_resamp = 1000)
 
 ## The co-clustering statistics are used to generate a new similarity graph, based on which accurate calling of the final set of metacells
 mcell_mc_from_coclust_balanced(
-  coc_id=&amp;quot;test_coc500&amp;quot;,
-  mat_id= &amp;quot;test1&amp;quot;,
-  mc_id= &amp;quot;test_mc&amp;quot;,
-  K=20, min_mc_size=20, alpha=2)
+  coc_id = &amp;quot;test_coc500&amp;quot;, 
+  mat_id = &amp;quot;test1&amp;quot;,
+  mc_id = &amp;quot;test_mc&amp;quot;,
+  K = 20, min_mc_size = 20, alpha = 2)
 
 ## Splitting metacells whose underlying similarity structure supports the existence of multiple sub-clusters, and removes outlier cells that strongly deviate from their metacell&#39;s expression profile
-mcell_plot_outlier_heatmap(mc_id=&amp;quot;test_mc&amp;quot;, mat_id = &amp;quot;test1&amp;quot;, T_lfc=3)
-mcell_mc_split_filt(new_mc_id=&amp;quot;test_mc_f&amp;quot;,
-                    mc_id=&amp;quot;test_mc&amp;quot;,
-                    mat_id=&amp;quot;test1&amp;quot;,
-                    T_lfc=3, plot_mats=F)
+mcell_plot_outlier_heatmap(mc_id = &amp;quot;test_mc&amp;quot;, mat_id = &amp;quot;test1&amp;quot;, T_lfc = 3)
+mcell_mc_split_filt(new_mc_id = &amp;quot;test_mc_f&amp;quot;,
+                    mc_id = &amp;quot;test_mc&amp;quot;,
+                    mat_id = &amp;quot;test1&amp;quot;,
+                    T_lfc = 3, plot_mats = FALSE)
 
 ## The filtered metacell object test_mc_f can now be visualized. In order to do this effectively, we usually go through one or two iterations of selecting informative marker genes. The package can select markers for you automatically - by simply looking for genes that are strongly enriched in any of the metacells
-mcell_gset_from_mc_markers(gset_id=&amp;quot;test_markers&amp;quot;, mc_id=&amp;quot;test_mc_f&amp;quot;)
+mcell_gset_from_mc_markers(gset_id = &amp;quot;test_markers&amp;quot;, mc_id = &amp;quot;test_mc_f&amp;quot;)
 
 
 ## Running 1st Round with known markers
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&amp;quot;)
-lfp = log2(object@mc_fp)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&amp;quot;)
+lfp &amp;lt;- log2(object@mc_fp)
 
 marks_colors &amp;lt;- NULL
 marks_colors &amp;lt;- rbind(marks_colors, c(&amp;quot;Adipocyte&amp;quot;, &amp;quot;Adrb3&amp;quot;, &amp;quot;blue&amp;quot;, 1, 2))
@@ -773,16 +772,16 @@ colnames(marks_colors) &amp;lt;- c(&amp;quot;group&amp;quot;, &amp;quot;gene&amp
 marks_colors$priority &amp;lt;- as.integer(marks_colors$priority)
 marks_colors$T_fold &amp;lt;- as.numeric(marks_colors$T_fold)
 
-mc = scdb_mc(&amp;quot;test_mc_f&amp;quot;)
-gset = scdb_gset(&amp;quot;test_markers&amp;quot;)
+mc &amp;lt;- scdb_mc(&amp;quot;test_mc_f&amp;quot;)
+gset &amp;lt;- scdb_gset(&amp;quot;test_markers&amp;quot;)
 
-gene_folds = mc@mc_fp
+gene_folds &amp;lt;- mc@mc_fp
 
-good_marks = intersect(names(gset@gene_set), rownames(mc@mc_fp))
-mc_ord = 1:ncol(mc@mc_fp)
+good_marks &amp;lt;- intersect(names(gset@gene_set), rownames(mc@mc_fp))
+mc_ord &amp;lt;- 1:ncol(mc@mc_fp)
 
-mat = log2(gene_folds[good_marks, mc_ord])
-mat = pmax(pmin(mat, 3), -3)
+mat &amp;lt;- log2(gene_folds[good_marks, mc_ord])
+mat &amp;lt;- pmax(pmin(mat, 3), -3)
 
 ## Selecting best markers for adipocyte cells
 mat_A &amp;lt;- mat[, which(mc@colors == &amp;quot;blue&amp;quot;)]
@@ -806,10 +805,10 @@ rowMeans(mat_P[names(head(sort(rowSums(mat_P), decreasing = T), 5)), ])
 
 ## Plotting heatmat to check the found markers
 items &amp;lt;- list(Adipocytes = mat_A, Endothelials = mat_E, Immunes = mat_I, Progenitors = mat_P)
-plot_list=list()
+plot_list &amp;lt;- list()
 for (i in 1:length(items)){
   x &amp;lt;- pheatmap(items[[i]], fontsize = 6, main = names(items)[i], legend = FALSE, treeheight_row = 0, treeheight_col = 0)
-  plot_list[[i]] = x[[4]]
+  plot_list[[i]] &amp;lt;- x[[4]]
 }
 gggpubr(plotlist = plot_list, ncol = 2)
 
@@ -841,19 +840,19 @@ colnames(marks_colors) &amp;lt;- c(&amp;quot;group&amp;quot;, &amp;quot;gene&amp
 marks_colors$priority &amp;lt;- as.integer(marks_colors$priority)
 marks_colors$T_fold &amp;lt;- as.numeric(marks_colors$T_fold)
 
-mc_colorize(&amp;quot;test_mc_f&amp;quot;, marker_colors=marks_colors)
-mc = scdb_mc(&amp;quot;test_mc_f&amp;quot;)
+mc_colorize(&amp;quot;test_mc_f&amp;quot;, marker_colors = marks_colors)
+mc &amp;lt;- scdb_mc(&amp;quot;test_mc_f&amp;quot;)
 
 ## We can use the colors to produce a labeled heat map, showing selected genes and their distributions over metacells, with the colored annotation shown at the bottom
-mcell_mc_plot_marks(mc_id=&amp;quot;test_mc_f&amp;quot;, gset_id=&amp;quot;test_markers&amp;quot;, mat_id=&amp;quot;test1&amp;quot;)
+mcell_mc_plot_marks(mc_id = &amp;quot;test_mc_f&amp;quot;, gset_id = &amp;quot;test_markers&amp;quot;, mat_id = &amp;quot;test1&amp;quot;)
 
-lfp = log2(mc@mc_fp)
+lfp &amp;lt;- log2(mc@mc_fp)
 
 ## Projecting metacells and cells in 2D
-mcell_mc2d_force_knn(mc2d_id=&amp;quot;test_2dproj&amp;quot;,mc_id=&amp;quot;test_mc_f&amp;quot;, graph_id=&amp;quot;test_graph&amp;quot;)
-tgconfig::set_param(&amp;quot;mcell_mc2d_height&amp;quot;,1000, &amp;quot;metacell&amp;quot;)
-tgconfig::set_param(&amp;quot;mcell_mc2d_width&amp;quot;,1000, &amp;quot;metacell&amp;quot;)
-mcell_mc2d_plot(mc2d_id=&amp;quot;test_2dproj&amp;quot;)
+mcell_mc2d_force_knn(mc2d_id = &amp;quot;test_2dproj&amp;quot;, mc_id = &amp;quot;test_mc_f&amp;quot;, graph_id = &amp;quot;test_graph&amp;quot;)
+tgconfig::set_param(&amp;quot;mcell_mc2d_height&amp;quot;, 1000, &amp;quot;metacell&amp;quot;)
+tgconfig::set_param(&amp;quot;mcell_mc2d_width&amp;quot;, 1000, &amp;quot;metacell&amp;quot;)
+mcell_mc2d_plot(mc2d_id = &amp;quot;test_2dproj&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
@@ -894,11 +893,11 @@ colnames(marks_colors) &amp;lt;- c(&amp;quot;group&amp;quot;, &amp;quot;gene&amp
 marks_colors$priority &amp;lt;- as.integer(marks_colors$priority)
 marks_colors$T_fold &amp;lt;- as.numeric(marks_colors$T_fold)
 
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda&amp;quot;)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda&amp;quot;)
 dims &amp;lt;- data.frame(x = object@sc_x, 
                    y = object@sc_y)
 
-load(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&amp;quot;)
+load(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&amp;quot;)
 tmp1 &amp;lt;- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 &amp;lt;- data.frame(cols = object@colors)
 teste &amp;lt;- merge(tmp1, tmp2, by.x = &amp;quot;cols&amp;quot;, by.y = &amp;quot;row.names&amp;quot;)
@@ -911,8 +910,8 @@ teste$cellType &amp;lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&amp;q
 tab &amp;lt;- merge(dims, teste, by.x = &amp;quot;row.names&amp;quot;, by.y = &amp;quot;cells&amp;quot;)
 
 ## Assign sccaf clusters to metacell results
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&amp;quot;)
-infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds&amp;quot;)
+infos &amp;lt;- read.table(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv&amp;quot;)
 
 new_cluster &amp;lt;- infos$L1_result
 names(new_cluster) &amp;lt;- rownames(infos)
@@ -934,7 +933,7 @@ Idents(data) &amp;lt;- factor(Idents(data), levels = c(&#39;A1&#39;, &#39;A2&#39
 cells &amp;lt;- names(Idents(data))[which(Idents(data) == &amp;quot;A1&amp;quot; | Idents(data) == &amp;quot;A2&amp;quot; | Idents(data) == &amp;quot;A3&amp;quot; | Idents(data) == &amp;quot;A4&amp;quot;)]
 
 ## Subsetting adipocyte clusters from all
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds&amp;quot;)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_Processed.rds&amp;quot;)
 data &amp;lt;- subset(data, cells = cells)
 
 ## Cell cycle genes
@@ -977,10 +976,10 @@ for (z in 1:length(dp)) {
 data &amp;lt;- RunUMAP(data, dims = 1:best_pc)
 
 ## RunTSNE
-data &amp;lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = T)
+data &amp;lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = TRUE)
 
 ## Saving RDS file
-saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
+saveRDS(data, &amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
@@ -993,10 +992,10 @@ saveRDS(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp
       <description>&lt;p&gt;Creating &lt;code&gt;h5ad&lt;/code&gt; file to use as input in SCCAF:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(Seurat)
 
-source(&amp;quot;/projects/cangen/coliveir/SeuratToH5ad.R&amp;quot;)
+source(&#39;/Users/biagi/PhD/Adipocyte/2_Functions.R&#39;)
 
-data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&amp;quot;)
-SeuratToH5ad(data, &amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&amp;quot;, &amp;quot;RNA&amp;quot;, 1)
+data &amp;lt;- readRDS(&amp;quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&amp;quot;)
+SeuratToH5ad(data, &amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/data.h5ad&amp;quot;, &amp;quot;RNA&amp;quot;, 1)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Defining the optimal accuracy number:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# python to define the optimal accuracy number
@@ -1004,29 +1003,30 @@ import warnings
 warnings.filterwarnings(&amp;quot;ignore&amp;quot;)
 from SCCAF import *
 
-ad = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad&amp;quot;)
+ad = sc.read(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/data.h5ad&amp;quot;)
 
-y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_Round0&#39;],n=100)
-aucs = plot_roc(y_prob, y_test, clf, cvsm=cvsm, acc=acc)
+y_prob, y_pred, y_test, clf, cvsm, acc = SCCAF_assessment(ad.X, ad.obs[&#39;L1_Round0&#39;],n = 100)
+aucs = plot_roc(y_prob, y_test, clf, cvsm = cvsm, acc = acc)
 plt.show()
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Optimisation and general purpose usage:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;##### Optimisation and general purpose usage
-cd /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/
-sccaf -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.669 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad --optimisation-plots-output /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.pdf
+cd /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/
+sccaf -i /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/data.h5ad --optimise --skip-assessment -s L1_Round0 -a 0.669 -c 10 --produce-rounds-summary -o /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results.h5ad --optimisation-plots-output /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results.pdf
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Parallel run of assessments:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
-sccaf-assess -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess -i /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round0.txt --slot-for-existing-clustering L1_Round0 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round1.txt --slot-for-existing-clustering L1_Round1 --iterations 20 --cores 16
+sccaf-assess -i /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results.h5ad -o /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/sccaf_assess_L1_Round2.txt --slot-for-existing-clustering L1_Round2 --iterations 20 --cores 16
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Merging parallel runs to produce plot:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess-merger -i /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly -r /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds.txt -o /Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/rounds-acc-comparison-plot.png
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;sccaf-assess-merger -i /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly -r /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/rounds.txt -o /Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/rounds-acc-comparison-plot.png
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Exporting SCCAF results&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import scanpy as sc
-adata = sc.read(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results.h5ad&amp;quot;)
-adata.write_csvs(&amp;quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/AdipocytesOnly/results&amp;quot;, sep=&#39;\t&#39;, skip_data=True)
+
+adata = sc.read(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results.h5ad&amp;quot;)
+adata.write_csvs(&amp;quot;/Users/biagi/PhD/Adipocyte/SCCAF/AdipocytesOnly/results&amp;quot;, sep = &#39;\t&#39;, skip_data = True)
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>

@@ -574,11 +574,11 @@ colnames(marks_colors) &lt;- c(&quot;group&quot;, &quot;gene&quot;, &quot;color&
 marks_colors$priority &lt;- as.integer(marks_colors$priority)
 marks_colors$T_fold &lt;- as.numeric(marks_colors$T_fold)
 
-load(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda&quot;)
+load(&quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc2d.test_2dproj.Rda&quot;)
 dims &lt;- data.frame(x = object@sc_x, 
                    y = object@sc_y)
 
-load(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&quot;)
+load(&quot;/Users/biagi/PhD/Adipocyte/output/10x/metacell_SCT/db/mc.test_mc_f.Rda&quot;)
 tmp1 &lt;- data.frame(cells = names(object@mc), cols = object@mc)
 tmp2 &lt;- data.frame(cols = object@colors)
 teste &lt;- merge(tmp1, tmp2, by.x = &quot;cols&quot;, by.y = &quot;row.names&quot;)
@@ -591,8 +591,8 @@ teste$cellType &lt;- ifelse(teste$cols.y %in% marks_colors$color[grep(&quot;Endo
 tab &lt;- merge(dims, teste, by.x = &quot;row.names&quot;, by.y = &quot;cells&quot;)
 
 ## Assign sccaf clusters to metacell results
-data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;)
-infos &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/SCCAF/Adipocytes/results/obs.csv&quot;)
+data &lt;- readRDS(&quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds&quot;)
+infos &lt;- read.table(&quot;/Users/biagi/PhD/Adipocyte/SCCAF/Adipocytes/results/obs.csv&quot;)
 
 new_cluster &lt;- infos$L1_result
 names(new_cluster) &lt;- rownames(infos)
@@ -614,7 +614,7 @@ Idents(data) &lt;- factor(Idents(data), levels = c('A1', 'A2', 'A3', 'A4', 'E1',
 cells &lt;- names(Idents(data))[which(Idents(data) == &quot;A1&quot; | Idents(data) == &quot;A2&quot; | Idents(data) == &quot;A3&quot; | Idents(data) == &quot;A4&quot;)]
 
 ## Subsetting adipocyte clusters from all
-data &lt;- readRDS(&quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_Processed.rds&quot;)
+data &lt;- readRDS(&quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_Processed.rds&quot;)
 data &lt;- subset(data, cells = cells)
 
 ## Cell cycle genes
@@ -657,10 +657,10 @@ for (z in 1:length(dp)) {
 data &lt;- RunUMAP(data, dims = 1:best_pc)
 
 ## RunTSNE
-data &lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = T)
+data &lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = TRUE)
 
 ## Saving RDS file
-saveRDS(data, &quot;/Users/biagi/PhD/AdipoSNAP/output/10x/Adipocytes.rds&quot;)
+saveRDS(data, &quot;/Users/biagi/PhD/Adipocyte/output/10x/Adipocytes.rds&quot;)
 </code></pre>
 
     </div>

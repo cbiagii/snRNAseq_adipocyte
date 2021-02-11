@@ -31,7 +31,7 @@
     
   
   <meta name="description" content="Performing preprocessing using regularized negative binomial regression (SCT) to normalize UMI count data.
-## Loading R packages library(Seurat) library(SeuratWrappers) library(future) ## Setting up the threads for 12 workers options(future.globals.maxSize = &#43;Inf) plan(&quot;multiprocess&quot;, workers = 12) ## Loading data Cellranger output format data &lt;- Read10X(&quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&quot;) ## Reading metadata annotation anno &lt;- read.">
+## Loading R packages library(Seurat) library(SeuratWrappers) library(future) ## Setting up the threads for 12 workers options(future.globals.maxSize = &#43;Inf) plan(&quot;multiprocess&quot;, workers = 12) ## Loading data Cellranger output format data &lt;- Read10X(&quot;/Users/biagi/PhD/Adipocyte/data/10x/&quot;) ## Reading metadata annotation anno &lt;- read.">
 
   
   <link rel="alternate" hreflang="en-us" href="https://cbiagii.github.io/snRNAseq_adipocyte/post/5_sct_preprocess/">
@@ -256,7 +256,7 @@
   <meta property="og:url" content="https://cbiagii.github.io/snRNAseq_adipocyte/post/5_sct_preprocess/">
   <meta property="og:title" content="5 - SCT Preprocessing | snRNA-seq Adipocyte">
   <meta property="og:description" content="Performing preprocessing using regularized negative binomial regression (SCT) to normalize UMI count data.
-## Loading R packages library(Seurat) library(SeuratWrappers) library(future) ## Setting up the threads for 12 workers options(future.globals.maxSize = &#43;Inf) plan(&quot;multiprocess&quot;, workers = 12) ## Loading data Cellranger output format data &lt;- Read10X(&quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&quot;) ## Reading metadata annotation anno &lt;- read."><meta property="og:image" content="https://cbiagii.github.io/snRNAseq_adipocyte/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
+## Loading R packages library(Seurat) library(SeuratWrappers) library(future) ## Setting up the threads for 12 workers options(future.globals.maxSize = &#43;Inf) plan(&quot;multiprocess&quot;, workers = 12) ## Loading data Cellranger output format data &lt;- Read10X(&quot;/Users/biagi/PhD/Adipocyte/data/10x/&quot;) ## Reading metadata annotation anno &lt;- read."><meta property="og:image" content="https://cbiagii.github.io/snRNAseq_adipocyte/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="https://cbiagii.github.io/snRNAseq_adipocyte/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
@@ -306,7 +306,7 @@
       "url": "https://cbiagii.github.io/snRNAseq_adipocyte/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "Performing preprocessing using regularized negative binomial regression (SCT) to normalize UMI count data.\n## Loading R packages library(Seurat) library(SeuratWrappers) library(future) ## Setting up the threads for 12 workers options(future.globals.maxSize = +Inf) plan(\u0026quot;multiprocess\u0026quot;, workers = 12) ## Loading data Cellranger output format data \u0026lt;- Read10X(\u0026quot;/Users/biagi/PhD/AdipoSNAP/data/10x/\u0026quot;) ## Reading metadata annotation anno \u0026lt;- read."
+  "description": "Performing preprocessing using regularized negative binomial regression (SCT) to normalize UMI count data.\n## Loading R packages library(Seurat) library(SeuratWrappers) library(future) ## Setting up the threads for 12 workers options(future.globals.maxSize = +Inf) plan(\u0026quot;multiprocess\u0026quot;, workers = 12) ## Loading data Cellranger output format data \u0026lt;- Read10X(\u0026quot;/Users/biagi/PhD/Adipocyte/data/10x/\u0026quot;) ## Reading metadata annotation anno \u0026lt;- read."
 }
 </script>
 
@@ -554,10 +554,10 @@ options(future.globals.maxSize = +Inf)
 plan(&quot;multiprocess&quot;, workers = 12)
 
 ## Loading data Cellranger output format
-data &lt;- Read10X(&quot;/Users/biagi/PhD/AdipoSNAP/data/10x/&quot;)
+data &lt;- Read10X(&quot;/Users/biagi/PhD/Adipocyte/data/10x/&quot;)
 
 ## Reading metadata annotation
-anno &lt;- read.table(&quot;/Users/biagi/PhD/AdipoSNAP/data/GSE133486_10XAdiposeNuclei.metaData.tsv&quot;)
+anno &lt;- read.table(&quot;/Users/biagi/PhD/Adipocyte/data/GSE133486_10XAdiposeNuclei.metaData.tsv&quot;)
 
 ## Creating Seurat object
 data &lt;- CreateSeuratObject(counts = data,
@@ -613,14 +613,14 @@ data &lt;- FindClusters(data)
 data &lt;- RunUMAP(data, dims = 1:best_pc)
 
 ## RunTSNE
-data &lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = T)
+data &lt;- RunTSNE(data, dims = 1:best_pc, max_iter = 2000, perplexity = 30, verbose = TRUE)
 
 ## Saving RDS file
-saveRDS(data, &quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed.rds&quot;)
+saveRDS(data, &quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed.rds&quot;)
 
 ## Running Adaptively-thresholded Low Rank Approximation (ALRA)
 data &lt;- SeuratWrappers::RunALRA(data)
-saveRDS(data, &quot;/Users/biagi/PhD/AdipoSNAP/output/10x/10x_SCT_Processed_ALRA.rds&quot;)
+saveRDS(data, &quot;/Users/biagi/PhD/Adipocyte/output/10x/10x_SCT_Processed_ALRA.rds&quot;)
 </code></pre>
 
     </div>

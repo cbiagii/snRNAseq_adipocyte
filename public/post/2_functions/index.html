@@ -647,9 +647,9 @@ SeuratToH5ad This function converts a Seurat Object to h5ad file to perform SCCA
     ggtitle(&quot;&quot;) +
     theme_bw() +
     scale_y_continuous(limits = c(0, -log10(input$p_val_adj)))
-  p &lt;- p + geom_point(data=subset(input, input$Significance == 'Not_different'), aes(avg_logFC, -log10(p_val_adj)), colour=&quot;gray70&quot;) +
-    geom_point(data=subset(input, input$Significance == 'Up_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour=&quot;firebrick4&quot;) +
-    geom_point(data=subset(input, input$Significance == 'Down_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour=&quot;dodgerblue&quot;) +
+  p &lt;- p + geom_point(data=subset(input, input$Significance == 'Not_different'), aes(avg_logFC, -log10(p_val_adj)), colour = &quot;gray70&quot;) +
+    geom_point(data=subset(input, input$Significance == 'Up_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour = &quot;firebrick4&quot;) +
+    geom_point(data=subset(input, input$Significance == 'Down_regulated'), aes(avg_logFC, -log10(p_val_adj)), colour = &quot;dodgerblue&quot;) +
     xlab(&quot;logFC&quot;) + ylab(&quot;-log10(padj)&quot;)
   p &lt;- p + geom_text_repel(data=input[c(head(upGenes, 5), head(downGenes, 5)), ], aes(label=gene))
   
@@ -685,10 +685,9 @@ SeuratToH5ad This function converts a Seurat Object to h5ad file to perform SCCA
       theme(axis.line.y = element_line(size=0.25, color=&quot;black&quot;)) +
       theme(panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank()) +
       theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank()) + 
-      theme(panel.background = element_rect(fill='white')) +
-      theme(legend.key=element_blank())
+      theme(panel.background = element_rect(fill = 'white')) +
+      theme(legend.key = element_blank())
   }
-  
   
   tmp &lt;- cds@assayData$exprs[gene, ]
   if (length(gene) == 1) {
@@ -717,7 +716,6 @@ SeuratToH5ad This function converts a Seurat Object to h5ad file to perform SCCA
   edge_df[, cn2] &lt;- as.matrix(edge_df[, cn2]) %*% t(rot_mat)
   edge_df[, cn3] &lt;- as.matrix(edge_df[, cn3]) %*% t(rot_mat)
   
-  
   data_df &lt;- pt$data
   
   g &lt;- ggplot(data = data_df, aes(x = data_dim_1, y = data_dim_2))
@@ -728,7 +726,9 @@ SeuratToH5ad This function converts a Seurat Object to h5ad file to perform SCCA
                         linetype = &quot;solid&quot;, na.rm = TRUE, data = edge_df)
   
   mst_branch_nodes &lt;- cds@auxOrderingData[[cds@dim_reduce_type]]$branch_points
-  branch_point_df &lt;- ica_space_df %&gt;% dplyr::slice(match(mst_branch_nodes, sample_name)) %&gt;% mutate(branch_point_idx = seq_len(n()))
+  branch_point_df &lt;- ica_space_df %&gt;% slice(match(mst_branch_nodes, sample_name)) %&gt;% mutate(branch_point_idx = seq_len(n()))
+  g &lt;- g + geom_point(aes_string(x = &quot;prin_graph_dim_1&quot;, y = &quot;prin_graph_dim_2&quot;), size = 5, na.rm = TRUE, branch_point_df) + 
+    geom_text(aes_string(x = &quot;prin_graph_dim_1&quot;, y = &quot;prin_graph_dim_2&quot;, label = &quot;branch_point_idx&quot;), size = 4, color = &quot;white&quot;, na.rm = TRUE, branch_point_df)
   
   g &lt;- g + monocle_theme_opts() + xlab(&quot;Component 1&quot;) + ylab(&quot;Component 2&quot;) + 
     theme(legend.position = &quot;top&quot;, legend.key.height = grid::unit(0.35, &quot;in&quot;)) + theme(legend.key = element_blank()) + 
@@ -736,15 +736,13 @@ SeuratToH5ad This function converts a Seurat Object to h5ad file to perform SCCA
   
   plotlist &lt;- list()
   for (i in 1:length(gene)) {
-    plotlist[[i]] &lt;- g + geom_point(data = data_df[which(data_df[[gene[i]]] &lt; 0), ], aes_string(color = paste0('`', gene[i], '`')), size = I(0.5), na.rm = TRUE) + 
-      geom_point(data = data_df[which(data_df[[gene[i]]] &gt; 0), ], aes_string(color = paste0('`', gene[i], '`')), size = I(0.8), na.rm = TRUE) + 
-      scale_color_viridis(option = 'C', discrete = F, end = 0.9) + ggtitle(gene[i]) + 
-      theme(plot.title = element_text(hjust = 0.5)) + labs(color = &quot;&quot;) + 
-      geom_point(aes_string(x = &quot;prin_graph_dim_1&quot;, y = &quot;prin_graph_dim_2&quot;), size = 4, na.rm = TRUE, branch_point_df) + 
-      geom_text(aes_string(x = &quot;prin_graph_dim_1&quot;, y = &quot;prin_graph_dim_2&quot;, label = &quot;branch_point_idx&quot;), size = 3, color = &quot;white&quot;, na.rm = TRUE, branch_point_df)
+    plotlist[[i]] &lt;- g + geom_point(data = data_df[which(data_df[[gene[i]]] &lt; 0), ], aes_string(color = paste0('`', gene[i], '`')), size = I(1), na.rm = TRUE) + 
+      geom_point(data = data_df[which(data_df[[gene[i]]] &gt; 0), ], aes_string(color = paste0('`', gene[i], '`')), size = I(1.5), na.rm = TRUE) + 
+      scale_color_viridis(option = 'C', discrete = FALSE, end = 0.9) + ggtitle(gene[i]) + 
+      theme(plot.title = element_text(hjust = 0.5)) + labs(color = &quot;&quot;)
   }
   
-  pt2 &lt;- ggarrange(plotlist = plotlist, common.legend = T)
+  pt2 &lt;- ggarrange(plotlist = plotlist, common.legend = TRUE)
   
   return(pt2)
 }
