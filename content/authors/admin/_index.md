@@ -22,9 +22,6 @@ social:
 - icon: linkedin
   icon_pack: fab
   link: https://www.linkedin.com/in/carlos-biagi-jr-50907076/
-- icon: google-scholar
-  icon_pack: ai
-  link: https://scholar.google.co.uk/citations?user=Ed-jajoAAAAJ&hl=en
 - icon: github
   icon_pack: fab
   link: https://github.com/cbiagii

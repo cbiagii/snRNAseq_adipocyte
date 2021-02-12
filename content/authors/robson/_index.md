@@ -11,6 +11,9 @@ social:
 - icon: envelope
   icon_pack: fas
   link: mailto:robson.carvalho@unesp.br
+- icon: twitter
+  icon_pack: fab
+  link: https://twitter.com/rcarvalho_7
 - icon: orcid
   icon_pack: ai
   link: https://orcid.org/0000-0002-4901-7714

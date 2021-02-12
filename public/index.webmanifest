@@ -5,11 +5,11 @@
   "theme_color": "#1EBA9D",
   "background_color": "#1EBA9D",
   "icons": [{
-    "src": "/snRNAseq_adipocyte/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_192x192_fill_lanczos_center_2.png",
+    "src": "/snRNAseq_adipocyte/images/icon_hub765cfc86e6f389528c73dbc99f89318_358991_192x192_fill_lanczos_center_2.png",
     "sizes": "192x192",
     "type": "image/png"
     }, {
-    "src": "/snRNAseq_adipocyte/images/icon_hu64d5fdaaa5c80254dbe3c681e74a1b81_409389_512x512_fill_lanczos_center_2.png",
+    "src": "/snRNAseq_adipocyte/images/icon_hub765cfc86e6f389528c73dbc99f89318_358991_512x512_fill_lanczos_center_2.png",
     "sizes": "512x512",
     "type": "image/png"
      }],
