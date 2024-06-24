@@ -91,10 +91,7 @@ pip install cellphonedb
 
 
 # Citation
-`xxxxx`
-<!---
-Qadir, M.M.F., Alvarez-Cubela, S., Klein, D., Van Dijk, J., Anquela, R.M., Lanzoni, G., Sadiq, S., Moreno-Hernandez, Y.B., Navarro-Rubio, B., Garcia, M.T., Diaz, A., Johnson, K., Sant, D., Ricordi, C., Griswold, T., Pastori, R.L., Dominguez-bendala, J. (2020) Proceedings of the National Academy of Sciences. Single cell resolution analysis of the human pancreatic ductal progenitor cell niche. Apr 2020, 201918314; DOI: 10.1073/pnas.1918314117
---->
+[Biagi Jr, Carlos Alberto Oliveira, et al. "Multidimensional single-nuclei RNA-seq reconstruction of adipose tissue reveals adipocyte plasticity underlying thermogenic response." Cells 10.11 (2021): 3073.](https://www.mdpi.com/2073-4409/10/11/3073)
 
 
 # Acknowledgements
